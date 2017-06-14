@@ -5,25 +5,25 @@ using System.Linq;
 
 namespace Nuke.Core.Execution
 {
-    internal class StronglyConnectedComponent<T> : IEnumerable<Vertex<T>>
+    internal class StronglyConnectedComponent : IEnumerable<TargetDefinition>
     {
-        private readonly LinkedList<Vertex<T>> _list;
+        private readonly LinkedList<TargetDefinition> _list;
 
         public StronglyConnectedComponent ()
         {
-            _list = new LinkedList<Vertex<T>> ();
+            _list = new LinkedList<TargetDefinition> ();
         }
 
-        public void Add (Vertex<T> vertex)
+        public void Add (TargetDefinition target)
         {
-            _list.AddLast (vertex);
+            _list.AddLast (target);
         }
 
         public int Count => _list.Count;
 
         public bool IsCycle => _list.Count > 1;
 
-        public IEnumerator<Vertex<T>> GetEnumerator ()
+        public IEnumerator<TargetDefinition> GetEnumerator ()
         {
             return _list.GetEnumerator ();
         }

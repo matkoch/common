@@ -8,10 +8,10 @@ using System.Linq;
 
 namespace Nuke.Core.Execution
 {
-    internal class StronglyConnectedComponentFinder<T>
+    internal class StronglyConnectedComponentFinder
     {
-        private StronglyConnectedComponentList<T> _stronglyConnectedComponents;
-        private Stack<Vertex<T>> _stack;
+        private StronglyConnectedComponentList _stronglyConnectedComponents;
+        private Stack<TargetDefinition> _stack;
         private int _index;
 
         /// <summary>
@@ -19,11 +19,11 @@ namespace Nuke.Core.Execution
         /// </summary>
         /// <param name="graph">Graph to detect cycles within.</param>
         /// <returns>Set of strongly connected components (sets of vertices)</returns>
-        public StronglyConnectedComponentList<T> DetectCycle (IEnumerable<Vertex<T>> graph)
+        public StronglyConnectedComponentList DetectCycle (IEnumerable<TargetDefinition> graph)
         {
-            _stronglyConnectedComponents = new StronglyConnectedComponentList<T> ();
+            _stronglyConnectedComponents = new StronglyConnectedComponentList ();
             _index = 0;
-            _stack = new Stack<Vertex<T>> ();
+            _stack = new Stack<TargetDefinition> ();
             foreach (var v in graph)
             {
                 if (v.Index < 0)
@@ -32,7 +32,7 @@ namespace Nuke.Core.Execution
             return _stronglyConnectedComponents;
         }
 
-        private void StrongConnect (Vertex<T> v)
+        private void StrongConnect (TargetDefinition v)
         {
             v.Index = _index;
             v.LowLink = _index;
@@ -55,8 +55,8 @@ namespace Nuke.Core.Execution
             if (v.LowLink != v.Index)
                 return;
 
-            var scc = new StronglyConnectedComponent<T> ();
-            Vertex<T> w2;
+            var scc = new StronglyConnectedComponent ();
+            TargetDefinition w2;
             do
             {
                 w2 = _stack.Pop ();

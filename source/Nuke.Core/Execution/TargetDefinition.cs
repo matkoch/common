@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
+using Nuke.Core.Utilities;
 
 namespace Nuke.Core.Execution
 {
@@ -24,6 +25,7 @@ namespace Nuke.Core.Execution
             DependentShadowTargets = new List<string>();
             Actions = new List<Action>();
             Conditions = new List<Func<bool>>();
+            Dependencies = new List<TargetDefinition>();
 
             factory?.Invoke(this);
         }
@@ -37,6 +39,10 @@ namespace Nuke.Core.Execution
         public List<Target> DependentTargets { get; }
         public List<string> DependentShadowTargets { get; }
         public List<Action> Actions { get; }
+
+        internal int Index { get; set; }
+        internal int LowLink { get; set; }
+        internal List<TargetDefinition> Dependencies { get; set; }
 
         public ITargetDefinition Executes (params Action[] actions)
         {
@@ -69,7 +75,7 @@ namespace Nuke.Core.Execution
 
         public override string ToString ()
         {
-            return $"Target '{Name}'";
+            return $"Target: {Name} -> {Dependencies.Select(x => x.Name).Join(", ")}";
         }
     }
 }

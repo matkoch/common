@@ -5,23 +5,23 @@ using System.Linq;
 
 namespace Nuke.Core.Execution
 {
-    internal class StronglyConnectedComponentList<T> : IEnumerable<StronglyConnectedComponent<T>>
+    internal class StronglyConnectedComponentList : IEnumerable<StronglyConnectedComponent>
     {
-        private readonly LinkedList<StronglyConnectedComponent<T>> _collection;
+        private readonly LinkedList<StronglyConnectedComponent> _collection;
 
         public StronglyConnectedComponentList ()
         {
-            _collection = new LinkedList<StronglyConnectedComponent<T>> ();
+            _collection = new LinkedList<StronglyConnectedComponent> ();
         }
 
-        public void Add (StronglyConnectedComponent<T> scc)
+        public void Add (StronglyConnectedComponent scc)
         {
             _collection.AddLast (scc);
         }
 
         public int Count => _collection.Count;
 
-        public IEnumerator<StronglyConnectedComponent<T>> GetEnumerator ()
+        public IEnumerator<StronglyConnectedComponent> GetEnumerator ()
         {
             return _collection.GetEnumerator ();
         }
@@ -31,12 +31,12 @@ namespace Nuke.Core.Execution
             return _collection.GetEnumerator ();
         }
 
-        public IEnumerable<StronglyConnectedComponent<T>> IndependentComponents ()
+        public IEnumerable<StronglyConnectedComponent> IndependentComponents ()
         {
             return this.Where (c => !c.IsCycle);
         }
 
-        public IEnumerable<StronglyConnectedComponent<T>> Cycles ()
+        public IEnumerable<StronglyConnectedComponent> Cycles ()
         {
             return this.Where (c => c.IsCycle);
         }
