@@ -79,14 +79,15 @@ namespace Nuke.Core.Tooling
         }
 
         [CanBeNull]
-        private static IProcess StartProcessInternal (
+        internal static IProcess StartProcessInternal (
             string toolPath,
             [CanBeNull] string arguments,
             [CanBeNull] string workingDirectory,
             [CanBeNull] IReadOnlyDictionary<string, string> environmentVariables,
             int? timeout,
             bool redirectOutput,
-            [CanBeNull] Func<string, string> outputFilter)
+            [CanBeNull] Func<string, string> outputFilter,
+            bool useShellExecute = false)
         {
             ControlFlow.Assert(workingDirectory == null || Directory.Exists(workingDirectory),
                 $"WorkingDirectory '{workingDirectory}' does not exist.");
@@ -98,15 +99,15 @@ namespace Nuke.Core.Tooling
                                 WorkingDirectory = workingDirectory ?? string.Empty,
                                 RedirectStandardOutput = redirectOutput,
                                 RedirectStandardError = redirectOutput,
-                                UseShellExecute = false
+                                UseShellExecute = useShellExecute
                             };
 
             if (environmentVariables != null)
             {
                 foreach (var pair in environmentVariables)
                     startInfo.Environment[pair.Key] = pair.Value;
-            }
             PrintEnvironmentVariables (startInfo);
+            }
 
             var process = Process.Start(startInfo);
             if (process == null)

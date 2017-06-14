@@ -28,15 +28,15 @@ namespace Nuke.Core.Execution
             factory?.Invoke(this);
         }
 
-        internal string Name { get; }
+        public string Name { get; }
         [CanBeNull]
-        internal Target Factory { get; }
-        internal TimeSpan Duration { get; set; }
-        internal ExecutionStatus Status { get; set; }
-        internal List<Func<bool>> Conditions { get; }
-        internal List<Target> DependentTargets { get; }
-        internal List<string> DependentShadowTargets { get; }
-        internal List<Action> Actions { get; }
+        public Target Factory { get; }
+        public TimeSpan Duration { get; set; }
+        public ExecutionStatus Status { get; set; }
+        public List<Func<bool>> Conditions { get; }
+        public List<Target> DependentTargets { get; }
+        public List<string> DependentShadowTargets { get; }
+        public List<Action> Actions { get; }
 
         public ITargetDefinition Executes (params Action[] actions)
         {

@@ -17,8 +17,7 @@ namespace Nuke.Core
 #if NETCORE
                 Assembly.GetEntryAssembly();
 #else
-                Assembly.GetExecutingAssembly();
-
+                Assembly.GetEntryAssembly();
 #endif
     }
 }

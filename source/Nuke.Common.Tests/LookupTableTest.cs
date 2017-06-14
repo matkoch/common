@@ -3,6 +3,7 @@
 // https://github.com/matkoch/Nuke/blob/master/LICENSE
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -11,6 +12,7 @@ using FluentAssertions;
 using JetBrains.Annotations;
 using Nuke.Common.Tools.MSBuild;
 using Nuke.Core;
+using Nuke.Core.Execution;
 using Nuke.Core.Tooling;
 using Xunit;
 
@@ -18,6 +20,74 @@ using Xunit;
 
 namespace Nuke.Common.Tests
 {
+
+    public class TargetDefinitionLoaderTest
+    {
+        private readonly Build1 _build;
+        private readonly TargetDefinitionLoader _loader;
+
+        public TargetDefinitionLoaderTest ()
+        {
+            _build = new Build1 ();
+            _loader = new TargetDefinitionLoader ();
+        }
+
+        [Fact]
+        public void FullSet()
+        {
+            var targetList = _loader.GetTargetList (_build,
+                _build.Compile,
+                new[] { "Full" },
+                executeDependencies: false);
+
+            targetList.First ().Should ().HaveCount (2);
+            targetList.First ().SelectMany (x => x).Select (x => x.Value.Name).Should ().BeEquivalentTo ("FxCop", "InspectCode");
+        }
+
+        [Fact]
+        public void Subset()
+        {
+            var targetList = _loader.GetTargetList(_build,
+                _build.Compile,
+                new[] { "Analysis", "FxCop", "InspectCode" },
+                executeDependencies: false);
+
+            targetList.Should().BeEquivalentTo(
+                new[]
+                {
+                    new[] { "InspectCode", "FxCop" }
+                },
+                new[]
+                {
+                    new[] { "Analysis" }
+                });
+
+            targetList.Should().HaveCount(2);
+            targetList.First().Should().HaveCount(2);
+            targetList.First().SelectMany(x => x).Select(x => x.Value.Name).Should().BeEquivalentTo("FxCop", "InspectCode");
+            targetList.Last().Single().Single().Value.Name.Should().Be("Analysis");
+        }
+
+        private class Build1 : Build
+        {
+            public Target A => _ => _;
+            public Target B => _ => _;
+            public Target C => _ => _;
+
+            public Target Clean => _ => _;
+            public Target Compile => _ => _.DependsOn(Clean);
+            public Target Test => _ => _.DependsOn(Compile);
+            
+            public Target InspectCode => _ => _.DependsOn(Compile);
+            public Target FxCop => _ => _.DependsOn(Compile);
+            public Target Analysis => _ => _.DependsOn(InspectCode, FxCop);
+
+            public Target Pack => _ => _.DependsOn(Compile);
+            public Target Push => _ => _.DependsOn(Pack);
+            public Target Full => _ => _.DependsOn(Push, Analysis, Test);
+        }
+    }
+
     public abstract class SettingsTestBase<T>
         where T : ToolSettings
     {
@@ -118,3 +188,4 @@ namespace Nuke.Common.Tests
         }
     }
 }
+

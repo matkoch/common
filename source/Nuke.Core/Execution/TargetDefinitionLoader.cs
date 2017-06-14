@@ -6,16 +6,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
-using Nuke.Core.Output;
-using Nuke.Core.Utilities;
 using Nuke.Core.Utilities.Collections;
 
 namespace Nuke.Core.Execution
 {
-    internal class TargetDefinitionLoader
+    public class TargetDefinitionLoader
     {
-        public IReadOnlyCollection<TargetDefinition> GetExecutionList (Build build, Target defaultTarget)
+        public TargetList GetTargetList (
+            Build build,
+            Target defaultTarget,
+            IEnumerable<string> specifiedTargetStrings,
+            bool executeDependencies,
+            bool strictExecution = false)
         {
             var targetDefinitions = build.GetType()
                     .GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
@@ -27,12 +31,18 @@ namespace Nuke.Core.Execution
 
             ControlFlow.Assert(!nameDictionary.ContainsKey("default"), "Don't use 'default' as a target identifier.");
             nameDictionary.Add("default", nameDictionary.Values.Single(x => x.Factory == defaultTarget));
-            var targetTargets = build.Targets.Select(x => GetTargetByName(x, defaultTarget, nameDictionary)).ToList();
+            var specifiedTargets = specifiedTargetStrings.Select(x => GetTargetByName(x, defaultTarget, nameDictionary)).ToList();
 
             var targetDependencies = targetDefinitions.ToDictionary(
                 x => x,
                 x => GetDependencies(x, nameDictionary, factoryDictionary).ToList());
-            return GetSortedList(targetTargets, targetDependencies);
+            return GetTargetList(specifiedTargets, targetDependencies, executeDependencies, strictExecution);
+        }
+
+        private TargetDefinition LoadTargetDefinition (Build build, PropertyInfo property)
+        {
+            var targetFactory = (Target) property.GetValue(build);
+            return TargetDefinition.Create(property.Name, targetFactory);
         }
 
         private static TargetDefinition GetTargetByName (string targetName, Target defaultTarget, Dictionary<string, TargetDefinition> nameDictionary)
@@ -51,12 +61,6 @@ namespace Nuke.Core.Execution
             throw new LoaderException(stringBuilder.ToString());
         }
 
-        private TargetDefinition LoadTargetDefinition (Build build, PropertyInfo property)
-        {
-            var targetFactory = (Target) property.GetValue(build);
-            return TargetDefinition.Create(property.Name, targetFactory);
-        }
-
         private IEnumerable<TargetDefinition> GetDependencies (
             TargetDefinition targetDefinition,
             Dictionary<string, TargetDefinition> nameDictionary,
@@ -69,51 +73,102 @@ namespace Nuke.Core.Execution
                     .Concat(targetDefinition.DependentTargets.Select(x => factoryDictionary[x]));
         }
 
-        private List<TargetDefinition> GetSortedList (
-            ICollection<TargetDefinition> targetTargets,
-            Dictionary<TargetDefinition, List<TargetDefinition>> targetDependencies)
+        private TargetList GetTargetList (
+            IReadOnlyCollection<TargetDefinition> specifiedTargets,
+            IReadOnlyDictionary<TargetDefinition, List<TargetDefinition>> targetDependencies,
+            bool executeDependencies,
+            bool strictExecution)
         {
             var vertexDictionary = targetDependencies.ToDictionary(x => x.Key, x => new Vertex<TargetDefinition>(x.Key));
             foreach (var pair in vertexDictionary)
                 pair.Value.Dependencies = targetDependencies[pair.Key].Select(x => vertexDictionary[x]).ToList();
+            var targetDefinitionGraph = vertexDictionary.Values.ToList();
 
-            var graphAsList = vertexDictionary.Values.ToList();
-            var result = new List<TargetDefinition>();
+            var scc = new StronglyConnectedComponentFinder<TargetDefinition> ();
+            var cycles = scc.DetectCycle (targetDefinitionGraph).Cycles ().ToList ();
+            if (cycles.Count > 0)
+                throw new LoaderException (
+                    "Circular dependencies between target definitions.",
+                    string.Join (EnvironmentInfo.NewLine, $"  - {cycles.Select (x => string.Join (" -> ", x.Select (y => y.Value.Name)))}"));
 
-            while (graphAsList.Any())
+            var targetList = new TargetList ();
+
+            IEnumerable<Vertex<TargetDefinition>> GetIndependents (IEnumerable<Vertex<TargetDefinition>> additionalGraphTargets = null)
             {
-                var independents = graphAsList.Where(x => !graphAsList.Any(y => y.Dependencies.Contains(x))).ToList();
-                if (EnvironmentInfo.ArgumentSwitch("strict") && independents.Count > 1)
-                {
-                    throw new LoaderException(
+                additionalGraphTargets = additionalGraphTargets ?? Enumerable.Empty<Vertex<TargetDefinition>>();
+                var tempGraph = targetDefinitionGraph.Concat(additionalGraphTargets).ToList();
+                var independents = tempGraph.Where (x => !tempGraph.Any (y => y.Dependencies.Contains (x))).ToList ();
+
+                if (strictExecution && independents.Count > 1)
+                    throw new LoaderException (
                         "Incomplete target definition order.",
-                        string.Join(EnvironmentInfo.NewLine, independents.Select(x => $"  - {x.Value.Name}")));
-                }
+                        string.Join (EnvironmentInfo.NewLine, independents.Select (x => $"  - {x.Value.Name}")));
 
-                var independent = independents.FirstOrDefault();
-                if (independent == null)
-                {
-                    var scc = new StronglyConnectedComponentFinder<TargetDefinition>();
-                    var cycles = scc.DetectCycle(graphAsList)
-                            .Cycles()
-                            .Select(x => string.Join(" -> ", x.Select(y => y.Value.Name)));
-
-                    throw new LoaderException(
-                        "Circular dependencies between target definitions.",
-                        string.Join(EnvironmentInfo.NewLine, $"  - {cycles}"));
-                }
-
-                graphAsList.Remove(independent);
-
-                var targetDefinition = independent.Value;
-                var executableDependency = result.SelectMany(x => targetDependencies[x]).Contains(targetDefinition)
-                                           && !EnvironmentInfo.ArgumentSwitch("nodeps");
-                if (targetTargets.Contains(targetDefinition) || executableDependency)
-                    result.Add(targetDefinition);
+                return independents;
             }
 
-            result.Reverse();
-            return result;
+            bool ShouldExecute(Vertex<TargetDefinition> target)
+            {
+                if (specifiedTargets.Contains(target.Value))
+                    return true;
+
+                if (!executeDependencies)
+                    return false;
+
+                return targetList.SelectMany(x => x).SelectMany(x => x).Select(x => x.Value)
+                        .SelectMany(x => targetDependencies[x])
+                        .Contains(target.Value);
+            }
+
+            while (targetDefinitionGraph.Any ())
+            {
+                var targetChunks = GetIndependents()
+                        .ForEachLazy (x => targetDefinitionGraph.Remove (x))
+                        .Where (ShouldExecute).ToList()
+                        .Select(x => new TargetChunk { x }).ToList();
+
+                if (targetChunks.Count == 0)
+                    continue;
+
+                var targetSequence = new TargetSequence();
+                targetSequence.AddRange(targetChunks);
+                targetList.Add(targetSequence);
+
+                if (targetChunks.Count > 1)
+                {
+                    foreach (var targetChunk in targetChunks)
+                    {
+                        while (true)
+                        {
+                            var parallelTargets = targetChunks.Except(new[] { targetChunk }).SelectMany(x => x).ToList();
+                            var additionalChunkTargets = GetIndependents(parallelTargets).Except(parallelTargets).Where(ShouldExecute).ToList();
+                            if (additionalChunkTargets.Count == 0)
+                                break;
+
+                            foreach (var additionalChunkTarget in additionalChunkTargets)
+                            {
+                                targetDefinitionGraph.Remove (additionalChunkTarget);
+                                targetChunk.Add (additionalChunkTarget);
+                            }
+                        }
+                    }
+                }
+            }
+
+            targetList.Reverse ();
+            return targetList;
         }
+    }
+
+    public class TargetList : List<TargetSequence>
+    {
+    }
+
+    public class TargetSequence : List<TargetChunk>
+    {
+    }
+
+    public class TargetChunk : List<Vertex<TargetDefinition>>
+    {
     }
 }

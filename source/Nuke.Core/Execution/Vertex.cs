@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Nuke.Core.Execution
 {
-    internal class Vertex<T>
+    public class Vertex<T>
     {
         public Vertex ()
         {

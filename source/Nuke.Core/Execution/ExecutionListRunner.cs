@@ -5,13 +5,21 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Nuke.Core.Output;
+using Nuke.Core.Tooling;
 
 namespace Nuke.Core.Execution
 {
     internal class ExecutionListRunner
     {
+        public int Run (TargetList targetList)
+        {
+            System.Diagnostics.Debugger.Launch();
+            return 0;
+        }
+
         public int Run (IReadOnlyCollection<TargetDefinition> executionList)
         {
             foreach (var target in executionList)
@@ -28,14 +36,12 @@ namespace Nuke.Core.Execution
                     continue;
                 }
 
-                using (OutputSink.WriteBlock(target.Name))
-                {
                     var stopwatch = Stopwatch.StartNew();
                     try
                     {
-                        target.Actions.ForEach(x => x());
-                        target.Duration = stopwatch.Elapsed;
+                        Execute(target);
 
+                        target.Duration = stopwatch.Elapsed;
                         target.Status = ExecutionStatus.Executed;
                     }
                     catch (Exception exception)
@@ -49,12 +55,36 @@ namespace Nuke.Core.Execution
                     {
                         target.Duration = stopwatch.Elapsed;
                     }
-                }
             }
 
             OutputSink.WriteSummary(executionList);
 
             return -executionList.Count(x => x.Status == ExecutionStatus.Failed);
+        }
+
+        private static void Execute (TargetDefinition target)
+        {
+            if (!EnvironmentInfo.ArgumentSwitch("parallel") ||
+                EnvironmentInfo.ArgumentSwitch("worker"))
+            {
+                using (OutputSink.WriteBlock(target.Name))
+                {
+                    target.Actions.ForEach(x => x.Invoke());
+                }
+            }
+            else
+            {
+                var process = ProcessManager.StartProcessInternal(EnvironmentInfo.BuildAssembly.Location,
+                    $"--target={target.Name} --worker --nodeps",
+                    EnvironmentInfo.CurrentDirectory,
+                    environmentVariables: null,
+                    timeout: null,
+                    redirectOutput: false,
+                    outputFilter: x => x,
+                    useShellExecute: true);
+
+                process.AssertZeroExitCode();
+            }
         }
     }
 }

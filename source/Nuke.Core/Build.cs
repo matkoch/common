@@ -32,8 +32,12 @@ namespace Nuke.Core
         {
             var build = Activator.CreateInstance<T>();
             var defaultTarget = defaultTargetExpression.Compile().Invoke(build);
-            var executionList = new TargetDefinitionLoader().GetExecutionList(build, defaultTarget);
-            return new ExecutionListRunner().Run(executionList);
+            var targetList = new TargetDefinitionLoader().GetTargetList(build,
+                defaultTarget,
+                build.Targets,
+                executeDependencies: !ArgumentSwitch("nodeps"),
+                strictExecution: ArgumentSwitch("strict"));
+            return new ExecutionListRunner().Run(targetList);
         }
 
         protected Build ()
