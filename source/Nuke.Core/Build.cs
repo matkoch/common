@@ -37,7 +37,7 @@ namespace Nuke.Core
                 build.Targets,
                 executeDependencies: !ArgumentSwitch("nodeps"),
                 strictExecution: ArgumentSwitch("strict"));
-            return new ExecutionListRunner().Run(targetList);
+            return new TargetListRunner().Run(targetList);
         }
 
         protected Build ()

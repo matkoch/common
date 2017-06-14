@@ -12,54 +12,59 @@ using Nuke.Core.Tooling;
 
 namespace Nuke.Core.Execution
 {
-    internal class ExecutionListRunner
+    internal class TargetListRunner
     {
         public int Run (TargetList targetList)
         {
-            System.Diagnostics.Debugger.Launch();
-            return 0;
+            foreach (var targetSequence in targetList)
+            {
+                if (targetSequence.Count == 1)
+                {
+                    Execute();
+                }
+            }
         }
 
         public int Run (IReadOnlyCollection<TargetDefinition> executionList)
         {
             foreach (var target in executionList)
             {
-                if (target.Factory == null)
-                {
-                    target.Status = ExecutionStatus.Absent;
-                    continue;
-                }
+                ExecuteTarget(target);
 
-                if (target.Conditions.Any(x => !x()))
-                {
-                    target.Status = ExecutionStatus.Skipped;
-                    continue;
-                }
-
-                    var stopwatch = Stopwatch.StartNew();
-                    try
-                    {
-                        Execute(target);
-
-                        target.Duration = stopwatch.Elapsed;
-                        target.Status = ExecutionStatus.Executed;
-                    }
-                    catch (Exception exception)
-                    {
-                        OutputSink.Fail(exception.Message, exception.StackTrace);
-                        target.Status = ExecutionStatus.Failed;
-
-                        break;
-                    }
-                    finally
-                    {
-                        target.Duration = stopwatch.Elapsed;
-                    }
+                if (target.Status == ExecutionStatus.Failed)
+                    break;
             }
 
             OutputSink.WriteSummary(executionList);
 
             return -executionList.Count(x => x.Status == ExecutionStatus.Failed);
+        }
+
+        private static void ExecuteTarget (TargetDefinition target)
+        {
+            if (target.Factory == null)
+                target.Status = ExecutionStatus.Absent;
+
+            if (target.Conditions.Any(x => !x()))
+                target.Status = ExecutionStatus.Skipped;
+
+            var stopwatch = Stopwatch.StartNew();
+            try
+            {
+                Execute(target);
+
+                target.Duration = stopwatch.Elapsed;
+                target.Status = ExecutionStatus.Executed;
+            }
+            catch (Exception exception)
+            {
+                OutputSink.Fail(exception.Message, exception.StackTrace);
+                target.Status = ExecutionStatus.Failed;
+            }
+            finally
+            {
+                target.Duration = stopwatch.Elapsed;
+            }
         }
 
         private static void Execute (TargetDefinition target)
