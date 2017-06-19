@@ -10,6 +10,7 @@ using System.Reflection;
 using Colorful;
 using Nuke.Core.Execution;
 using Nuke.Core.Utilities;
+using Console = System.Console;
 
 namespace Nuke.Core.Output
 {
@@ -53,8 +54,8 @@ namespace Nuke.Core.Output
             Info(GetAscii(text));
 
             return DelegateDisposable.CreateBracket(
-                () => System.Console.Title = $"Executing: {text}",
-                () => System.Console.Title = $"Finished: {text}");
+                () => Console.Title = $"Executing: {text}",
+                () => Console.Title = $"Finished: {text}");
         }
 
         public virtual void WriteSummary (IReadOnlyCollection<TargetDefinition> executionList)
@@ -90,16 +91,16 @@ namespace Nuke.Core.Output
 
         private void WriteWithColors (string text, ConsoleColor brightForeground, ConsoleColor darkForeground)
         {
-            var previousForeground = System.Console.ForegroundColor;
-            var backgroundColor = System.Console.BackgroundColor;
+            var previousForeground = Console.ForegroundColor;
+            var backgroundColor = Console.BackgroundColor;
 
             var hasDarkBackground = backgroundColor == ConsoleColor.Black || backgroundColor.ToString().StartsWith("Dark");
 
             using (DelegateDisposable.CreateBracket(
-                () => System.Console.ForegroundColor = hasDarkBackground ? brightForeground : darkForeground,
-                () => System.Console.ForegroundColor = previousForeground))
+                () => Console.ForegroundColor = hasDarkBackground ? brightForeground : darkForeground,
+                () => Console.ForegroundColor = previousForeground))
             {
-                System.Console.WriteLine(text);
+                Console.WriteLine(text);
             }
         }
 

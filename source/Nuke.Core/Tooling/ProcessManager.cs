@@ -101,36 +101,26 @@ namespace Nuke.Core.Tooling
                                 RedirectStandardError = redirectOutput,
                                 UseShellExecute = useShellExecute
                             };
-
-            if (environmentVariables != null)
-            {
-                foreach (var pair in environmentVariables)
-                    startInfo.Environment[pair.Key] = pair.Value;
-            PrintEnvironmentVariables (startInfo);
-            }
+            ApplyEnvironmentVariables(startInfo, environmentVariables);
 
             var process = Process.Start(startInfo);
             if (process == null)
                 return null;
 
-            BlockingCollection<Output> output = null;
-            if (redirectOutput)
-            {
-                output = new BlockingCollection<Output>();
+            return new Process2(process, timeout, GetOutputCollection(process, redirectOutput), outputFilter ?? (x => x));
+        }
 
-                void AddNotNullData (DataReceivedEventArgs e, OutputType outputType)
-                {
-                    if (e.Data != null)
-                        output.Add (new Output { Text = e.Data, Type = outputType });
-                }
+        private static void ApplyEnvironmentVariables (
+            ProcessStartInfo startInfo,
+            [CanBeNull] IReadOnlyDictionary<string, string> environmentVariables)
+        {
+            if (environmentVariables == null)
+                return;
 
-                process.OutputDataReceived += (s, e) => AddNotNullData(e, OutputType.Std);
-                process.ErrorDataReceived += (s, e) => AddNotNullData(e, OutputType.Err);
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-            }
+            foreach (var pair in environmentVariables)
+                startInfo.Environment[pair.Key] = pair.Value;
 
-            return new Process2(process, timeout, output, outputFilter ?? (x => x));
+            PrintEnvironmentVariables(startInfo);
         }
 
         private static void PrintEnvironmentVariables (ProcessStartInfo startInfo)
@@ -150,6 +140,27 @@ namespace Nuke.Core.Tooling
                     Trace(pair.Key, pair.Value);
                 }
             }
+        }
+
+        [CanBeNull]
+        private static BlockingCollection<Output> GetOutputCollection (Process process, bool redirectOutput)
+        {
+            if (!redirectOutput)
+                return null;
+
+            var output = new BlockingCollection<Output>();
+
+            void AddNotNullData (DataReceivedEventArgs e, OutputType outputType)
+            {
+                if (e.Data != null)
+                    output.Add(new Output { Text = e.Data, Type = outputType });
+            }
+
+            process.OutputDataReceived += (s, e) => AddNotNullData(e, OutputType.Std);
+            process.ErrorDataReceived += (s, e) => AddNotNullData(e, OutputType.Err);
+            process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
+            return output;
         }
     }
 }
