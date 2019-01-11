@@ -9,7 +9,7 @@ namespace Nuke.Common.Execution
 {
     public interface IBuildExtension
     {
-        void Execute(NukeBuild build);
+        void Execute<T>(NukeBuild<T> build);
     }
 
     public interface IPreLogoBuildExtension : IBuildExtension

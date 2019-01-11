@@ -55,6 +55,13 @@ partial class Build : NukeBuild
     readonly string ReleaseBranchPrefix = "release";
     readonly string HotfixBranchPrefix = "hotfix";
 
+    Target Foo => _ => _
+        .Executes(() =>
+        {
+            Console.WriteLine(InvokedTargets.Contains(Foo));
+            Console.WriteLine(InvokedTargets.Select(x => x.Method.Name).JoinComma());
+        });
+    
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>

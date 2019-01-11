@@ -18,8 +18,8 @@ namespace Nuke.Common.Execution
     {
         private static PathConstruction.AbsolutePath BuildAttemptFile => Constants.GetBuildAttemptFile(NukeBuild.RootDirectory);
 
-        public static void Execute(
-            NukeBuild build,
+        public static void Execute<T>(
+            NukeBuild<T> build,
             IReadOnlyCollection<ExecutableTarget> executionPlan,
             [CanBeNull] IReadOnlyCollection<string> skippedTargets)
         {
@@ -29,8 +29,8 @@ namespace Nuke.Common.Execution
             
             if (skippedTargets != null)
             {
-                NukeBuild.ExecutionPlan
-                    .Where(x => !NukeBuild.InvokedTargets.Contains(x.Name))
+                build.ExecutionPlan
+                    .Where(x => !build.InvokedTargets.Contains((T) x.ReferenceObject))
                     .Where(x => skippedTargets.Count == 0 || skippedTargets.Contains(x.Name, StringComparer.OrdinalIgnoreCase))
                     .ForEach(x => x.Status = ExecutionStatus.Skipped);
             }

@@ -14,20 +14,22 @@ using Nuke.Common.Utilities.Collections;
 
 namespace Nuke.Common.Execution
 {
-    internal static class BuildManager
+    public static class BuildManager
     {
         public static int Execute<T>(Expression<Func<T, Target>> defaultTargetExpression)
             where T : NukeBuild
         {
             var build = Create<T>();
-            NukeBuild.ExecutableTargets = ExecutableTargetFactory.CreateAll(build, defaultTargetExpression);
+            
+            var executableTargetFactory = build.CreateExecutableTargetFactory();
+            build.ExecutableTargets = executableTargetFactory.CreateAll(build, defaultTargetExpression);
             
             try
             {
                 build.Execute<IPreLogoBuildExtension>();
                 build.OnBuildCreated();
                 
-                Logger.OutputSink = build.OutputSink;
+                Logger.OutputSink = build.GetOutputSink();
                 Logger.LogLevel = NukeBuild.LogLevel;
                 ToolPathResolver.NuGetPackagesConfigFile = build.NuGetPackagesConfigFile;
 
@@ -35,21 +37,21 @@ namespace Nuke.Common.Execution
                 Logger.Log(FigletTransform.GetText("NUKE"));
                 
                 build.Execute<IPostLogoBuildExtension>();
-                NukeBuild.ExecutionPlan = ExecutionPlanner.GetExecutionPlan(
-                    NukeBuild.ExecutableTargets,
-                    ParameterService.Instance.GetParameter(() => NukeBuild.InvokedTargets) ??
+                build.ExecutionPlan = ExecutionPlanner.GetExecutionPlan(
+                    build.ExecutableTargets,
+                    ParameterService.Instance.GetParameter<string[]>(() => build.InvokedTargets) ??
                     ParameterService.Instance.GetPositionalCommandLineArguments<string>(separator: Constants.TargetsSeparator.Single()));
                 Console.CancelKeyPress += (s, e) => Finish();
 
                 InjectionUtility.InjectValues(build);
-                RequirementService.ValidateRequirements(NukeBuild.ExecutionPlan, build);
+                RequirementService.ValidateRequirements(build.ExecutionPlan, build);
                 
                 build.OnBuildInitialized();
                 
                 BuildExecutor.Execute(
                     build,
-                    NukeBuild.ExecutionPlan,
-                    ParameterService.Instance.GetParameter(() => NukeBuild.SkippedTargets));
+                    build.ExecutionPlan,
+                    ParameterService.Instance.GetParameter<string[]>(() => build.SkippedTargets));
                 
                 return 0;
             }
@@ -65,7 +67,7 @@ namespace Nuke.Common.Execution
             
             void Finish()
             {
-                NukeBuild.ExecutionPlan
+                build.ExecutionPlan
                     .Where(x => x.Status == ExecutionStatus.Executing)
                     .ForEach(x => x.Status = ExecutionStatus.Aborted);
                 
@@ -75,10 +77,10 @@ namespace Nuke.Common.Execution
                     WriteWarningsAndErrors(outputSink);
                 }
 
-                if (NukeBuild.ExecutionPlan != null)
+                if (build.ExecutionPlan != null)
                 {
                     Logger.Log();
-                    WriteSummary(NukeBuild.ExecutionPlan);
+                    WriteSummary(build.ExecutionPlan);
                 }
 
                 build.OnBuildFinished();
@@ -148,8 +150,8 @@ namespace Nuke.Common.Execution
                 Logger.Error($"Build failed on {DateTime.Now.ToString(CultureInfo.CurrentCulture)}.");
             Logger.Log();
         }
-        
-        public static void WriteWarningsAndErrors(SevereMessagesOutputSink outputSink)
+
+        private static void WriteWarningsAndErrors(SevereMessagesOutputSink outputSink)
         {
             if (outputSink.SevereMessages.Count <= 0)
                 return;

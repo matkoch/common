@@ -13,6 +13,7 @@ using Nuke.Common.Execution;
 using Nuke.Common.OutputSinks;
 using Nuke.Common.Tooling;
 using Nuke.Common.Utilities.Collections;
+using static Nuke.Common.Constants;
 
 // ReSharper disable VirtualMemberNeverOverridden.Global
 
@@ -43,11 +44,7 @@ namespace Nuke.Common
     /// }
     /// </code>
     /// </example>
-    [PublicAPI]
-    [HandleHelpRequests]
-    [HandleShellCompletion]
-    [HandleVisualStudioDebugging]
-    public abstract partial class NukeBuild
+    public abstract class NukeBuild : NukeBuild<Target>
     {
         /// <summary>
         /// Executes the build. The provided expression defines the <em>default</em> target that is invoked,
@@ -58,43 +55,78 @@ namespace Nuke.Common
         {
             return BuildManager.Execute(defaultTargetExpression);
         }
-        
-        internal static IReadOnlyCollection<ExecutableTarget> ExecutableTargets { get; set; }
-        internal static IReadOnlyCollection<ExecutableTarget> ExecutionPlan { get; set; }
 
-        internal void Execute<T>()
-            where T : IBuildExtension
+        protected internal override IExecutableTargetFactory CreateExecutableTargetFactory()
         {
-            GetType().GetCustomAttributes().OfType<T>().ForEach(x => x.Execute(this));
+            return new ExecutableTargetFactory();
+        }
+    }
+    
+    [PublicAPI]
+    [HandleHelpRequests]
+    [HandleShellCompletion]
+    [HandleVisualStudioDebugging]
+    public abstract partial class NukeBuild<T>
+    {
+        internal IReadOnlyCollection<ExecutableTarget> ExecutableTargets { get; set; }
+        internal IReadOnlyCollection<ExecutableTarget> ExecutionPlan { get; set; }
+
+        private static T GetKeyObject(ExecutableTarget executable)
+        {
+            return (T) executable.ReferenceObject;
         }
 
-        protected internal virtual IOutputSink OutputSink
-        {
-            get
-            {
-                IOutputSink innerOutputSink;
-                
-                switch (Host)
-                {
-                    case HostType.Bitrise:
-                        innerOutputSink = new BitriseOutputSink();
-                        break;
-                    case HostType.Travis:
-                        innerOutputSink = new TravisOutputSink();
-                        break;
-                    case HostType.TeamCity:
-                        innerOutputSink = new TeamCityOutputSink(new TeamCity());
-                        break;
-                    case HostType.TeamServices:
-                        innerOutputSink = new TeamServicesOutputSink(new TeamServices());
-                        break;
-                    default:
-                        innerOutputSink = new ConsoleOutputSink();
-                        break;
-                }
+        /// <summary>
+        /// Gets the list of targets that were invoked.
+        /// </summary>
+        [Parameter("List of targets to be executed. Default is '{default_target}'.",
+            Name = InvokedTargetsParameterName,
+            Separator = TargetsSeparator)]
+        public T[] InvokedTargets => ExecutionPlan.Where(x => x.Invoked).Select(GetKeyObject).ToArray();
+        
+        /// <summary>
+        /// Gets the list of targets that are skipped.
+        /// </summary>
+        [Parameter("List of targets to be skipped. Empty list skips all dependencies.", Name = SkippedTargetsParameterName, Separator = TargetsSeparator)]
+        public T[] SkippedTargets => ExecutionPlan.Where(x => x.Status == ExecutionStatus.Skipped).Select(GetKeyObject).ToArray();
 
-                return new SevereMessagesOutputSink(innerOutputSink);
+        /// <summary>
+        /// Gets the list of targets that are executing.
+        /// </summary>
+        public T[] ExecutingTargets => ExecutionPlan.Where(x => x.Status != ExecutionStatus.Skipped).Select(GetKeyObject).ToArray();
+
+        internal void Execute<TExtension>()
+            where TExtension : IBuildExtension
+        {
+            GetType().GetCustomAttributes().OfType<TExtension>().ForEach(x => x.Execute(this));
+        }
+
+        protected internal abstract IExecutableTargetFactory CreateExecutableTargetFactory();
+
+        protected internal virtual IOutputSink GetOutputSink()
+        {
+            IOutputSink innerOutputSink;
+            
+            switch (Host)
+            {
+                case HostType.Bitrise:
+                    innerOutputSink = new BitriseOutputSink();
+                    break;
+                case HostType.Travis:
+                    innerOutputSink = new TravisOutputSink();
+                    break;
+                case HostType.TeamCity:
+                    innerOutputSink = new TeamCityOutputSink(new TeamCity());
+                    break;
+                case HostType.TeamServices:
+                    innerOutputSink = new TeamServicesOutputSink(new TeamServices());
+                    break;
+                default:
+                    innerOutputSink = new ConsoleOutputSink();
+                    break;
             }
+
+            return new SevereMessagesOutputSink(innerOutputSink);
         }
         
         [CanBeNull]

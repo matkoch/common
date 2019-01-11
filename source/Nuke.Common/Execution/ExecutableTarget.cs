@@ -12,28 +12,36 @@ using System.Reflection;
 namespace Nuke.Common.Execution
 {
     [DebuggerDisplay("{" + nameof(ToDebugString) + "}")]
-    internal class ExecutableTarget
+    public class ExecutableTarget
     {
         public ExecutableTarget(
-            PropertyInfo property,
-            Target factory,
-            TargetDefinition definition,
-            bool isDefault)
+            MemberInfo member,
+            object referenceObject,
+            object definitionObject,
+            bool isDefault,
+            string description,
+            List<Func<bool>> conditions,
+            IReadOnlyList<LambdaExpression> requirements,
+            IReadOnlyList<Action> actions)
         {
-            Property = property;
-            Factory = factory;
-            Definition = definition;
+            Member = member;
+            ReferenceObject = referenceObject;
+            DefinitionObject = definitionObject;
             IsDefault = isDefault;
+            Description = description;
+            Conditions = conditions;
+            Requirements = requirements;
+            Actions = actions;
         }
 
-        public PropertyInfo Property { get; }
-        public string Name => Property.Name;
-        public Target Factory { get; }
-        public TargetDefinition Definition { get; }
-        public string Description => Definition.Description;
-        public List<Func<bool>> Conditions => Definition.Conditions;
-        public IReadOnlyList<LambdaExpression> Requirements => Definition.Requirements;
-        public IReadOnlyList<Action> Actions => Definition.Actions;
+        public MemberInfo Member { get; }
+        public string Name => Member.Name;
+        public object ReferenceObject { get; }
+        public object DefinitionObject { get; }
+        public string Description { get; }
+        public List<Func<bool>> Conditions { get; }
+        public IReadOnlyList<LambdaExpression> Requirements { get; }
+        public IReadOnlyList<Action> Actions { get; }
         public ICollection<ExecutableTarget> ExecutionDependencies { get; } = new List<ExecutableTarget>();
         public ICollection<ExecutableTarget> OrderDependencies { get; } = new List<ExecutableTarget>();
         public ICollection<ExecutableTarget> TriggerDependencies { get; } = new List<ExecutableTarget>();

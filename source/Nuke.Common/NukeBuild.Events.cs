@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Nuke.Common
 {
-    public abstract partial class NukeBuild
+    public abstract partial class NukeBuild<T>
     {
         /// <summary>
         /// Method that is invoked after the instance of the build was created.

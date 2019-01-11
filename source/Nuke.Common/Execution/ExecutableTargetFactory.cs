@@ -6,13 +6,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using NuGet.Packaging;
 
 namespace Nuke.Common.Execution
 {
-    internal static class ExecutableTargetFactory
+    public interface IExecutableTargetFactory
     {
-        public static IReadOnlyCollection<ExecutableTarget> CreateAll<T>(
+        IReadOnlyCollection<ExecutableTarget> CreateAll<T>(T build, Expression<Func<T, Target>> defaultTargetExpression)
+            where T : NukeBuild;
+    }
+
+    public class ExecutableTargetFactory : IExecutableTargetFactory
+    {
+        public IReadOnlyCollection<ExecutableTarget> CreateAll<T>(
             T build,
             Expression<Func<T, Target>> defaultTargetExpression)
             where T : NukeBuild
@@ -29,24 +36,31 @@ namespace Nuke.Common.Execution
                 var factory = (Target) property.GetValue(build);
                 var definition = new TargetDefinition();
                 factory.Invoke(definition);
-                executables.Add(new ExecutableTarget(property, factory, definition, isDefault: factory == defaultTarget));
+                var executable = new ExecutableTarget(
+                    property,
+                    referenceObject: factory,
+                    definitionObject: definition,
+                    isDefault: factory == defaultTarget,
+                    definition.Description,
+                    definition.Conditions,
+                    definition.Requirements,
+                    definition.Actions);
+                executables.Add(executable);
             }
-            
- 
 
             foreach (var executable in executables)
             {
                 IEnumerable<ExecutableTarget> GetDependencies(
-                    Func<TargetDefinition, IReadOnlyList<Target>> directDependenciesSelector,
-                    Func<TargetDefinition, IReadOnlyList<Target>> indirectDependenciesSelector)
+                    Func<TargetDefinition, IReadOnlyList<object>> directDependenciesSelector,
+                    Func<TargetDefinition, IReadOnlyList<object>> indirectDependenciesSelector)
                 {
-                    foreach (var factoryDependency in directDependenciesSelector(executable.Definition))
-                        yield return executables.Single(x => x.Factory == factoryDependency);
+                    foreach (var factoryDependency in directDependenciesSelector((TargetDefinition) executable.DefinitionObject))
+                        yield return executables.Single(x => x.ReferenceObject.Equals(factoryDependency));
 
                     foreach (var otherExecutables in executables.Where(x => x != executable))
                     {
-                        var otherDependencies = indirectDependenciesSelector(otherExecutables.Definition);
-                        if (otherDependencies.Any(x => x == executable.Factory))
+                        var otherDependencies = indirectDependenciesSelector((TargetDefinition) otherExecutables.DefinitionObject);
+                        if (otherDependencies.Any(x => x.Equals(executable.ReferenceObject)))
                             yield return otherExecutables;
                     }
                 }

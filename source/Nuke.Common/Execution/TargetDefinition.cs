@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Nuke.Common.Execution
 {
-    internal class TargetDefinition : ITargetDefinition
+    public class TargetDefinition : ITargetDefinition
     {
         internal string Description { get; set; }
         internal bool IsDefault { get; set; }
