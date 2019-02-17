@@ -22,6 +22,8 @@ namespace Nuke.Common.Execution
             IReadOnlyCollection<ExecutableTarget> executableTargets,
             [CanBeNull] IReadOnlyCollection<string> invokedTargetNames)
         {
+            CheckCycles(executableTargets);
+
             var invokedTargets = invokedTargetNames?.Select(x => GetExecutableTarget(x, executableTargets)).ToArray() ??
                                  GetDefaultTarget(executableTargets);
             invokedTargets.ForEach(x => x.Invoked = true);
@@ -31,7 +33,7 @@ namespace Nuke.Common.Execution
             IReadOnlyCollection<ExecutableTarget> additionallyTriggered;
             do
             {
-                executionPlan = GetExecutionPlanInternal(executableTargets, invokedTargets);
+                executionPlan = GetExecutionPlanInternal(executableTargets.ToList(), invokedTargets);
                 additionallyTriggered = executionPlan.SelectMany(x => x.Triggers).Except(executionPlan).ToList();
                 invokedTargets = executionPlan.Concat(additionallyTriggered).ToArray();
             } while (additionallyTriggered.Count > 0);
@@ -39,16 +41,14 @@ namespace Nuke.Common.Execution
             return executionPlan;
         }
 
-        private static IReadOnlyCollection<ExecutableTarget> GetExecutionPlanInternal(
-            IReadOnlyCollection<ExecutableTarget> executableTargets,
-            ICollection<ExecutableTarget> invokedTargets)
+        private static void CheckCycles(IReadOnlyCollection<ExecutableTarget> executableTargets)
         {
-            var vertexDictionary = GetVertexDictionary(executableTargets);
-            var graphAsList = vertexDictionary.Values.ToList();
-            var executingTargets = new List<ExecutableTarget>();
+            var vertexDictionary = executableTargets.ToDictionary(x => x, x => new Vertex<ExecutableTarget>(x));
+            foreach (var (executable, vertex) in vertexDictionary)
+                vertex.Dependencies.AddRange(executable.AllDependencies.Select(x => vertexDictionary[x]));
             
             var scc = new StronglyConnectedComponentFinder<ExecutableTarget>();
-            var cycles = scc.DetectCycle(graphAsList).Cycles().ToList();
+            var cycles = scc.DetectCycle(vertexDictionary.Values).Cycles().ToList();
             if (cycles.Count > 0)
             {
                 ControlFlow.Fail(
@@ -56,42 +56,38 @@ namespace Nuke.Common.Execution
                         .Concat(cycles.Select(x => $" - {x.Select(y => y.Value.Name).JoinComma()}"))
                         .JoinNewLine());
             }
+        }
 
-            while (graphAsList.Any())
+        private static IReadOnlyCollection<ExecutableTarget> GetExecutionPlanInternal(
+            ICollection<ExecutableTarget> availableTargets,
+            IReadOnlyCollection<ExecutableTarget> invokedTargets)
+        {
+            var executingTargets = new List<ExecutableTarget>();
+            
+            while (availableTargets.Any())
             {
-                var independents = graphAsList.Where(x => !graphAsList.Any(y => y.Dependencies.Contains(x))).ToList();
+                var independents = availableTargets.Where(x => !availableTargets.Any(y => y.AllDependencies.Contains(x))).ToList();
                 if (EnvironmentInfo.ArgumentSwitch("strict") && independents.Count > 1)
                 {
                     ControlFlow.Fail(
                         new[] { "Incomplete target definition order." }
-                            .Concat(independents.Select(x => $"  - {x.Value.Name}"))
+                            .Concat(independents.Select(x => $"  - {x.Name}"))
                             .JoinNewLine());
                 }
 
-                var independent = independents.First();
-                graphAsList.Remove(independent);
+                var independentTarget = independents.First();
+                availableTargets.Remove(independentTarget);
 
-                var executableTarget = independent.Value;
-                if (!invokedTargets.Contains(executableTarget) &&
-                    !executingTargets.SelectMany(x => x.ExecutionDependencies).Contains(executableTarget))
+                if (!invokedTargets.Contains(independentTarget) &&
+                    !executingTargets.SelectMany(x => x.ExecutionDependencies).Contains(independentTarget))
                     continue;
 
-                executingTargets.Add(executableTarget);
+                executingTargets.Add(independentTarget);
             }
 
             executingTargets.Reverse();
 
             return executingTargets;
-        }
-
-        private static IReadOnlyDictionary<ExecutableTarget, Vertex<ExecutableTarget>> GetVertexDictionary(
-            IReadOnlyCollection<ExecutableTarget> executableTargets)
-        {
-            var vertexDictionary = executableTargets.ToDictionary(x => x, x => new Vertex<ExecutableTarget>(x));
-            foreach (var (executable, vertex) in vertexDictionary)
-                vertex.Dependencies.AddRange(executable.AllDependencies.Select(x => vertexDictionary[x]));
-            
-            return vertexDictionary;
         }
 
         private static ExecutableTarget GetExecutableTarget(
@@ -122,4 +118,97 @@ namespace Nuke.Common.Execution
                 .AppendLine(HelpTextService.GetTargetsText(executableTargets)).ToString());
         }
     }
+    
+    // public class TargetDefinitionLoader
+    // {
+    //     private TargetList GetTargetList (
+    //         IReadOnlyCollection<TargetDefinition> specifiedTargets,
+    //         ICollection<TargetDefinition> targetDefinitionGraph,
+    //         bool executeDependencies,
+    //         // ReSharper disable once UnusedParameter.Local
+    //         bool strictExecution)
+    //     {
+
+    //
+    //         List<TargetDefinition> GetIndependents (IEnumerable<TargetDefinition> additionalGraphTargets = null)
+    //         {
+    //             additionalGraphTargets = additionalGraphTargets ?? Enumerable.Empty<TargetDefinition>();
+    //             var tempGraph = targetDefinitionGraph.Concat(additionalGraphTargets).ToList();
+    //             var independents = tempGraph.Where(x => !tempGraph.Any(y => y.Dependencies.Contains(x))).ToList();
+    //
+    //             if (strictExecution && independents.Count > 1)
+    //                 throw new LoaderException(
+    //                     "Incomplete target definition order.",
+    //                     string.Join(EnvironmentInfo.NewLine, independents.Select(x => $"  - {x.Name}")));
+    //
+    //             return independents;
+    //         }
+    //
+    //         bool ShouldExecute (TargetDefinition target)
+    //         {
+    //             if (specifiedTargets.Contains(target))
+    //                 return true;
+    //
+    //             if (!executeDependencies)
+    //                 return false;
+    //
+    //             return targetList.SelectMany(x => x).SelectMany(x => x).SelectMany(x => x.Dependencies).Contains(target);
+    //         }
+    //
+    //         while (targetDefinitionGraph.Any())
+    //         {
+    //             var targetSequence = new TargetSequence();
+    //
+    //             while (true)
+    //             {
+    //                 var independents = GetIndependents(targetSequence.SelectMany(x => x)).Except(targetSequence.SelectMany(x => x)).ToList();
+    //                 if (independents.Count == 0)
+    //                     break;
+    //
+    //                 independents.ForEach(x => targetDefinitionGraph.Remove(x));
+    //                 targetSequence.AddRange(independents.Where(ShouldExecute).Select(x => new TargetChunk { x }));
+    //             }
+    //
+    //             if (targetSequence.Count == 0)
+    //                 continue;
+    //
+    //             targetList.Add(targetSequence);
+    //
+    //             if (targetSequence.Count <= 1)
+    //                 continue;
+    //
+    //             foreach (var targetChunk in targetSequence)
+    //             {
+    //                 while (true)
+    //                 {
+    //                     var parallelTargets = targetSequence.Except(new[] { targetChunk }).SelectMany(x => x).ToList();
+    //                     var additionalChunkTargets = GetIndependents(parallelTargets).Except(parallelTargets).Where(ShouldExecute).ToList();
+    //                     if (additionalChunkTargets.Count == 0)
+    //                         break;
+    //
+    //                     foreach (var additionalChunkTarget in additionalChunkTargets)
+    //                     {
+    //                         targetDefinitionGraph.Remove(additionalChunkTarget);
+    //                         targetChunk.Add(additionalChunkTarget);
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //
+    //         targetList.Reverse();
+    //         return targetList;
+    //     }
+    // }
+
+    // public class TargetList : List<TargetSequence>
+    // {
+    // }
+    //
+    // public class TargetSequence : List<TargetChunk>
+    // {
+    // }
+    //
+    // public class TargetChunk : List<TargetDefinition>
+    // {
+    // }
 }
