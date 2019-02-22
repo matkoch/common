@@ -12,7 +12,7 @@ using System.Reflection;
 namespace Nuke.Common.Execution
 {
     [DebuggerDisplay("{" + nameof(ToDebugString) + "}")]
-    public class ExecutableTarget
+    public class ExecutableTarget : IExecutionItem
     {
         internal ExecutableTarget()
         {

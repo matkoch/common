@@ -49,7 +49,7 @@ namespace Nuke.Common.Execution
                 Logger.Normal(FigletTransform.GetText("NUKE"));
                 
                 build.ExecuteExtensions<IPostLogoBuildExtension>();
-                build.ExecutionPlan = ExecutionPlanner.GetExecutionPlan(
+                build.ExecutionPlan = ExecutionPlanner.GetSequentialExecutionPlan(
                     build.ExecutableTargets,
                     ParameterService.Instance.GetParameter<string[]>(() => build.InvokedTargets) ??
                     ParameterService.Instance.GetPositionalCommandLineArguments<string>(separator: Constants.TargetsSeparator.Single()));

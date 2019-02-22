@@ -81,7 +81,7 @@ namespace Nuke.Common.Tests.Execution
         {
             string[] SelectNames(ExecutableTarget[] targets) => targets?.Select(x => x.Name).ToArray();
 
-            return ExecutionPlanner.GetExecutionPlan(new[] { A, B, C }, SelectNames(invokedTargets));
+            return ExecutionPlanner.GetSequentialExecutionPlan(new[] { A, B, C }, SelectNames(invokedTargets));
         }
 
         private void AddTrigger(ExecutableTarget source, ExecutableTarget target)

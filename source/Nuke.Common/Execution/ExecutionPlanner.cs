@@ -18,7 +18,22 @@ namespace Nuke.Common.Execution
     /// </summary>
     internal static class ExecutionPlanner
     {
-        public static IReadOnlyCollection<ExecutableTarget> GetExecutionPlan(
+        public static ExecutionPlan GetComposedExecutionPlan(
+            IReadOnlyCollection<ExecutableTarget> executableTargets,
+            [CanBeNull] IReadOnlyCollection<string> invokedTargetNames)
+        {
+            var sequentialPlan = GetSequentialExecutionPlan(executableTargets, invokedTargetNames);
+
+            ExecutionPlan Compose(IReadOnlyCollection<ExecutableTarget> plannedTargets)
+            {
+                
+            }
+
+
+            return Compose(sequentialPlan);
+        }
+
+        public static IReadOnlyCollection<ExecutableTarget> GetSequentialExecutionPlan(
             IReadOnlyCollection<ExecutableTarget> executableTargets,
             [CanBeNull] IReadOnlyCollection<string> invokedTargetNames)
         {
@@ -66,16 +81,7 @@ namespace Nuke.Common.Execution
             
             while (availableTargets.Any())
             {
-                var independents = availableTargets.Where(x => !availableTargets.Any(y => y.AllDependencies.Contains(x))).ToList();
-                if (EnvironmentInfo.ArgumentSwitch("strict") && independents.Count > 1)
-                {
-                    ControlFlow.Fail(
-                        new[] { "Incomplete target definition order." }
-                            .Concat(independents.Select(x => $"  - {x.Name}"))
-                            .JoinNewLine());
-                }
-
-                var independentTarget = independents.First();
+                var independentTarget = availableTargets.GetIndependents().First();
                 availableTargets.Remove(independentTarget);
 
                 if (!invokedTargets.Contains(independentTarget) &&
@@ -88,6 +94,21 @@ namespace Nuke.Common.Execution
             executingTargets.Reverse();
 
             return executingTargets;
+        }
+
+        private static IReadOnlyCollection<ExecutableTarget> GetIndependents(this ICollection<ExecutableTarget> availableTargets)
+        {
+            var independents = availableTargets.Where(x => !availableTargets.Any(y => y.AllDependencies.Contains(x))).ToList();
+            
+            if (EnvironmentInfo.ArgumentSwitch("strict") && independents.Count > 1)
+            {
+                ControlFlow.Fail(
+                    new[] { "Incomplete target definition order." }
+                        .Concat(independents.Select(x => $"  - {x.Name}"))
+                        .JoinNewLine());
+            }
+
+            return independents;
         }
 
         private static ExecutableTarget GetExecutableTarget(
@@ -200,15 +221,40 @@ namespace Nuke.Common.Execution
     //     }
     // }
 
-    // public class TargetList : List<TargetSequence>
-    // {
-    // }
-    //
-    // public class TargetSequence : List<TargetChunk>
-    // {
-    // }
-    //
-    // public class TargetChunk : List<TargetDefinition>
-    // {
-    // }
+    public interface IExecutionItem
+    {
+    }
+
+    public class ExecutionPlan  : IExecutionItem
+    {
+        public ExecutionMode Mode { get; set; }
+
+        public Stack<IExecutionItem> Items { get; } = new Stack<IExecutionItem>();
+    }
+
+    public enum ExecutionMode
+    {
+        Sequential,
+        Parallel
+    }
+
+    public static class ExecutionPlanExtensions
+    {
+        public static IEnumerable<ExecutableTarget> GetAllTargets(this ExecutionPlan executionPlan)
+        {
+            foreach (var item in executionPlan.Items)
+            {
+                switch (item)
+                {
+                    case ExecutionPlan plan:
+                        foreach (var subItems in plan.GetAllTargets())
+                            yield return subItems;
+                        break;
+                    case ExecutableTarget target:
+                        yield return target;
+                        break;
+                }
+            }
+        }
+    }
 }
