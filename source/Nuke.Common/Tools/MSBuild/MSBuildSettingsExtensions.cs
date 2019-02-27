@@ -26,8 +26,7 @@ namespace Nuke.Common.Tools.MSBuild
         {
             if (TeamCity.Instance != null)
             {
-                var teamCity = TeamCity.Instance.NotNull("TeamCity.Instance != null");
-                var teamCityLogger = teamCity.ConfigurationProperties["TEAMCITY_DOTNET_MSBUILD_EXTENSIONS4_0"];
+                var teamCityLogger = TeamCity.Instance.ConfigurationProperties["TEAMCITY_DOTNET_MSBUILD_EXTENSIONS4_0"];
                 return toolSettings
                     .AddLoggers($"JetBrains.BuildServer.MSBuildLoggers.MSBuildLogger,{teamCityLogger}")
                     .EnableNoConsoleLogger();
