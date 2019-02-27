@@ -42,7 +42,7 @@ namespace Nuke.Common.Tools.GitVersion
                               "GitVersion.CommandLine.DotNetCore",
                               "GitVersion.CommandLine"
                           }
-                .Select(x => NuGetPackageResolver.TryGetLocalInstalledPackage(x, ToolPathResolver.NuGetPackagesConfigFile))
+                .Select(x => NuGetPackageResolver.TryGetLocalInstalledPackage(x, ToolPathResolver.NuGetPackagesConfigFile, includeDependencies: true))
                 .WhereNotNull()
                 .FirstOrDefault().NotNull("package != null");
             return Directory.GetFiles(package.Directory, "GitVersion.*", SearchOption.AllDirectories)
