@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net461;netcoreapp2.0</TargetFrameworks>
+    <NoWarn>$(NoWarn);CS0649</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nuke.CodeGeneration\Nuke.CodeGeneration.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == ''">
+    <None Include="$(MSBuildProjectName).targets" PackagePath="build\netstandard2.0" Pack="true" />
+    <None Include="$(MSBuildProjectName).targets" PackagePath="build\net461" Pack="true" />
+    <None Include="bin\$(Configuration)\netcoreapp2.0\publish\**\*.*" PackagePath="build\netstandard2.0" Pack="true" />
+    <None Include="bin\$(Configuration)\net461\publish\**\*.*" PackagePath="build\net461" Pack="true" />
+  </ItemGroup>
+
+</Project>

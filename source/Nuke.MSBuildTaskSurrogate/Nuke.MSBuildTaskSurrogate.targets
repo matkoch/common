@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <ProgramCall Condition="'$(MSBuildRuntimeType)' == 'Core'">dotnet exec "$(MSBuildThisFileDirectory)$(MSBuildThisFileName).dll" --</ProgramCall>
+    <ProgramCall Condition="'$(MSBuildRuntimeType)' != 'Core'">"$(MSBuildThisFileDirectory)$(MSBuildThisFileName).exe"</ProgramCall>
+  </PropertyGroup>
+
+  <Target
+    Name="NukeCodeGeneration"
+    BeforeTargets="CoreCompile"
+    Condition="'@(NukeSpecificationFiles)' != ''">
+
+    <Exec
+      Command="$(ProgramCall) --action CodeGeneration --files @(NukeSpecificationFiles)" />
+
+  </Target>
+
+  <Target
+    Name="NukeSharedFilesDownload"
+    BeforeTargets="CoreCompile"
+    Condition="'@(NukeSharedFiles)' != ''">
+
+    <Exec
+      Command="$(ProgramCall) --action SharedFilesDownload --files @(NukeSharedFiles)" />
+
+  </Target>
+
+  <Target
+    Name="NukeGlobalToolPackaging"
+    BeforeTargets="GenerateNuspec"
+    Condition="'$(PackAsTool)' == 'True'">
+
+    <Exec
+      Command="$(ProgramCall) --action GlobalToolPackaging --target-framework @(_TargetFrameworks) --project-assets-file $(ProjectAssetsFile) --nuget-package-root $(NuGetPackageRoot)"
+      ConsoleToMsBuild="true">
+      <Output TaskParameter="ConsoleOutput" ItemName="_PackageFilesRaw" />
+    </Exec>
+
+    <ItemGroup>
+      <_PackageFilesRaw Remove="%(_PackageFilesRaw.Identity)" Condition="$([System.String]::Copy('%(Identity)').StartsWith('error'))" />
+      <_PackageFilesRaw Remove="%(_PackageFilesRaw.Identity)" Condition="$([System.String]::Copy('%(Identity)').StartsWith('warning'))" />
+
+      <_PackageFilesRaw
+        Part1="$([System.String]::Copy('%(Identity)').Split('->')[0].Trim())"
+        Part2="$([System.String]::Copy('%(Identity)').Split('->')[2].Trim())" />
+
+      <_PackageFiles
+        Include="%(_PackageFilesRaw.Part1)"
+        BuildAction="None"
+        PackagePath="%(_PackageFilesRaw.Part2)"/>
+    </ItemGroup>
+
+  </Target>
+
+</Project>
