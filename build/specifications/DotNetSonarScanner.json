@@ -7,7 +7,7 @@
   "name": "DotNetSonarScanner",
   "officialUrl": "https://www.sonarqube.org/",
   "help": "The SonarScanner for MSBuild is the recommended way to launch a SonarQube or SonarCloud analysis for projects/solutions using MSBuild or dotnet command as build tool.",
-  "pathExecutable": "dotnet sonarscanner",
+  "pathExecutable": "dotnet",
   "tasks": [
     {
       "postfix": "Begin",

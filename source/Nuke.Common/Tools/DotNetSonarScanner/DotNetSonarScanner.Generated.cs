@@ -28,7 +28,7 @@ namespace Nuke.Common.Tools.DotNetSonarScanner
         /// </summary>
         public static string DotNetSonarScannerPath =>
             ToolPathResolver.TryGetEnvironmentExecutable("DOTNETSONARSCANNER_EXE") ??
-            ToolPathResolver.GetPathExecutable("dotnet sonarscanner");
+            ToolPathResolver.GetPathExecutable("dotnet");
         public static Action<OutputType, string> DotNetSonarScannerLogger { get; set; } = ProcessTasks.DefaultLogger;
         /// <summary>
         ///   The SonarScanner for MSBuild is the recommended way to launch a SonarQube or SonarCloud analysis for projects/solutions using MSBuild or dotnet command as build tool.
