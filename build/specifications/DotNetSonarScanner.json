@@ -11,10 +11,7 @@
   "tasks": [
     {
       "postfix": "Begin",
-      "commonPropertySets": [
-        "sonarscanner"
-      ],
-      "definiteArgument": "begin",
+      "definiteArgument": "sonarscanner begin",
       "settingsClass": {
         "properties": [
           {
@@ -33,7 +30,7 @@
           {
             "name": "Organization",
             "type": "string",
-            "format": "/d:sonar.organization={value}",
+            "format": "/o:{value}",
             "help": "Specifies the SonarQube organization."
           },
           {
@@ -58,6 +55,7 @@
             "name": "Login",
             "type": "string",
             "format": "/d:sonar.login={value}",
+            "secret": true,
             "help": "Specifies the username or access token to authenticate with to SonarQube. If this argument is added to the begin step, it must also be added on the end step."
           },
           {
@@ -170,16 +168,14 @@
     },
     {
       "postfix": "End",
-      "commonPropertySets": [
-        "sonarscanner"
-      ],
-      "definiteArgument": "end",
+      "definiteArgument": "sonarscanner end",
       "settingsClass": {
         "properties": [
           {
             "name": "Login",
             "type": "string",
             "format": "/d:sonar.login={value}",
+            "secret": true,
             "help": "Specifies the username or access token to authenticate with to SonarQube. If this argument is added to the begin step, it must also be added on the end step."
           },
           {

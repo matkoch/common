@@ -71,7 +71,6 @@ namespace Nuke.Common.Tools.DotNetSonarScanner
         ///     <li><c>/d:sonar.links.issue</c> via <see cref="DotNetSonarScannerBeginSettings.IssueTrackerUrl"/></li>
         ///     <li><c>/d:sonar.links.scm</c> via <see cref="DotNetSonarScannerBeginSettings.SCMUrl"/></li>
         ///     <li><c>/d:sonar.login</c> via <see cref="DotNetSonarScannerBeginSettings.Login"/></li>
-        ///     <li><c>/d:sonar.organization</c> via <see cref="DotNetSonarScannerBeginSettings.Organization"/></li>
         ///     <li><c>/d:sonar.password</c> via <see cref="DotNetSonarScannerBeginSettings.Password"/></li>
         ///     <li><c>/d:sonar.projectDescription</c> via <see cref="DotNetSonarScannerBeginSettings.Description"/></li>
         ///     <li><c>/d:sonar.sourceEncoding</c> via <see cref="DotNetSonarScannerBeginSettings.SourceEncoding"/></li>
@@ -79,6 +78,7 @@ namespace Nuke.Common.Tools.DotNetSonarScanner
         ///     <li><c>/d:sonar.ws.timeout</c> via <see cref="DotNetSonarScannerBeginSettings.WebServiceTimeout"/></li>
         ///     <li><c>/k</c> via <see cref="DotNetSonarScannerBeginSettings.ProjectKey"/></li>
         ///     <li><c>/n</c> via <see cref="DotNetSonarScannerBeginSettings.Name"/></li>
+        ///     <li><c>/o</c> via <see cref="DotNetSonarScannerBeginSettings.Organization"/></li>
         ///     <li><c>/v</c> via <see cref="DotNetSonarScannerBeginSettings.Version"/></li>
         ///   </ul>
         /// </remarks>
@@ -107,7 +107,6 @@ namespace Nuke.Common.Tools.DotNetSonarScanner
         ///     <li><c>/d:sonar.links.issue</c> via <see cref="DotNetSonarScannerBeginSettings.IssueTrackerUrl"/></li>
         ///     <li><c>/d:sonar.links.scm</c> via <see cref="DotNetSonarScannerBeginSettings.SCMUrl"/></li>
         ///     <li><c>/d:sonar.login</c> via <see cref="DotNetSonarScannerBeginSettings.Login"/></li>
-        ///     <li><c>/d:sonar.organization</c> via <see cref="DotNetSonarScannerBeginSettings.Organization"/></li>
         ///     <li><c>/d:sonar.password</c> via <see cref="DotNetSonarScannerBeginSettings.Password"/></li>
         ///     <li><c>/d:sonar.projectDescription</c> via <see cref="DotNetSonarScannerBeginSettings.Description"/></li>
         ///     <li><c>/d:sonar.sourceEncoding</c> via <see cref="DotNetSonarScannerBeginSettings.SourceEncoding"/></li>
@@ -115,6 +114,7 @@ namespace Nuke.Common.Tools.DotNetSonarScanner
         ///     <li><c>/d:sonar.ws.timeout</c> via <see cref="DotNetSonarScannerBeginSettings.WebServiceTimeout"/></li>
         ///     <li><c>/k</c> via <see cref="DotNetSonarScannerBeginSettings.ProjectKey"/></li>
         ///     <li><c>/n</c> via <see cref="DotNetSonarScannerBeginSettings.Name"/></li>
+        ///     <li><c>/o</c> via <see cref="DotNetSonarScannerBeginSettings.Organization"/></li>
         ///     <li><c>/v</c> via <see cref="DotNetSonarScannerBeginSettings.Version"/></li>
         ///   </ul>
         /// </remarks>
@@ -281,14 +281,14 @@ namespace Nuke.Common.Tools.DotNetSonarScanner
         protected override Arguments ConfigureArguments(Arguments arguments)
         {
             arguments
-              .Add("begin")
+              .Add("sonarscanner begin")
               .Add("/k:{value}", ProjectKey)
               .Add("/n:{value}", Name)
-              .Add("/d:sonar.organization={value}", Organization)
+              .Add("/o:{value}", Organization)
               .Add("/v:{value}", Version)
               .Add("/d:sonar.projectDescription={value}", Description)
               .Add("/d:sonar.host.url={value}", Server)
-              .Add("/d:sonar.login={value}", Login)
+              .Add("/d:sonar.login={value}", Login, secret: true)
               .Add("/d:sonar.password={value}", Password, secret: true)
               .Add("/d:sonar.verbose={value}", Verbose)
               .Add("/d:sonar.cs.vstest.reportsPaths={value}", VSTestReports, separator: ',')
@@ -334,8 +334,8 @@ namespace Nuke.Common.Tools.DotNetSonarScanner
         protected override Arguments ConfigureArguments(Arguments arguments)
         {
             arguments
-              .Add("end")
-              .Add("/d:sonar.login={value}", Login)
+              .Add("sonarscanner end")
+              .Add("/d:sonar.login={value}", Login, secret: true)
               .Add("/d:sonar.password={value}", Password, secret: true);
             return base.ConfigureArguments(arguments);
         }
