@@ -1,4 +1,4 @@
-// Generated from https://github.com/nuke-build/common/blob/master/build/specifications/DotNetEntityFramework.json
+// Generated from https://github.com/RLittlesII/common/blob/master/build/specifications/DotNetEntityFramework.json
 // Generated with Nuke.CodeGeneration version LOCAL (Windows,.NETStandard,Version=v2.0)
 
 using JetBrains.Annotations;
@@ -653,7 +653,7 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   The build configuration, for example: Debug or Release.
+        ///   The build configuration, for example: <c>Debug</c> or <c>Release.</c>
         /// </summary>
         public virtual string Configuration { get; internal set; }
         /// <summary>
@@ -740,7 +740,7 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   The build configuration, for example: Debug or Release.
+        ///   The build configuration, for example: <c>Debug</c> or <c>Release.</c>
         /// </summary>
         public virtual string Configuration { get; internal set; }
         /// <summary>
@@ -819,7 +819,7 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   The build configuration, for example: Debug or Release.
+        ///   The build configuration, for example: <c>Debug</c> or <c>Release.</c>
         /// </summary>
         public virtual string Configuration { get; internal set; }
         /// <summary>
@@ -896,7 +896,7 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   The build configuration, for example: Debug or Release.
+        ///   The build configuration, for example: <c>Debug</c> or <c>Release.</c>
         /// </summary>
         public virtual string Configuration { get; internal set; }
         /// <summary>
@@ -957,7 +957,7 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string Connection { get; internal set; }
         /// <summary>
-        ///   The provider to use. Typically this is the name of the NuGet package, for example: Microsoft.EntityFrameworkCore.SqlServer.
+        ///   The provider to use. Typically this is the name of the NuGet package, for example: <c>Microsoft.EntityFrameworkCore.SqlServer.</c>
         /// </summary>
         public virtual string Provider { get; internal set; }
         /// <summary>
@@ -981,11 +981,11 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string OutputDirectory { get; internal set; }
         /// <summary>
-        ///   The schemas of tables to generate entity types for. To specify multiple schemas, repeat --schema for each one. If this option is omitted, all schemas are included.
+        ///   The schemas of tables to generate entity types for. To specify multiple schemas, repeat <c>--schema</c> for each one. If this option is omitted, all schemas are included.
         /// </summary>
         public virtual string Schema { get; internal set; }
         /// <summary>
-        ///   The tables to generate entity types for. To specify multiple tables, repeat -t or --table for each one. If this option is omitted, all tables are included.
+        ///   The tables to generate entity types for. To specify multiple tables, repeat <c>-t</c> or <c>--table</c> for each one. If this option is omitted, all tables are included.
         /// </summary>
         public virtual string Table { get; internal set; }
         /// <summary>
@@ -1013,7 +1013,7 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   The build configuration, for example: Debug or Release.
+        ///   The build configuration, for example: <c>Debug</c> or <c>Release.</c>
         /// </summary>
         public virtual string Configuration { get; internal set; }
         /// <summary>
@@ -1108,7 +1108,7 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   The build configuration, for example: Debug or Release.
+        ///   The build configuration, for example: <c>Debug</c> or <c>Release.</c>
         /// </summary>
         public virtual string Configuration { get; internal set; }
         /// <summary>
@@ -1187,7 +1187,7 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   The build configuration, for example: Debug or Release.
+        ///   The build configuration, for example: <c>Debug</c> or <c>Release.</c>
         /// </summary>
         public virtual string Configuration { get; internal set; }
         /// <summary>
@@ -1268,7 +1268,7 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   The build configuration, for example: Debug or Release.
+        ///   The build configuration, for example: <c>Debug</c> or <c>Release.</c>
         /// </summary>
         public virtual string Configuration { get; internal set; }
         /// <summary>
@@ -1362,7 +1362,7 @@ namespace Nuke.Common.Tools.DotNetEF
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   The build configuration, for example: Debug or Release.
+        ///   The build configuration, for example: <c>Debug</c> or <c>Release.</c>
         /// </summary>
         public virtual string Configuration { get; internal set; }
         /// <summary>
@@ -1686,7 +1686,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Configuration
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFDatabaseDropSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDatabaseDropSettings SetConfiguration(this DotNetEFDatabaseDropSettings toolSettings, string configuration)
@@ -1697,7 +1697,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFDatabaseDropSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDatabaseDropSettings ResetConfiguration(this DotNetEFDatabaseDropSettings toolSettings)
@@ -2173,7 +2173,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Configuration
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFDatabaseUpdateSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDatabaseUpdateSettings SetConfiguration(this DotNetEFDatabaseUpdateSettings toolSettings, string configuration)
@@ -2184,7 +2184,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFDatabaseUpdateSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDatabaseUpdateSettings ResetConfiguration(this DotNetEFDatabaseUpdateSettings toolSettings)
@@ -2579,7 +2579,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Configuration
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFDbContextInfoSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextInfoSettings SetConfiguration(this DotNetEFDbContextInfoSettings toolSettings, string configuration)
@@ -2590,7 +2590,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFDbContextInfoSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextInfoSettings ResetConfiguration(this DotNetEFDbContextInfoSettings toolSettings)
@@ -2985,7 +2985,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Configuration
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFDbContextListSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextListSettings SetConfiguration(this DotNetEFDbContextListSettings toolSettings, string configuration)
@@ -2996,7 +2996,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFDbContextListSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextListSettings ResetConfiguration(this DotNetEFDbContextListSettings toolSettings)
@@ -3262,7 +3262,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Provider
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFDbContextScaffoldSettings.Provider"/></em></p>
-        ///   <p>The provider to use. Typically this is the name of the NuGet package, for example: Microsoft.EntityFrameworkCore.SqlServer.</p>
+        ///   <p>The provider to use. Typically this is the name of the NuGet package, for example: <c>Microsoft.EntityFrameworkCore.SqlServer.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextScaffoldSettings SetProvider(this DotNetEFDbContextScaffoldSettings toolSettings, string provider)
@@ -3273,7 +3273,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFDbContextScaffoldSettings.Provider"/></em></p>
-        ///   <p>The provider to use. Typically this is the name of the NuGet package, for example: Microsoft.EntityFrameworkCore.SqlServer.</p>
+        ///   <p>The provider to use. Typically this is the name of the NuGet package, for example: <c>Microsoft.EntityFrameworkCore.SqlServer.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextScaffoldSettings ResetProvider(this DotNetEFDbContextScaffoldSettings toolSettings)
@@ -3472,7 +3472,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Schema
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFDbContextScaffoldSettings.Schema"/></em></p>
-        ///   <p>The schemas of tables to generate entity types for. To specify multiple schemas, repeat --schema for each one. If this option is omitted, all schemas are included.</p>
+        ///   <p>The schemas of tables to generate entity types for. To specify multiple schemas, repeat <c>--schema</c> for each one. If this option is omitted, all schemas are included.</p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextScaffoldSettings SetSchema(this DotNetEFDbContextScaffoldSettings toolSettings, string schema)
@@ -3483,7 +3483,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFDbContextScaffoldSettings.Schema"/></em></p>
-        ///   <p>The schemas of tables to generate entity types for. To specify multiple schemas, repeat --schema for each one. If this option is omitted, all schemas are included.</p>
+        ///   <p>The schemas of tables to generate entity types for. To specify multiple schemas, repeat <c>--schema</c> for each one. If this option is omitted, all schemas are included.</p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextScaffoldSettings ResetSchema(this DotNetEFDbContextScaffoldSettings toolSettings)
@@ -3496,7 +3496,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Table
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFDbContextScaffoldSettings.Table"/></em></p>
-        ///   <p>The tables to generate entity types for. To specify multiple tables, repeat -t or --table for each one. If this option is omitted, all tables are included.</p>
+        ///   <p>The tables to generate entity types for. To specify multiple tables, repeat <c>-t</c> or <c>--table</c> for each one. If this option is omitted, all tables are included.</p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextScaffoldSettings SetTable(this DotNetEFDbContextScaffoldSettings toolSettings, string table)
@@ -3507,7 +3507,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFDbContextScaffoldSettings.Table"/></em></p>
-        ///   <p>The tables to generate entity types for. To specify multiple tables, repeat -t or --table for each one. If this option is omitted, all tables are included.</p>
+        ///   <p>The tables to generate entity types for. To specify multiple tables, repeat <c>-t</c> or <c>--table</c> for each one. If this option is omitted, all tables are included.</p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextScaffoldSettings ResetTable(this DotNetEFDbContextScaffoldSettings toolSettings)
@@ -3730,7 +3730,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Configuration
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFDbContextScaffoldSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextScaffoldSettings SetConfiguration(this DotNetEFDbContextScaffoldSettings toolSettings, string configuration)
@@ -3741,7 +3741,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFDbContextScaffoldSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFDbContextScaffoldSettings ResetConfiguration(this DotNetEFDbContextScaffoldSettings toolSettings)
@@ -4184,7 +4184,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Configuration
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFMigrationsAddSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFMigrationsAddSettings SetConfiguration(this DotNetEFMigrationsAddSettings toolSettings, string configuration)
@@ -4195,7 +4195,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFMigrationsAddSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFMigrationsAddSettings ResetConfiguration(this DotNetEFMigrationsAddSettings toolSettings)
@@ -4590,7 +4590,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Configuration
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFMigrationsListSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFMigrationsListSettings SetConfiguration(this DotNetEFMigrationsListSettings toolSettings, string configuration)
@@ -4601,7 +4601,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFMigrationsListSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFMigrationsListSettings ResetConfiguration(this DotNetEFMigrationsListSettings toolSettings)
@@ -5020,7 +5020,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Configuration
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFMigrationsRemoveSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFMigrationsRemoveSettings SetConfiguration(this DotNetEFMigrationsRemoveSettings toolSettings, string configuration)
@@ -5031,7 +5031,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFMigrationsRemoveSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFMigrationsRemoveSettings ResetConfiguration(this DotNetEFMigrationsRemoveSettings toolSettings)
@@ -5555,7 +5555,7 @@ namespace Nuke.Common.Tools.DotNetEF
         #region Configuration
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetEFMigrationsScriptSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFMigrationsScriptSettings SetConfiguration(this DotNetEFMigrationsScriptSettings toolSettings, string configuration)
@@ -5566,7 +5566,7 @@ namespace Nuke.Common.Tools.DotNetEF
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetEFMigrationsScriptSettings.Configuration"/></em></p>
-        ///   <p>The build configuration, for example: Debug or Release.</p>
+        ///   <p>The build configuration, for example: <c>Debug</c> or <c>Release.</c></p>
         /// </summary>
         [Pure]
         public static DotNetEFMigrationsScriptSettings ResetConfiguration(this DotNetEFMigrationsScriptSettings toolSettings)

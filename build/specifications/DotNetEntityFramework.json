@@ -93,7 +93,7 @@
             "name": "Provider",
             "type": "string",
             "format": "{value}",
-            "help": "The provider to use. Typically this is the name of the NuGet package, for example: Microsoft.EntityFrameworkCore.SqlServer."
+            "help": "The provider to use. Typically this is the name of the NuGet package, for example: <c>Microsoft.EntityFrameworkCore.SqlServer.</c>"
           },
           {
             "name": "DataAnnotations",
@@ -129,13 +129,13 @@
             "name": "Schema",
             "type": "string",
             "format": "--schema {value}",
-            "help": "The schemas of tables to generate entity types for. To specify multiple schemas, repeat --schema for each one. If this option is omitted, all schemas are included."
+            "help": "The schemas of tables to generate entity types for. To specify multiple schemas, repeat <c>--schema</c> for each one. If this option is omitted, all schemas are included."
           },
           {
             "name": "Table",
             "type": "string",
             "format": "--table {value}",
-            "help": "The tables to generate entity types for. To specify multiple tables, repeat -t or --table for each one. If this option is omitted, all tables are included."
+            "help": "The tables to generate entity types for. To specify multiple tables, repeat <c>-t</c> or <c>--table</c> for each one. If this option is omitted, all tables are included."
           },
           {
             "name": "UseDatabaseNames",
@@ -270,7 +270,7 @@
         "name": "Configuration",
         "type": "string",
         "format": "--configuration {value}",
-        "help": "The build configuration, for example: Debug or Release."
+        "help": "The build configuration, for example: <c>Debug</c> or <c>Release.</c>"
       },
       {
         "name": "Runtime",
