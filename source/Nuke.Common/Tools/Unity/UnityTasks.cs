@@ -26,11 +26,19 @@ namespace Nuke.Common.Tools.Unity
 
         public static string GetToolPath()
         {
-            return EnvironmentInfo.IsWin
-                ? EnvironmentInfo.SpecialFolder(SpecialFolders.ProgramFiles) + "/Editor/Unity.exe"
-                : EnvironmentInfo.IsOsx
-                    ? "/Applications/Unity/Unity.app/Contents/MacOS/Unity"
-                    : null;
+            const string unityWinPath = @"\Unity\Editor\Unity.exe";
+            if (EnvironmentInfo.IsWin)
+            {
+                if (EnvironmentInfo.Is32Bit) return EnvironmentInfo.SpecialFolder(SpecialFolders.ProgramFilesX86) + unityWinPath;
+                if (EnvironmentInfo.Is64Bit) return EnvironmentInfo.SpecialFolder(SpecialFolders.ProgramFiles) + unityWinPath;
+            }
+
+            if (EnvironmentInfo.IsOsx)
+            {
+                return "/Applications/Unity/Unity.app/Contents/MacOS/Unity";
+            }
+
+            return null;
         }
 
         private static void PreProcess<T>(ref T unitySettings)
