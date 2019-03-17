@@ -1,0 +1,600 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nuke-build/nuke/master/source/Nuke.CodeGeneration/schema.json",
+  "references": [
+    "http://wixtoolset.org/documentation/manual/v3/overview/alltools.html"
+  ],
+  "name": "Wix",
+  "officialUrl": "http://wixtoolset.org/",
+  "help": "",
+  "customExecutable": true,
+  "tasks": [
+    {
+      "help": "Preprocesses and compiles WiX source files into object files (.wixobj).",
+      "postfix": "Candle",
+      "commonPropertySets": [
+        "common",
+        "extension",
+        "responsefile",
+        "multiple-input-files",
+        "output",
+        "nologo",
+        "verbose",
+        "pedantic"
+      ],
+      "settingsClass": {
+        "baseClass": "CandleBaseSettings",
+        "properties": [
+          {
+            "name": "Architecture",
+            "type": "Architecture",
+            "format": "-arch {value}",
+            "help": "set architecture defaults for package, components, etc. values: x86, x64, or ia64 (default: x86)"
+          },
+          {
+            "name": "Fips",
+            "type": "bool",
+            "format": "-fips",
+            "help": "enables FIPS compliant algorithms"
+          },
+          {
+            "name": "Include",
+            "type": "List<string>",
+            "format": "-I{value}",
+            "help": "add to include search path"
+          },
+          {
+            "name": "Parameter",
+            "type": "Dictionary<string, string>",
+            "format": "-d{value}",
+            "itemFormat": "{key}={value}",
+            "help": "define a parameter for the preprocessor"
+          },
+          {
+            "name": "PreprocessToFile",
+            "type": "string",
+            "format": "-p{value}",
+            "help": "preprocess to a file"
+          }
+        ]
+      }
+    },
+    {
+      "help": "Generates WiX authoring from various input formats. It is used for harvesting files, Visual Studio projects and Internet Information Server web sites, harvesting these files into components and generating Windows Installer XML Source files (.wxs). Heat is good to use when you begin authoring your first Windows Installer package for a product.",
+      "postfix": "Heat",
+      "commonPropertySets": [
+        "common",
+        "extension",
+        "output",
+        "nologo",
+        "verbose"
+      ],
+      "settingsClass": {
+        "baseClass": "HeatBaseSettings",
+        "properties": [
+          {
+            "name": "Type",
+            "type": "Types",
+            "format": "{value}",
+            "help": "harvest type"
+          },
+          {
+            "name": "Source",
+            "type": "string",
+            "format": "{value}",
+            "help": "harvest source"
+          },
+          {
+            "name": "SourceFile",
+            "type": "string",
+            "format": "{value}",
+            "help": "WXS source file"
+          },
+          {
+            "name": "AutogenerateComponentGuids",
+            "type": "bool",
+            "format": "-ag",
+            "help": "autogenerate component guids at compile time"
+          },
+          {
+            "name": "ComponentGroup",
+            "type": "string",
+            "format": "-cg {value}",
+            "help": "component group name (cannot contain spaces e.g -cg MyComponentGroup)"
+          },
+          {
+            "name": "Configuration",
+            "type": "string",
+            "format": "-configuration {value}",
+            "help": "configuration to set when harvesting the project"
+          },
+          {
+            "name": "DirectoryId",
+            "type": "string",
+            "format": "-directoryid {value}",
+            "help": "overridden directory id for generated directory elements"
+          },
+          {
+            "name": "RootDirectoryReference",
+            "type": "string",
+            "format": "-dr {value}",
+            "help": "directory reference to root directories (cannot contain spaces e.g. -dr MyAppDirRef)"
+          },
+          {
+            "name": "NoBracketGuids",
+            "type": "bool",
+            "format": "-gl",
+            "help": "generated guids are not in brackets"
+          },
+          {
+            "name": "GenerateElement",
+            "type": "Elements",
+            "format": "-generate {value}",
+            "help": "specify what elements to generate"
+          },
+          {
+            "name": "GenerateGuidsNow",
+            "type": "bool",
+            "format": "-gg",
+            "help": "generate guids now"
+          },
+          {
+            "name": "Indentation",
+            "type": "int",
+            "format": "-indent {value}",
+            "help": "indentation multiple"
+          },
+          {
+            "name": "KeepEmptyDirectories",
+            "type": "bool",
+            "format": "-ke",
+            "help": "keep empty directories"
+          },
+          {
+            "name": "Platform",
+            "type": "string",
+            "format": "-platform {value}",
+            "help": "platform to set when harvesting the project"
+          },
+          {
+            "name": "ProjectOutputGroup",
+            "type": "List<ProjectOutputGroups>",
+            "format": "-pog {value}",
+            "help": "specify output group of VS project"
+          },
+          {
+            "name": "ProjectName",
+            "type": "string",
+            "format": "-projectname {value}",
+            "help": "overridden project name to use in variables"
+          },
+          {
+            "name": "SuppressComElements",
+            "type": "bool",
+            "format": "-scom",
+            "help": "suppress COM elements"
+          },
+          {
+            "name": "SuppressFragments",
+            "type": "bool",
+            "format": "-sfrag",
+            "help": "suppress fragments"
+          },
+          {
+            "name": "SuppressRootDirectoryAsElement",
+            "type": "bool",
+            "format": "-srd",
+            "help": "suppress harvesting the root directory as an element"
+          },
+          {
+            "name": "SuppressRegistry",
+            "type": "bool",
+            "format": "-sreg",
+            "help": "suppress registry harvesting"
+          },
+          {
+            "name": "SuppressUids",
+            "type": "bool",
+            "format": "-suid",
+            "help": "suppress unique identifiers for files, components, & directories"
+          },
+          {
+            "name": "SuppressVb6ComElements",
+            "type": "bool",
+            "format": "-svb6",
+            "help": "suppress VB6 COM elements"
+          },
+          {
+            "name": "Transform",
+            "type": "string",
+            "format": "-t {value}",
+            "help": "transform harvested output with XSL file"
+          },
+          {
+            "name": "Template",
+            "type": "Templates",
+            "format": "-template {value}",
+            "help": "use template, one of: fragment,module,product"
+          },
+          {
+            "name": "Var",
+            "type": "string",
+            "format": "-var {value}",
+            "help": "substitute File/@Source=\"SourceDir\" with a preprocessor or a wix variable (e.g. -var var.MySource will become File/@Source=\"$(var.MySource)\\myfile.txt\" and -var wix.MySource will become File/@Source=\"!(wix.MySource)\\myfile.txt\""
+          },
+          {
+            "name": "WixVar",
+            "type": "bool",
+            "format": "-wixvar",
+            "help": "generate binder variables instead of preprocessor variables"
+          }
+        ]
+      }
+    },
+    {
+      "help": "Inscribes an installer database with information about the digital certificates its external cabs are signed with.",
+      "postfix": "Insignia",
+      "commonPropertySets": [
+        "common",
+        "responsefile",
+        "output",
+        "nologo",
+        "verbose"
+      ],
+      "settingsClass": {
+        "baseClass": "InsigniaBaseSettings",
+        "properties": [
+          {
+            "name": "DatabaseFile",
+            "type": "string",
+            "format": "-im {value}",
+            "help": "specify the database file to inscribe"
+          },
+          {
+            "name": "Bundle",
+            "type": "string",
+            "format": "-ib {value}",
+            "help": "specify the bundle file from which to extract the engine. The engine is stored in the file specified by -o"
+          },
+          {
+            "name": "Reattach",
+            "type": "string",
+            "format": "-ab {value}",
+            "help": "Reattach the engine to a bundle (bundle path + bundle with attached container path)"
+          }
+        ]
+      }
+    },
+    {
+      "help": "Runs validation checks on .msi or .msm files.",
+      "postfix": "Smoke",
+      "commonPropertySets": [
+        "multiple-input-files",
+        "extension",
+        "common",
+        "ice",
+        "nologo",
+        "verbose"
+      ],
+      "settingsClass": {
+        "baseClass": "SmokeBaseSettings",
+        "properties": [
+          {
+            "name": "NoDefault",
+            "type": "bool",
+            "format": "-nodefault",
+            "help": "do not add the default .cub files for .msi and .msm files"
+          },
+          {
+            "name": "NoTidy",
+            "type": "bool",
+            "format": "-notidy",
+            "help": "do not delete temporary files (useful for debugging)"
+          },
+          {
+            "name": "Pdb",
+            "type": "string",
+            "format": "-pdb {value}",
+            "help": "path to the pdb file corresponding to the databaseFile"
+          }
+        ]
+      }
+    },
+    {
+      "help": "Author and run declarative unit tests for custom actions.",
+      "postfix": "Nit",
+      "commonPropertySets": [
+        "multiple-input-files",
+        "nologo"
+      ],
+      "settingsClass": {
+        "baseClass": "NitBaseSettings"
+      }
+    },
+    {
+      "help": "Creates a WiX source file that consumes unit tests declared in one or more WiX source files.",
+      "postfix": "Lux",
+      "commonPropertySets": [
+        "multiple-input-files",
+        "nologo",
+        "output",
+        "extension",
+        "verbose"
+      ],
+      "settingsClass": {
+        "baseClass": "LuxBaseSettings"
+      }
+    },
+    {
+      "help": "Combines multiple .wixobj files into libraries that can be consumed by Light.",
+      "postfix": "Lit",
+      "commonPropertySets": [
+        "multiple-input-files",
+        "responsefile",
+        "nologo",
+        "output",
+        "extension",
+        "verbose",
+        "common"
+      ],
+      "settingsClass": {
+        "baseClass": "LitBaseSettings",
+        "properties": [
+          {
+            "name": "Bind",
+            "type": "string",
+            "format": "-b {value}",
+            "help": "binder path to locate all files (default: current directory) prefix the path with 'name=' where 'name' is the name of your named bindpath."
+          },
+          {
+            "name": "BindFiles",
+            "type": "bool",
+            "format": "-bf",
+            "help": "bind files into the library file"
+          },
+          {
+            "name": "BindLocalization",
+            "type": "string",
+            "format": "-loc {value}",
+            "help": "bind localization strings from a wxl into the library file"
+          },
+          {
+            "name": "SuppressSchemaValidation",
+            "type": "bool",
+            "format": "-ss",
+            "help": "suppress schema validation of documents (performance boost)"
+          },
+          {
+            "name": "SuppressVersionMismatchCheck",
+            "type": "bool",
+            "format": "-sv",
+            "help": "suppress intermediate file version mismatch checking"
+          }
+        ]
+      }
+    },
+    {
+      "help": "Enforces standards on WiX source files. WixCop can also be used to assist in converting a set of WiX source files created using an older version of WiX to the latest version of WiX.",
+      "postfix": "Cop",
+      "commonPropertySets": [
+        "multiple-input-files",
+        "nologo"
+      ],
+      "settingsClass": {
+        "baseClass": "CopBaseSettings",
+        "properties": [
+          {
+            "name": "AutoFix",
+            "type": "bool",
+            "format": "-f",
+            "help": "fix errors automatically for writable files"
+          },
+          {
+            "name": "Search",
+            "type": "bool",
+            "format": "-s",
+            "help": "search for matching files in current dir and subdirs"
+          },
+          {
+            "name": "PrimarySettingsFile",
+            "type": "string",
+            "format": "-set1{value}",
+            "help": "primary settings file"
+          },
+          {
+            "name": "SecondarySettingsFile",
+            "type": "string",
+            "format": "-set2{value}",
+            "help": "secondary settings file (overrides primary)"
+          },
+          {
+            "name": "Indentation",
+            "type": "int",
+            "format": "-indent:{value}",
+            "help": "indentation multiple (overrides default of 4)"
+          }
+        ]
+      }
+    }
+  ],
+  "commonTaskPropertySets": {
+    "pedantic": [
+      {
+        "name": "Pedantic",
+        "type": "bool",
+        "format": "-pedantic",
+        "help": "show pedantic messages"
+      }
+    ],
+    "verbose": [
+      {
+        "name": "Verbose",
+        "type": "bool",
+        "format": "-v",
+        "help": "verbose output"
+      }
+    ],
+    "nologo": [
+      {
+        "name": "NoLogo",
+        "type": "bool",
+        "format": "-nologo",
+        "help": "skip printing logo information"
+      }
+    ],
+    "ice": [
+      {
+        "name": "CubFile",
+        "type": "string",
+        "format": "-cub {value}",
+        "help": "additional .cub file containing ICEs to run"
+      },
+      {
+        "name": "Ice",
+        "type": "List<string>",
+        "format": "-ice:{value}",
+        "help": "run a specific internal consistency evaluator (ICE)"
+      },
+      {
+        "name": "SuppressIce",
+        "type": "List<string>",
+        "format": "-sice:{value}",
+        "help": "suppress an internal consistency evaluator (ICE)"
+      }
+    ],
+    "multiple-input-files": [
+      {
+        "name": "InputFiles",
+        "type": "List<string>",
+        "format": "{value}",
+        "help": "input files to process"
+      }
+    ],
+    "responsefile": [
+      {
+        "name": "ResponseFile",
+        "type": "string",
+        "format": "@{value}",
+        "help": "response file"
+      }
+    ],
+    "extension": [
+      {
+        "name": "Extension",
+        "type": "List<string>",
+        "format": "-ext {value}",
+        "help": " extension assembly or 'class, assembly'"
+      }
+    ],
+    "output": [
+      {
+        "name": "Output",
+        "type": "string",
+        "format": "-out {value}",
+        "help": "specify output file (default: write to current directory)"
+      }
+    ],
+    "common": [
+      {
+        "name": "SuppressAllWarnings",
+        "type": "bool",
+        "format": "-sw",
+        "help": "suppress all warnings"
+      },
+      {
+        "name": "SuppressWarnings",
+        "type": "List<int>",
+        "format": "-sw{value}",
+        "help": "suppress a specific message ID"
+      },
+      {
+        "name": "WarningsAsErrors",
+        "type": "bool",
+        "format": "-wx",
+        "help": "treat all warnings as an error"
+      },
+      {
+        "name": "MessageIdAsError",
+        "type": "List<int>",
+        "format": "-wx{value}",
+        "help": "treat a specific message ID as an error"
+      }
+    ]
+  },
+  "dataClasses": [
+    {
+      "name": "CandleBaseSettings"
+    },
+    {
+      "name": "HeatBaseSettings"
+    },
+    {
+      "name": "InsigniaBaseSettings"
+    },
+    {
+      "name": "SmokeBaseSettings"
+    },
+    {
+      "name": "NitBaseSettings"
+    },
+    {
+      "name": "LuxBaseSettings"
+    },
+    {
+      "name": "LitBaseSettings"
+    },
+    {
+      "name": "CopBaseSettings"
+    }
+  ],
+  "enumerations": [
+    {
+      "name": "Types",
+      "values": [
+        "dir",
+        "file",
+        "payload",
+        "perf",
+        "project",
+        "reg",
+        "website"
+      ]
+    },
+    {
+      "name": "Elements",
+      "values": [
+        "components",
+        "container",
+        "payloadgroup",
+        "layout",
+        "packagegroup"
+      ]
+    },
+    {
+      "name": "ProjectOutputGroups",
+      "values": [
+        "Binaries",
+        "Symbols",
+        "Documents",
+        "Satellites",
+        "Sources",
+        "Content"
+      ]
+    },
+    {
+      "name": "Templates",
+      "values": [
+        "fragment",
+        "module",
+        "product"
+      ]
+    },
+    {
+      "name": "Architecture",
+      "values": [
+        "x86",
+        "x64",
+        "ia64"
+      ]
+    }
+  ]
+}
