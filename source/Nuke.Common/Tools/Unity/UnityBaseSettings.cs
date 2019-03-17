@@ -10,13 +10,11 @@ namespace Nuke.Common.Tools.Unity
 {
     public partial class UnityBaseSettings
     {
-        public override string ToolPath { get; internal set; } = UnityTasks.GetToolPath();
-        
         public override Action<OutputType, string> CustomLogger => UnityTasks.UnityLogger;
 
         public string GetToolPath()
         {
-            return ToolPath;
+            return UnityTasks.GetToolPath();
         }
 
         public string GetLogFile()
