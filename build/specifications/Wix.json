@@ -19,7 +19,8 @@
         "output",
         "nologo",
         "verbose",
-        "pedantic"
+        "pedantic",
+        "wixvariable"
       ],
       "settingsClass": {
         "baseClass": "CandleBaseSettings",
@@ -41,13 +42,6 @@
             "type": "List<string>",
             "format": "-I{value}",
             "help": "add to include search path"
-          },
-          {
-            "name": "Parameter",
-            "type": "Dictionary<string, string>",
-            "format": "-d{value}",
-            "itemFormat": "{key}={value}",
-            "help": "define a parameter for the preprocessor"
           },
           {
             "name": "PreprocessToFile",
@@ -73,7 +67,7 @@
         "properties": [
           {
             "name": "Type",
-            "type": "Types",
+            "type": "HarvestType",
             "format": "{value}",
             "help": "harvest type"
           },
@@ -127,7 +121,7 @@
           },
           {
             "name": "GenerateElement",
-            "type": "Elements",
+            "type": "Element",
             "format": "-generate {value}",
             "help": "specify what elements to generate"
           },
@@ -157,7 +151,7 @@
           },
           {
             "name": "ProjectOutputGroup",
-            "type": "List<ProjectOutputGroups>",
+            "type": "List<ProjectOutputGroup>",
             "format": "-pog {value}",
             "help": "specify output group of VS project"
           },
@@ -195,7 +189,7 @@
             "name": "SuppressUids",
             "type": "bool",
             "format": "-suid",
-            "help": "suppress unique identifiers for files, components, & directories"
+            "help": "suppress unique identifiers for files, components, and directories"
           },
           {
             "name": "SuppressVb6ComElements",
@@ -211,7 +205,7 @@
           },
           {
             "name": "Template",
-            "type": "Templates",
+            "type": "Template",
             "format": "-template {value}",
             "help": "use template, one of: fragment,module,product"
           },
@@ -273,7 +267,8 @@
         "common",
         "ice",
         "nologo",
-        "verbose"
+        "verbose",
+        "notidy"
       ],
       "settingsClass": {
         "baseClass": "SmokeBaseSettings",
@@ -283,12 +278,6 @@
             "type": "bool",
             "format": "-nodefault",
             "help": "do not add the default .cub files for .msi and .msm files"
-          },
-          {
-            "name": "NoTidy",
-            "type": "bool",
-            "format": "-notidy",
-            "help": "do not delete temporary files (useful for debugging)"
           },
           {
             "name": "Pdb",
@@ -334,7 +323,8 @@
         "output",
         "extension",
         "verbose",
-        "common"
+        "common",
+        "localization"
       ],
       "settingsClass": {
         "baseClass": "LitBaseSettings",
@@ -350,12 +340,6 @@
             "type": "bool",
             "format": "-bf",
             "help": "bind files into the library file"
-          },
-          {
-            "name": "BindLocalization",
-            "type": "string",
-            "format": "-loc {value}",
-            "help": "bind localization strings from a wxl into the library file"
           },
           {
             "name": "SuppressSchemaValidation",
@@ -414,9 +398,360 @@
           }
         ]
       }
+    },
+    {
+      "help": "Links and binds one or more .wixobj files and creates a Windows Installer database (.msi or .msm). When necessary, Light will also create cabinets and embed streams into the Windows Installer database it creates.",
+      "postfix": "Light",
+      "commonPropertySets": [
+        "wixvariable",
+        "extension",
+        "localization",
+        "nologo",
+        "notidy",
+        "output",
+        "multiple-input-files",
+        "responsefile",
+        "pedantic",
+        "common",
+        "verbose",
+        "ice"
+      ],
+      "settingsClass": {
+        "baseClass": "LightBaseSettings",
+        "properties": [
+          {
+            "name": "BinderPath",
+            "type": "string",
+            "format": "-b {value}",
+            "help": "specify a binder path to locate all files (default: current directory) prefix the path with 'name=' where 'name' is the name of your named bindpath."
+          },
+          {
+            "name": "Cultures",
+            "type": "List<string>",
+            "format": "-cultures:{value}",
+            "separator": ";",
+            "help": "semicolon or comma delimited list of localized string cultures to load from .wxl files and libraries. Precedence of cultures is from left to right."
+          },
+          {
+            "name": "SuppressLocalization",
+            "type": "bool",
+            "format": "-sloc",
+            "help": "suppress localization"
+          },
+          {
+            "name": "WixOutFormat",
+            "type": "bool",
+            "format": "-xo",
+            "help": "output wixout format instead of MSI format"
+          },
+          {
+            "name": "BackwardsCompatableGuids",
+            "type": "bool",
+            "format": "-bcgg",
+            "help": "use backwards compatible guid generation algorithm (almost never needed)"
+          },
+          {
+            "name": "CachePath",
+            "type": "string",
+            "format": "-cc {value}",
+            "help": "path to cache built cabinets (will not be deleted after linking)"
+          },
+          {
+            "name": "Threads",
+            "type": "int",
+            "format": "-ct {value}",
+            "help": "number of threads to use when creating cabinets (default: %NUMBER_OF_PROCESSORS%)"
+          },
+          {
+            "name": "CompressionLevel",
+            "type": "CompressionLevel",
+            "format": "-dcl:{value}",
+            "help": "set default cabinet compression level (low, medium, high, none, mszip; mszip default)"
+          },
+          {
+            "name": "ExactAssemblyVersions",
+            "type": "bool",
+            "format": "-eav",
+            "help": "exact assembly versions (breaks .NET 1.1 RTM compatibility)"
+          },
+          {
+            "name": "AddFileVersionEntry",
+            "type": "bool",
+            "format": "-fv",
+            "help": "add a 'fileVersion' entry to the MsiAssemblyName table (rarely needed)"
+          },
+          {
+            "name": "PdbOut",
+            "type": "string",
+            "format": "-pdbout {value}",
+            "help": "save the WixPdb to a specific file (default: same name as output with wixpdb extension)"
+          },
+          {
+            "name": "ReuseCab",
+            "type": "bool",
+            "format": "-reusecab",
+            "help": "reuse cabinets from cabinet cache"
+          },
+          {
+            "name": "SuppressAssemblies",
+            "type": "bool",
+            "format": "-sa",
+            "help": "suppress assemblies: do not get assembly name information for assemblies"
+          },
+          {
+            "name": "SuppressResettingAcls",
+            "type": "bool",
+            "format": "-sacl",
+            "help": "suppress resetting ACLs (useful when laying out image to a network share)"
+          },
+          {
+            "name": "SuppressFiles",
+            "type": "bool",
+            "format": "-sf",
+            "help": "suppress files: do not get any file information (equivalent to -sa and -sh)"
+          },
+          {
+            "name": "SuppressFileInfo",
+            "type": "bool",
+            "format": "-sh",
+            "help": "suppress file info: do not get hash, version, language, etc"
+          },
+          {
+            "name": "SuppressLayout",
+            "type": "bool",
+            "format": "-sl",
+            "help": "suppress layout"
+          },
+          {
+            "name": "SuppressWixPdb",
+            "type": "bool",
+            "format": "-spdb",
+            "help": "suppress outputting the WixPdb"
+          },
+          {
+            "name": "SuppressPatchSequenceData",
+            "type": "bool",
+            "format": "-spsd",
+            "help": "suppress patch sequence data in patch XML to decrease bundle size and increase patch applicability performance (patch packages themselves are not modified)"
+          },
+          {
+            "name": "SuppressValidation",
+            "type": "bool",
+            "format": "-sval",
+            "help": "suppress MSI/MSM validation"
+          }
+        ]
+      }
+    },
+    {
+      "help": "Performs a diff to generate a transform (.wixmst or .mst) for XML outputs (.wixout or .wixpdb) or .msi files.",
+      "postfix": "Torch",
+      "commonPropertySets": [
+        "nologo",
+        "responsefile",
+        "output",
+        "extension",
+        "notidy",
+        "pedantic",
+        "common",
+        "verbose"
+      ],
+      "settingsClass": {
+        "baseClass": "TorchBaseSettings",
+        "properties": [
+          {
+            "name": "TargetInput",
+            "type": "string",
+            "format": "{value}",
+            "help": "Target input"
+          },
+          {
+            "name": "UpdatedInput",
+            "type": "string",
+            "format": "{value}",
+            "help": "Updated input"
+          },
+          {
+            "name": "AdminImage",
+            "type": "bool",
+            "format": "-a",
+            "help": "admin image (generates source file information in the transform) (default with -ax)"
+          },
+          {
+            "name": "AdminImageWithExtraction",
+            "type": "string",
+            "format": "-ax {value}",
+            "help": "admin image with extraction of binaries (combination of -a and -x)"
+          },
+          {
+            "name": "Preserve",
+            "type": "bool",
+            "format": "-p",
+            "help": "preserve unmodified content in the output"
+          },
+          {
+            "name": "SuppressErrors",
+            "type": "List<TorchErrorFlag>",
+            "format": "-serr {value}",
+            "help": "suppress error when applying transform, a - Ignore errors when adding an existing row, b - Ignore errors when deleting a missing row, c - Ignore errors when adding an existing table, d - Ignore errors when deleting a missing table, e - Ignore errors when modifying a missing row, f - Ignore errors when changing the code page"
+          },
+          {
+            "name": "ValidationFlags",
+            "type": "List<TorchValidationFlag>",
+            "format": "-val {value}",
+            "help": "use default validation flags for the transform type, g - UpgradeCode must match, l - Language must match, r - Product ID must match, s - Check major version only, t - Check major and minor versions, u - Check major, minor, and upgrade versions, v - Upgrade version less than target version, w - Upgrade version less or equal than target version, x - Upgrade version equals target version, y - Upgrade version greater than target version, z - Upgrade version greater or equal than target version"
+          },
+          {
+            "name": "TransformType",
+            "type": "TorchTransformType",
+            "format": "-t {value}",
+            "help": "use default validation flags for the transform type"
+          },
+          {
+            "name": "ExtractBinariesToPath",
+            "type": "string",
+            "format": "-x {value}",
+            "help": "extract binaries to the specified path"
+          },
+          {
+            "name": "WixInputFormat",
+            "type": "bool",
+            "format": "-xi",
+            "help": "input WiX format instead of MSI format (.wixout or .wixpdb)"
+          },
+          {
+            "name": "Wixout",
+            "type": "bool",
+            "format": "-xo",
+            "help": "output wixout instead of MST format (set by default if -xi is present)"
+          }
+        ]
+      }
+    },
+    {
+      "help": "Takes an XML output patch file (.wixmsp) and one or more XML transform files (.wixmst) and produces an .msp file.",
+      "postfix": "Pyro",
+      "commonPropertySets": [
+        "nologo",
+        "notidy",
+        "output",
+        "common",
+        "verbose",
+        "responsefile",
+        "extension"
+      ],
+      "settingsClass": {
+        "baseClass": "PyroBaseSettings",
+        "properties": [
+          {
+            "name": "AllowEmptyProductTransforms",
+            "type": "bool",
+            "format": "-aet",
+            "help": "allow patches to be created with one or more empty product transforms"
+          },
+          {
+            "name": "BindTargetPath",
+            "type": "string",
+            "format": "-bt {value}",
+            "help": "new bind path to replace the original target path. It accepts two formats matching the exact light behavior. (example: -bt name1=c:\\feature1\\component1 -bt c:\\feature2)"
+          },
+          {
+            "name": "BindUpdatePath",
+            "type": "string",
+            "format": "-bu {value}",
+            "help": "new bind paths to replace the bind paths for the updated input. It accepts two formats matching the exact light behavior. example: -bu name1=\\\\serverA\\feature1\\component1 -bu \\\\serverA\\feature2"
+          },
+          {
+            "name": "CachePath",
+            "type": "string",
+            "format": "-cc {value}",
+            "help": "path to cache built cabinets"
+          },
+          {
+            "name": "CreateDeltaPatch",
+            "type": "bool",
+            "format": "-delta",
+            "help": "create binary delta patch (instead of whole file patch)"
+          },
+          {
+            "name": "UpdateFileVersionEntries",
+            "type": "bool",
+            "format": "-fv",
+            "help": "update 'fileVersion' entries in the MsiAssemblyName table"
+          },
+          {
+            "name": "PdbOut",
+            "type": "string",
+            "format": "-pdbout {value}",
+            "help": "save the WixPdb to a specific file (default: same name as output with wixpdb extension)"
+          },
+          {
+            "name": "ReuseCab",
+            "type": "bool",
+            "format": "-reusecab",
+            "help": "reuse cabinets from cabinet cache"
+          },
+          {
+            "name": "SuppressAssemblies",
+            "type": "bool",
+            "format": "-sa",
+            "help": "suppress assemblies: do not get assembly name information for assemblies"
+          },
+          {
+            "name": "SuppressFiles",
+            "type": "bool",
+            "format": "-sf",
+            "help": "suppress files: do not get any file information (equivalent to -sa and -sh)"
+          },
+          {
+            "name": "SuppressFileInfo",
+            "type": "bool",
+            "format": "-sh",
+            "help": "suppress file info: do not get hash, version, language, etc"
+          },
+          {
+            "name": "SuppressWixPdb",
+            "type": "bool",
+            "format": "-spdb",
+            "help": "suppress outputting the WixPdb"
+          },
+          {
+            "name": "BaselineAndTransform",
+            "type": "List<string>",
+            "format": "-t {value}",
+            "separator": " ",
+            "help": "one or more wix transforms and its baseline"
+          }
+        ]
+      }
     }
   ],
   "commonTaskPropertySets": {
+    "notidy": [
+      {
+        "name": "NoTidy",
+        "type": "bool",
+        "format": "-notidy",
+        "help": "do not delete temporary files (useful for debugging)"
+      }
+    ],
+    "localization": [
+      {
+        "name": "Localization",
+        "type": "string",
+        "format": "-loc {value}",
+        "help": "read localization strings from .wxl file"
+      }
+    ],
+    "wixvariable": [
+      {
+        "name": "Parameter",
+        "type": "Dictionary<string, string>",
+        "format": "-d{value}",
+        "itemFormat": "{key}={value}",
+        "help": "define a parameter for the preprocessor"
+      }
+    ],
     "pedantic": [
       {
         "name": "Pedantic",
@@ -544,11 +879,20 @@
     },
     {
       "name": "CopBaseSettings"
+    },
+    {
+      "name": "LightBaseSettings"
+    },
+    {
+      "name": "TorchBaseSettings"
+    },
+    {
+      "name": "PyroBaseSettings"
     }
   ],
   "enumerations": [
     {
-      "name": "Types",
+      "name": "HarvestType",
       "values": [
         "dir",
         "file",
@@ -560,7 +904,7 @@
       ]
     },
     {
-      "name": "Elements",
+      "name": "Element",
       "values": [
         "components",
         "container",
@@ -570,7 +914,7 @@
       ]
     },
     {
-      "name": "ProjectOutputGroups",
+      "name": "ProjectOutputGroup",
       "values": [
         "Binaries",
         "Symbols",
@@ -581,11 +925,21 @@
       ]
     },
     {
-      "name": "Templates",
+      "name": "Template",
       "values": [
         "fragment",
         "module",
         "product"
+      ]
+    },
+    {
+      "name": "CompressionLevel",
+      "values": [
+        "low",
+        "medium",
+        "high",
+        "none",
+        "mszip"
       ]
     },
     {
@@ -594,6 +948,41 @@
         "x86",
         "x64",
         "ia64"
+      ]
+    },
+    {
+      "name": "TorchErrorFlag",
+      "values": [
+        "a",
+        "b",
+        "c",
+        "d",
+        "e",
+        "f"
+      ]
+    },
+    {
+      "name": "TorchValidationFlag",
+      "values": [
+        "g",
+        "l",
+        "r",
+        "s",
+        "t",
+        "u",
+        "v",
+        "w",
+        "x",
+        "y",
+        "z"
+      ]
+    },
+    {
+      "name": "TorchTransformType",
+      "values": [
+        "language",
+        "instance",
+        "patch"
       ]
     }
   ]
