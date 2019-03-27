@@ -1,5 +1,5 @@
-// Generated from https://github.com/nuke-build/common/blob/master/build/specifications/GitVersion.json
-// Generated with Nuke.CodeGeneration version LOCAL (OSX,.NETStandard,Version=v2.0)
+// Generated from https://github.com/hayhay27/common/blob/master/build/specifications/GitVersion.json
+// Generated with Nuke.CodeGeneration version LOCAL (Windows,.NETStandard,Version=v2.0)
 
 using JetBrains.Annotations;
 using Newtonsoft.Json;
@@ -299,6 +299,7 @@ namespace Nuke.Common.Tools.GitVersion
         public virtual string NuGetVersion { get; internal set; }
         public virtual string NuGetPreReleaseTagV2 { get; internal set; }
         public virtual string NuGetPreReleaseTag { get; internal set; }
+        public virtual string VersionSourceSha { get; internal set; }
         public virtual string CommitsSinceVersionSource { get; internal set; }
         public virtual string CommitsSinceVersionSourcePadded { get; internal set; }
         public virtual string CommitDate { get; internal set; }
