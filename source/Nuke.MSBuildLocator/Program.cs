@@ -74,10 +74,12 @@ namespace Nuke.MSBuildLocator
                 if (installation == null)
                     return null;
 
+                var msBuildMajorVersion = installation.Version.Split('.')[0];
+
                 var msbuildPath = Path.Combine(
                     installation.Path,
                     "MSBuild",
-                    $"{installation.Version.Split('.')[0]}.0",
+                    int.TryParse(msBuildMajorVersion, out var major) && major < 16 ? $"{installation.Version.Split('.')[0]}.0" : "Current",
                     "Bin",
                     Environment.Is64BitOperatingSystem ? "amd64" : ".",
                     "MSBuild.exe");
