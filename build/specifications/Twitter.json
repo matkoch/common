@@ -1,0 +1,41 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nuke-build/nuke/master/source/Nuke.CodeGeneration/schema.json",
+  "references": [
+    "https://developer.twitter.com/en/docs/tweets/post-and-engage/api-reference/post-statuses-update"
+  ],
+  "name": "Twitter",
+  "officialUrl": "https://developer.twitter.com",
+  "help": "Twitter is an American online news and social networking service on which users post and interact with messages known as 'tweets'",
+  "dataClasses": [
+    {
+      "name": "TwitterApiKeys",
+      "extensionMethods": true,
+      "properties": [
+        {
+          "name": "ConsumerApiKey",
+          "type": "string",
+          "json": "consumerApiKey",
+          "help": "The Consumer Api Key needed to access the Twitter API. To get this key, an App with read and write permissions must be created using the <a href='https://developer.twitter.com/en/apps'>Twitter Developer Page</a>"
+        },
+        {
+          "name": "ConsumerApiKeySecret",
+          "type": "string",
+          "json": "consumerApiKeySecret",
+          "help": "The Consumer Api Key Secret needed to access the Twitter API. See ConsumerApiKey on how to get it."
+        },
+        {
+          "name": "AccessToken",
+          "type": "string",
+          "json": "accessToken",
+          "help": "The Access Token needed to access the Twitter API. See ConsumerApiKey on how to get it."
+        },
+        {
+          "name": "AccessTokenSecret",
+          "type": "string",
+          "json": "accessTokenSecret",
+          "help": "The Access Token Secret needed to access the Twitter API. See ConsumerApiKey on how to get it."
+        }
+      ]
+    }
+  ]
+}
