@@ -55,14 +55,29 @@ namespace Nuke.Common.Execution
         public string GetParameterGeneratedDescription(MemberInfo member, NukeBuild build) 
         {
             var description = new List<string>();
-
-            var parameterType = (member as FieldInfo)?.FieldType ?? (member as PropertyInfo)?.PropertyType ?? null;
-            if (parameterType?.IsEnum == true)
-                description.Add($"The available Values are {string.Join(", ", Enum.GetNames(parameterType).Select(q => $"\"{q}\""))}");
-
+            var attribute = member.GetCustomAttribute<ParameterAttribute>();
             var defaultValue = member.GetValue(build);
-            if (defaultValue != null)
-                description.Add($"The Default Value is \"{defaultValue}\"");
+            var parameterType = (member as FieldInfo)?.FieldType ?? (member as PropertyInfo)?.PropertyType;
+            var elementType = parameterType?.GetElementType();
+            var parameterIsEnum = parameterType?.IsEnum == true;
+            var quoteStr = ((elementType ?? parameterType) == typeof(string) || parameterIsEnum) ? "\"" : "";
+
+            string QuoteValue(object value) => $"{quoteStr}{value}{quoteStr}";
+            string QuoteValueList(IEnumerable<object> valueList) => string.Join(", ", valueList.Select(QuoteValue));
+
+            if (parameterIsEnum)
+                description.Add($"The available values are {QuoteValueList(Enum.GetNames(parameterType))}");
+            else if (elementType != null) 
+                description.Add($"List of {elementType.Name} values, separated by \"{attribute.Separator ?? " "}\"");
+
+            if (defaultValue != null) 
+            {
+                if (defaultValue is IEnumerable<object>)
+                    defaultValue = $"[{QuoteValueList((IEnumerable<object>)defaultValue)}]";
+                else
+                    defaultValue = QuoteValue(defaultValue);
+                description.Add($"The default value is {defaultValue}");
+            }
 
             return description.Count > 0 ? string.Join(". ", description) : null;
         }
