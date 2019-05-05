@@ -52,6 +52,22 @@ namespace Nuke.Common.Execution
         }
 
         [CanBeNull]
+        public string GetParameterGeneratedDescription(MemberInfo member, NukeBuild build) 
+        {
+            var description = new List<string>();
+
+            var parameterType = (member as FieldInfo)?.FieldType ?? (member as PropertyInfo)?.PropertyType ?? null;
+            if (parameterType?.IsEnum == true)
+                description.Add($"The available Values are {string.Join(", ", Enum.GetNames(parameterType).Select(q => $"\"{q}\""))}");
+
+            var defaultValue = member.GetValue(build);
+            if (defaultValue != null)
+                description.Add($"The Default Value is \"{defaultValue}\"");
+
+            return description.Count > 0 ? string.Join(". ", description) : null;
+        }
+
+        [CanBeNull]
         public IEnumerable<(string Text, object Object)> GetParameterValueSet(MemberInfo member, object instance)
         {
             var attribute = member.GetCustomAttribute<ParameterAttribute>();
