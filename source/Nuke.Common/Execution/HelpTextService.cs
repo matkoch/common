@@ -47,14 +47,15 @@ namespace Nuke.Common.Execution
 
             void PrintParameter(MemberInfo parameter)
             {
-                var description = SplitLines(
-                    // TODO: remove
-                    ParameterService.Instance.GetParameterDescription(parameter)
-                        ?.Replace("{default_target}", defaultTarget?.Name).Append(".")
-                    ?? "<no description>");
+                // TODO: remove
+                var description = ParameterService.Instance.GetParameterDescription(parameter)
+                        ?.Replace("{default_target}", defaultTarget?.Name)
+                        ?? ParameterService.Instance.GetParameterGeneratedDescription(parameter, build);
+                
+                var descriptionLines = SplitLines(description?.Append(".") ?? "<no description>");
                 var parameterName = ParameterService.Instance.GetParameterName(parameter).SplitCamelHumpsWithSeparator("-");
-                builder.AppendLine($"  --{parameterName.PadRight(padRightParameter)}  {description.First()}");
-                foreach (var line in description.Skip(count: 1))
+                builder.AppendLine($"  --{parameterName.PadRight(padRightParameter)}  {descriptionLines.First()}");
+                foreach (var line in descriptionLines.Skip(count: 1))
                     builder.AppendLine($"{new string(c: ' ', count: padRightParameter + 6)}{line}");
             }
 
