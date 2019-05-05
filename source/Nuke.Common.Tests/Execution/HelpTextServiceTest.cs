@@ -7,6 +7,7 @@ using FluentAssertions;
 using System.Linq;
 
 namespace Nuke.Common.Tests.Execution {
+#pragma warning disable IDE0051 // Remove unused private members
     public class HelpTextServiceTest {
 
         private class DummyBuild : NukeBuild {
@@ -44,7 +45,7 @@ namespace Nuke.Common.Tests.Execution {
 
         [Fact]
         public void StringParamWithDefaultValue() {
-            ParameterHelpText(new StringParamWithDefaultValueBuild(), "string-param", "The Default Value is \"TEST\".");
+            ParameterHelpText(new StringParamWithDefaultValueBuild(), "string-param", "The default value is \"TEST\".");
         }
 
         private class EnumParamWithDefaultValueBuild : DummyBuild {
@@ -55,8 +56,29 @@ namespace Nuke.Common.Tests.Execution {
 
         [Fact]
         public void EnumParamWithDefaultValue() {
-            ParameterHelpText(new EnumParamWithDefaultValueBuild(), "enum-param", "The available Values are \"Yes\", \"No\", \"Maybe\". The Default Value is \"Maybe\".");
+            ParameterHelpText(new EnumParamWithDefaultValueBuild(), "enum-param", "The available values are \"Yes\", \"No\", \"Maybe\". The default value is \"Maybe\".");
+        }
+
+        private class IntArrayWithSeparatorBuild : DummyBuild {
+            [Parameter(Separator = ",")]
+            private readonly int[] IntArrayParam;
+        }
+
+        [Fact]
+        public void IntArrayWithDefaultValues() {
+            ParameterHelpText(new IntArrayWithSeparatorBuild(), "int-array-param", "List of Int32 values, separated by \",\".");
+        }
+
+        private class StringArrayWithDefaultValueBuild : DummyBuild {
+            [Parameter()]
+            private readonly string[] StrArrayParam = new string[] { "Elem1", "Elem2" };
+        }
+
+        [Fact]
+        public void StringArrayWithSeparatorAndDefaultValue() {
+            ParameterHelpText(new StringArrayWithDefaultValueBuild(), "str-array-param", "List of String values, separated by \" \". The default value is [\"Elem1\", \"Elem2\"].");
         }
 
     }
+#pragma warning restore IDE0051 // Remove unused private members
 }
