@@ -19,8 +19,10 @@ namespace Nuke.Common.Tests.Execution {
         private void ParameterHelpText(NukeBuild build, string expectedParamName, string expectedHelpText) {
 
             var helpTextLine = HelpTextService.GetParametersText(build).Split(Environment.NewLine + "  --").FirstOrDefault(q => q.StartsWith(expectedParamName));
-            if (!string.IsNullOrEmpty(helpTextLine))
-                helpTextLine = helpTextLine.Split(" ", 2)[1].Replace(Environment.NewLine, " ").Trim();
+            if (!string.IsNullOrEmpty(helpTextLine) && helpTextLine.Contains(" ")) {
+                helpTextLine = helpTextLine.Split(" ", 2)[1];
+                helpTextLine = string.Join(" ", helpTextLine.Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries).Select(q => q.Trim()));
+            }
             helpTextLine.Should().EndWith(expectedHelpText);
         }
 
