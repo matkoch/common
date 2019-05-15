@@ -1,4 +1,4 @@
-// Copyright 2019 Maintainers of NUKE.
+﻿// Copyright 2019 Maintainers of NUKE.
 // Distributed under the MIT License.
 // https://github.com/nuke-build/nuke/blob/master/LICENSE
 
@@ -11,12 +11,35 @@ using System.IO;
 using System.Linq;
 using GlobExpressions;
 using JetBrains.Annotations;
+using Nuke.Common.Execution;
 using Nuke.Common.Utilities;
 
 // ReSharper disable ArrangeMethodOrOperatorBody
 
 namespace Nuke.Common.IO
 {
+    /// <summary>
+    /// Indicates the case sensitivity used for globbing.
+    /// </summary>
+    public enum GlobbingCaseSensitivity
+    {
+        /// <summary>
+        /// Automatically determines whether to use case-sensitive or case-insensitive matching when globbing. This 
+        /// means using case-insensitive matching when running on Windows, and case-sensitive otherwise.
+        /// </summary>
+        Auto,
+
+        /// <summary>
+        /// Globbing patterns will be case-sensitive.
+        /// </summary>
+        CaseSensitive,
+
+        /// <summary>
+        /// Globbing patterns will be case-insensitive.
+        /// </summary>
+        CaseInsensitive
+    }
+
     /// <summary>
     /// <p>Provides an abstraction for generating Windows/Unix/UNC-compliant
     /// file-system paths independently of the underlying operating system. Usages should be restricted to the moment
@@ -45,6 +68,31 @@ namespace Nuke.Common.IO
     [PublicAPI]
     public static class PathConstruction
     {
+        /// <summary>
+        /// Gets the case-sensitivity option used by default for Glob operations in this class.  This is set by defining
+        /// the <see cref="GlobbingOptionsAttribute"/> on the build class.
+        /// </summary>
+        public static GlobbingCaseSensitivity DefaultGlobbingCaseSensitivity { get; internal set; }
+
+        private static GlobOptions GlobOptions
+        {
+            get
+            {
+                switch (DefaultGlobbingCaseSensitivity)
+                {
+                    case GlobbingCaseSensitivity.CaseSensitive:
+                        return GlobOptions.None;
+
+                    case GlobbingCaseSensitivity.CaseInsensitive:
+                        return GlobOptions.CaseInsensitive;
+
+                    case GlobbingCaseSensitivity.Auto:
+                    default:
+                        return EnvironmentInfo.IsWin ? GlobOptions.CaseInsensitive : GlobOptions.None;
+                }
+            }
+        }
+
         // TODO: check usages
         [Pure]
         public static string GetRelativePath(string basePath, string destinationPath, bool normalize = true)
@@ -75,7 +123,7 @@ namespace Nuke.Common.IO
         public static IReadOnlyCollection<string> GlobFiles(string directory, params string[] patterns)
         {
             var directoryInfo = new DirectoryInfo(directory);
-            return patterns.SelectMany(x => directoryInfo.GlobFiles(x)).Select(x => x.FullName).ToList();
+            return patterns.SelectMany(x => Glob.Files(directoryInfo, x, GlobOptions)).Select(x => x.FullName).ToList();
         }
 
         public static IReadOnlyCollection<AbsolutePath> GlobFiles(this AbsolutePath directory, params string[] patterns)
@@ -87,7 +135,7 @@ namespace Nuke.Common.IO
         public static IReadOnlyCollection<string> GlobDirectories(string directory, params string[] patterns)
         {
             var directoryInfo = new DirectoryInfo(directory);
-            return patterns.SelectMany(x => directoryInfo.GlobDirectories(x)).Select(x => x.FullName).ToList();
+            return patterns.SelectMany(x => Glob.Directories(directoryInfo, x, GlobOptions)).Select(x => x.FullName).ToList();
         }
 
         public static IReadOnlyCollection<AbsolutePath> GlobDirectories(this AbsolutePath directory, params string[] patterns)
@@ -413,6 +461,26 @@ namespace Nuke.Common.IO
             {
                 return _path;
             }
+        }
+    }
+
+    /// <summary>
+    /// Define this on the main class derived from <see cref="NukeBuild"/> to set the default case-sensitivity of the globbing operations 
+    /// in <see cref="PathConstruction"/>.  The default is <see cref="GlobbingCaseSensitivity.Auto"/>.
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public sealed class GlobbingOptionsAttribute : Attribute, IPostLogoBuildExtension
+    {
+        private readonly GlobbingCaseSensitivity _caseSensitivity;
+
+        public GlobbingOptionsAttribute(GlobbingCaseSensitivity caseSensitivity)
+        {
+            _caseSensitivity = caseSensitivity;
+        }
+
+        public void Execute(NukeBuild build, IReadOnlyCollection<ExecutableTarget> executableTargets, IReadOnlyCollection<ExecutableTarget> executionPlan)
+        {
+            PathConstruction.DefaultGlobbingCaseSensitivity = _caseSensitivity;
         }
     }
 }
