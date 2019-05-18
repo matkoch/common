@@ -13,20 +13,12 @@ namespace Nuke.Common.BuildServers
     /// <summary>
     ///     Interface according to the <a href="https://docs.gitlab.com/ce/ci/variables/README.html">official website</a>.
     /// </summary>
-    [PublicAPI]
-    [BuildServer]
     [ExcludeFromCodeCoverage]
-    public class GitLab
+    public class GitLab : BuildServer
     {
-        private static Lazy<GitLab> s_instance = new Lazy<GitLab>(() => new GitLab());
-
-        public static GitLab Instance => NukeBuild.Host == HostType.GitLab ? s_instance.Value : null;
-
         internal static bool IsRunningGitLab => Environment.GetEnvironmentVariable("GITLAB_CI") != null;
 
-        internal GitLab()
-        {
-        }
+        public override string Branch => CommitRefName;
 
         /// <summary>
         /// Mark that job is executed in CI environment.

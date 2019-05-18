@@ -13,20 +13,12 @@ namespace Nuke.Common.BuildServers
     /// <summary>
     /// Interface according to the <a href="https://wiki.jenkins.io/display/JENKINS/Building+a+software+project">official website</a>.
     /// </summary>
-    [PublicAPI]
-    [BuildServer]
     [ExcludeFromCodeCoverage]
-    public class Jenkins
+    public class Jenkins : BuildServer
     {
-        private static Lazy<Jenkins> s_instance = new Lazy<Jenkins>(() => new Jenkins());
-
-        public static Jenkins Instance => NukeBuild.Host == HostType.Jenkins ? s_instance.Value : null;
-
         internal static bool IsRunningJenkins => Environment.GetEnvironmentVariable("JENKINS_HOME") != null;
 
-        internal Jenkins()
-        {
-        }
+        public override string Branch => GitBranch;
 
         /// <summary>
         /// The current build display name, such as "#14".

@@ -14,14 +14,9 @@ namespace Nuke.Common.BuildServers
     /// Interface according to the <a href="http://devcenter.bitrise.io/faq/available-environment-variables/#exposed-by-bitriseio">official website</a>.
     /// </summary>
     [PublicAPI]
-    [BuildServer]
     [ExcludeFromCodeCoverage]
-    public class Bitrise
+    public class Bitrise : BuildServer
     {
-        private static Lazy<Bitrise> s_instance = new Lazy<Bitrise>(() => new Bitrise());
-
-        public static Bitrise Instance => NukeBuild.Host == HostType.Bitrise ? s_instance.Value : null;
-
         internal static bool IsRunningBitrise => Environment.GetEnvironmentVariable("BITRISE_BUILD_URL") != null;
 
         private static DateTime ConvertUnixTimestamp(long timestamp)
@@ -31,9 +26,7 @@ namespace Nuke.Common.BuildServers
                 .ToLocalTime();
         }
 
-        internal Bitrise()
-        {
-        }
+        public override string Branch => GitBranch;
 
         public string BuildUrl => Variable("BITRISE_BUILD_URL");
         public long BuildNumber => Variable<long>("BITRISE_BUILD_NUMBER");

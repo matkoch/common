@@ -13,20 +13,12 @@ namespace Nuke.Common.BuildServers
     /// <summary>
     /// Interface according to the <a href="https://www.appveyor.com/docs/environment-variables/">official website</a>.
     /// </summary>
-    [PublicAPI]
-    [BuildServer]
     [ExcludeFromCodeCoverage]
-    public class AppVeyor
+    public class AppVeyor : BuildServer
     {
-        private static Lazy<AppVeyor> s_instance = new Lazy<AppVeyor>(() => new AppVeyor());
-
-        public static AppVeyor Instance => NukeBuild.Host == HostType.AppVeyor ? s_instance.Value : null;
-
         internal static bool IsRunningAppVeyor => Environment.GetEnvironmentVariable("APPVEYOR") != null;
 
-        internal AppVeyor()
-        {
-        }
+        public override string Branch => RepositoryBranch;
 
         public string ApiUrl => Variable("APPVEYOR_API_URL");
         public string AccountName => Variable("APPVEYOR_ACCOUNT_NAME");

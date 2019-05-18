@@ -21,15 +21,9 @@ namespace Nuke.Common.BuildServers
     /// <summary>
     /// Interface according to the <a href="https://confluence.jetbrains.com/display/TCDL/Build+Script+Interaction+with+TeamCity">official website</a>.
     /// </summary>
-    [PublicAPI]
-    [BuildServer]
     [ExcludeFromCodeCoverage]
-    public class TeamCity
+    public class TeamCity : BuildServer
     {
-        private static Lazy<TeamCity> s_instance = new Lazy<TeamCity>(() => new TeamCity());
-
-        public static TeamCity Instance => NukeBuild.Host == HostType.TeamCity ? s_instance.Value : null;
-
         internal static bool IsRunningTeamCity => Environment.GetEnvironmentVariable("TEAMCITY_VERSION") != null;
 
         public static T CreateRestClient<T>(string serverUrl, string username, string password)
@@ -83,16 +77,18 @@ namespace Nuke.Common.BuildServers
         private readonly Lazy<IReadOnlyDictionary<string, string>> _runnerProperties;
         private readonly Lazy<ITeamCityRestClient> _restClient;
 
-        internal TeamCity(Action<string> messageSink = null)
+        public TeamCity()
         {
-            _messageSink = messageSink ?? Console.WriteLine;
+            _messageSink = Console.WriteLine;
 
             _systemProperties = GetLazy(() => ParseDictionary(Variable("TEAMCITY_BUILD_PROPERTIES_FILE")));
             _configurationProperties = GetLazy(() => ParseDictionary(SystemProperties?["TEAMCITY_CONFIGURATION_PROPERTIES_FILE"]));
             _runnerProperties = GetLazy(() => ParseDictionary(SystemProperties?["TEAMCITY_RUNNER_PROPERTIES_FILE"]));
 
-            _restClient = GetLazy(() => CreateRestClient<ITeamCityRestClient>());
+            _restClient = GetLazy(CreateRestClient<ITeamCityRestClient>);
         }
+
+        public override string Branch => BranchName;
 
         public T CreateRestClient<T>()
         {

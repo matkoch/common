@@ -13,20 +13,10 @@ namespace Nuke.Common.BuildServers
     /// <summary>
     /// Interface according to the <a href="https://docs.travis-ci.com/user/environment-variables/">official website</a>.
     /// </summary>
-    [PublicAPI]
-    [BuildServer]
     [ExcludeFromCodeCoverage]
-    public class Travis
+    public class Travis : BuildServer
     {
-        private static Lazy<Travis> s_instance = new Lazy<Travis>(() => new Travis());
-
-        public static Travis Instance => NukeBuild.Host == HostType.Travis ? s_instance.Value : null;
-
         internal static bool IsRunningTravis => Environment.GetEnvironmentVariable("TRAVIS") != null;
-
-        internal Travis()
-        {
-        }
 
         public bool Ci => Variable<bool>("CI");
         public bool ContinousIntegration => Variable<bool>("CONTINUOUS_INTEGRATION");
@@ -46,7 +36,7 @@ namespace Nuke.Common.BuildServers
         /// For builds triggered by a pull request this is the name of the branch targeted by the pull request.
         /// For builds triggered by a tag, this is the same as the name of the tag (<c>TRAVIS_TAG</c>).
         /// </summary>
-        public string Branch => Variable("TRAVIS_BRANCH");
+        public override string Branch => Variable("TRAVIS_BRANCH");
 
         /// <summary>
         /// The absolute path to the directory where the repository being built has been copied on the worker.
@@ -79,7 +69,7 @@ namespace Nuke.Common.BuildServers
         public string CommitRange => Variable("TRAVIS_COMMIT_RANGE");
 
         /// <summary>
-        /// Indicates how the build was triggered. 
+        /// Indicates how the build was triggered.
         /// </summary>
         public TravisEventType EventType => Variable<TravisEventType>("TRAVIS_EVENT_TYPE");
 

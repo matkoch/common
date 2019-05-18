@@ -14,9 +14,8 @@ namespace Nuke.Common.BuildServers
     /// Interface according to the <a href="https://www.visualstudio.com/en-us/docs/build/define/variables">official website</a>.
     /// </summary>
     [PublicAPI]
-    [BuildServer]
     [ExcludeFromCodeCoverage]
-    public class TeamServices
+    public class TeamServices : BuildServer
     {
         private static Lazy<TeamServices> s_instance = new Lazy<TeamServices>(() => new TeamServices());
 
@@ -24,12 +23,9 @@ namespace Nuke.Common.BuildServers
 
         internal static bool IsRunningTeamServices => Environment.GetEnvironmentVariable("TF_BUILD") != null;
 
-        private readonly Action<string> _messageSink;
+        private readonly Action<string> _messageSink = Console.WriteLine;
 
-        internal TeamServices(Action<string> messageSink = null)
-        {
-            _messageSink = messageSink ?? Console.WriteLine;
-        }
+        public override string Branch => SourceBranchName;
 
         public string AgentBuildDirectory => Variable("AGENT_BUILDDIRECTORY");
         public string AgentHomeDirectory => Variable("AGENT_HOMEDIRECTORY");
