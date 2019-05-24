@@ -11,6 +11,7 @@ using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tooling;
+using Nuke.Common.Tools.CloudFoundry;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.GitVersion;
 using Nuke.Common.Tools.InspectCode;
@@ -200,5 +201,14 @@ partial class Build : NukeBuild
                     .AppendLine(ChangelogSectionNotes.Select(x => x.Replace("- ", "* ")).JoinNewLine()).ToString(),
                 "593f3dadd73408ce4f66db89",
                 GitterAuthToken);
+        });
+
+    Target CfPush => _ => _
+        .Executes(() =>
+        {
+            CloudFoundryTasks.CloudFoundryPush(c => c
+                .SetPath("myfolder")
+                .SetAppName("blah")
+                .SetHealthCheckType(HealthCheckType.Port));
         });
 }

@@ -16,8 +16,7 @@ namespace Nuke.Common.Tools.CloudFoundry
             {    
                 var commandResult = CloudFoundryGetServiceInfo(c => c
                         .SetServiceInstance(serviceInstance))
-                    .Where(x => x.Text.StartsWith("status:"))
-                    .First()
+                    .First(x => x.Text.StartsWith("status:"))
                     .Text;
                 var result = Regex.Match(commandResult, @"(?<=^status:\s+)[a-z].+", RegexOptions.Multiline).Value;
                 return result == "create in progress";
