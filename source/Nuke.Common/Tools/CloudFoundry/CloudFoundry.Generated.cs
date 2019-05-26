@@ -28,7 +28,7 @@ namespace Nuke.Common.Tools.CloudFoundry
         /// </summary>
         public static string CloudFoundryPath =>
             ToolPathResolver.TryGetEnvironmentExecutable("CLOUDFOUNDRY_EXE") ??
-            ToolPathResolver.GetPathExecutable("cf");
+            GetToolPath();
         public static Action<OutputType, string> CloudFoundryLogger { get; set; } = ProcessTasks.DefaultLogger;
         /// <summary>
         ///   Cloud Foundry CLI is the official command line client for Cloud Foundry
@@ -935,12 +935,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryPushSettings : ToolSettings
+    public partial class CloudFoundryPushSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         /// <summary>
         ///   The name of the application.
@@ -1059,12 +1059,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryLoginSettings : ToolSettings
+    public partial class CloudFoundryLoginSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string Username { get; internal set; }
         public virtual string Password { get; internal set; }
@@ -1099,12 +1099,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryStartSettings : ToolSettings
+    public partial class CloudFoundryStartSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         protected override Arguments ConfigureArguments(Arguments arguments)
@@ -1123,12 +1123,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryStopSettings : ToolSettings
+    public partial class CloudFoundryStopSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         protected override Arguments ConfigureArguments(Arguments arguments)
@@ -1147,12 +1147,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryRestartSettings : ToolSettings
+    public partial class CloudFoundryRestartSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         protected override Arguments ConfigureArguments(Arguments arguments)
@@ -1171,12 +1171,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryRestageSettings : ToolSettings
+    public partial class CloudFoundryRestageSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         protected override Arguments ConfigureArguments(Arguments arguments)
@@ -1195,12 +1195,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryDeleteApplicationSettings : ToolSettings
+    public partial class CloudFoundryDeleteApplicationSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         /// <summary>
@@ -1224,12 +1224,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryCreateServiceSettings : ToolSettings
+    public partial class CloudFoundryCreateServiceSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         /// <summary>
         ///   Service type
@@ -1272,12 +1272,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryDeleteServiceSettings : ToolSettings
+    public partial class CloudFoundryDeleteServiceSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         /// <summary>
         ///   Service Instance
@@ -1299,12 +1299,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryGetServiceInfoSettings : ToolSettings
+    public partial class CloudFoundryGetServiceInfoSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         /// <summary>
         ///   Service Instance
@@ -1326,12 +1326,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryBindServiceSettings : ToolSettings
+    public partial class CloudFoundryBindServiceSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         public virtual string ServiceInstance { get; internal set; }
@@ -1362,12 +1362,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryUnbindServiceSettings : ToolSettings
+    public partial class CloudFoundryUnbindServiceSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         public virtual string ServiceInstance { get; internal set; }
@@ -1388,12 +1388,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundrySetEnvSettings : ToolSettings
+    public partial class CloudFoundrySetEnvSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         public virtual string EnvironmentalVariableName { get; internal set; }
@@ -1416,12 +1416,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryUnsetEnvSettings : ToolSettings
+    public partial class CloudFoundryUnsetEnvSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         public virtual string EnvironmentalVariableName { get; internal set; }
@@ -1442,12 +1442,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryCreateRouteSettings : ToolSettings
+    public partial class CloudFoundryCreateRouteSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string Space { get; internal set; }
         public virtual string Domain { get; internal set; }
@@ -1488,12 +1488,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryMapRouteSettings : ToolSettings
+    public partial class CloudFoundryMapRouteSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         public virtual string Domain { get; internal set; }
@@ -1534,12 +1534,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryUnmapRouteSettings : ToolSettings
+    public partial class CloudFoundryUnmapRouteSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string AppName { get; internal set; }
         public virtual string Domain { get; internal set; }
@@ -1575,12 +1575,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryCreateSpaceSettings : ToolSettings
+    public partial class CloudFoundryCreateSpaceSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string Space { get; internal set; }
         public virtual string Org { get; internal set; }
@@ -1606,12 +1606,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryDeleteSpaceSettings : ToolSettings
+    public partial class CloudFoundryDeleteSpaceSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string Space { get; internal set; }
         public virtual string Org { get; internal set; }
@@ -1632,12 +1632,12 @@ namespace Nuke.Common.Tools.CloudFoundry
     [PublicAPI]
     [ExcludeFromCodeCoverage]
     [Serializable]
-    public partial class CloudFoundryTargetSettings : ToolSettings
+    public partial class CloudFoundryTargetSettings : CloudFoundryBaseSettings
     {
         /// <summary>
         ///   Path to the CloudFoundry executable.
         /// </summary>
-        public override string ToolPath => base.ToolPath ?? CloudFoundryTasks.CloudFoundryPath;
+        public override string ToolPath => base.ToolPath ?? GetToolPath();
         public override Action<OutputType, string> CustomLogger => CloudFoundryTasks.CloudFoundryLogger;
         public virtual string Space { get; internal set; }
         public virtual string Org { get; internal set; }
@@ -1649,6 +1649,17 @@ namespace Nuke.Common.Tools.CloudFoundry
               .Add("-o {value}", Org);
             return base.ConfigureArguments(arguments);
         }
+    }
+    #endregion
+    #region CloudFoundryBaseSettings
+    /// <summary>
+    ///   Used within <see cref="CloudFoundryTasks"/>.
+    /// </summary>
+    [PublicAPI]
+    [ExcludeFromCodeCoverage]
+    [Serializable]
+    public partial class CloudFoundryBaseSettings : ToolSettings
+    {
     }
     #endregion
     #region CloudFoundryPushSettingsExtensions

@@ -7,13 +7,14 @@
   "name": "CloudFoundry",
   "officialUrl": "https://docs.cloudfoundry.org/cf-cli/cf-help.html",
   "help": "Cloud Foundry CLI is the official command line client for Cloud Foundry",
-  "pathExecutable": "cf",
+  "customExecutable": true,
   "tasks": [
     {
       "help": "Push a new app or sync changes to an existing app",
       "postfix": "Push",
       "definiteArgument": "push",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -150,6 +151,7 @@
       "postfix": "Login",
       "definiteArgument": "login",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "Username",
@@ -192,6 +194,7 @@
       "postfix": "Start",
       "definiteArgument": "start",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -207,6 +210,7 @@
       "postfix": "Stop",
       "definiteArgument": "stop",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -222,6 +226,7 @@
       "postfix": "Restart",
       "definiteArgument": "restart",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -237,6 +242,7 @@
       "postfix": "Restage",
       "definiteArgument": "restage",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -252,6 +258,7 @@
       "postfix": "DeleteApplication",
       "definiteArgument": "delete",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -273,6 +280,7 @@
       "postfix": "CreateService",
       "definiteArgument": "create-service",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "Service",
@@ -314,6 +322,7 @@
       "postfix": "DeleteService",
       "definiteArgument": "delete-service",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "ServiceInstance",
@@ -330,6 +339,7 @@
       "postfix": "GetServiceInfo",
       "definiteArgument": "service",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "ServiceInstance",
@@ -345,6 +355,7 @@
       "postfix": "BindService",
       "definiteArgument": "bind-service",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -376,6 +387,7 @@
       "postfix": "UnbindService",
       "definiteArgument": "bind-service",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -395,6 +407,7 @@
       "postfix": "SetEnv",
       "definiteArgument": "set-env",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -419,6 +432,7 @@
       "postfix": "UnsetEnv",
       "definiteArgument": "set-env",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -438,6 +452,7 @@
       "postfix": "CreateRoute",
       "definiteArgument": "create-route",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "Space",
@@ -481,6 +496,7 @@
       "postfix": "MapRoute",
       "definiteArgument": "map-route",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -524,6 +540,7 @@
       "postfix": "UnmapRoute",
       "definiteArgument": "unmap-route",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "AppName",
@@ -561,6 +578,7 @@
       "postfix": "CreateSpace",
       "definiteArgument": "create-space",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "Space",
@@ -586,6 +604,7 @@
       "postfix": "DeleteSpace",
       "definiteArgument": "delete-space",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "Space",
@@ -605,6 +624,7 @@
       "postfix": "Target",
       "definiteArgument": "target",
       "settingsClass": {
+        "baseClass": "CloudFoundryBaseSettings",
         "properties": [
           {
             "name": "Space",
@@ -618,6 +638,11 @@
           }
         ]
       }
+    }
+  ],
+  "dataClasses": [
+    {
+      "name": "CloudFoundryBaseSettings"
     }
   ],
   "enumerations": [
