@@ -21,10 +21,14 @@ namespace Nuke.Common.Tools.CloudFoundry
 
         public static string GetToolPath()
         {
-            var cfPath = ToolPathResolver.TryGetEnvironmentExecutable("CLOUDFOUNDRY_EXE") ??
-                         ToolPathResolver.GetPathExecutable("cf");
-            if (cfPath != null)
-                return cfPath;
+            try
+            {
+                return ToolPathResolver.TryGetEnvironmentExecutable("CLOUDFOUNDRY_EXE") ??
+                             ToolPathResolver.GetPathExecutable("cf");
+            }
+            catch
+            {
+            }
             
             var cliDir = NukeBuild.TemporaryDirectory / "cf-cli";
             var binary = cliDir / (Environment.OSVersion.Platform == PlatformID.Win32NT ? "cf.exe" : "cf");
