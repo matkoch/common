@@ -62,6 +62,7 @@ namespace Nuke.Common.Tools.CloudFoundry
             else
             {
                 TarArchive.CreateInputTarArchive(new GZipInputStream(File.Open(archive, FileMode.Open))).ExtractContents(cliDir);
+                ProcessTasks.StartProcess("chmod", $"+x {binary}").AssertZeroExitCode();
             }
             File.Delete(archive);
             return binary;
