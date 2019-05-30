@@ -40,7 +40,7 @@ namespace Nuke.Common.BuildServers
         public string AgentWorkFolder => Variable("AGENT_WORKFOLDER");
         public string ArtifactStagingDirectory => Variable("BUILD_ARTIFACTSTAGINGDIRECTORY");
         public long BuildId => Variable<long>("BUILD_BUILDID");
-        public string BuildNumber => Variable<string>("BUILD_BUILDNUMBER");
+        [NoConvert] public string BuildNumber => Variable<string>("BUILD_BUILDNUMBER");
         public string BuildUri => Variable("BUILD_BUILDURI");
         public string BinariesDirectory => Variable("BUILD_BINARIESDIRECTORY");
         public string DefinitionName => Variable("BUILD_DEFINITIONNAME");
