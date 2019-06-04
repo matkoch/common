@@ -22,8 +22,24 @@ namespace Nuke.Common.Tools.CloudFoundry
         public static string GetToolPath()
         {
             return ToolPathResolver.TryGetEnvironmentExecutable("CLOUDFOUNDRY_EXE") ??
-                   ToolPathResolver.GetPathExecutable("cf");
-            
+                   ToolPathResolver.GetPackageExecutable($"CloudFoundry.CommandLine.{CurrentOsRid}",  
+                       IsWindows ? "cf.exe" : "cf");
+
+        }
+
+        private static bool IsWindows => Environment.OSVersion.Platform == PlatformID.Win32NT;
+        private static string CurrentOsRid
+        {
+            get
+            {
+                if(Environment.OSVersion.Platform == PlatformID.Win32NT)
+                    return Environment.Is64BitOperatingSystem ? "win-x64" : "win-x32";
+                if(Environment.OSVersion.Platform == PlatformID.Unix)
+                    return  Environment.Is64BitOperatingSystem ? "linux-x64" : "linux-x32";
+                if(Environment.OSVersion.Platform == PlatformID.MacOSX)
+                    return  "osx-x64";
+                throw new PlatformNotSupportedException();
+            }
         }
 
         public static async Task CloudFoundryEnsureServiceReady(string serviceInstance)
