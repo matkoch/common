@@ -17,7 +17,7 @@ namespace Nuke.Common.Execution
     {
         public static void ValidateRequirements(NukeBuild build)
         {
-            foreach (var target in build.ExecutionPlan.Where(x => !x.HasSkippingCondition(x.StaticConditions)))
+            foreach (var target in build.ExecutionPlan.Where(x => x.Status != ExecutionStatus.Skipped))
             foreach (var requirement in target.Requirements)
             {
                 if (requirement is Expression<Func<bool>> boolExpression)

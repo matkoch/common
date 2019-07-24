@@ -44,28 +44,5 @@ namespace Nuke.Common.Execution
         public TimeSpan Duration { get; internal set; }
         public bool Invoked { get; internal set; }
         public string SkipReason { get; internal set; }
-        
-        internal bool HasSkippingCondition(IEnumerable<Expression<Func<bool>>> conditions)
-        {
-            // TODO: trim outer parenthesis
-            string GetSkipReason(Expression<Func<bool>> condition) =>
-                condition.Body.ToString()
-                    .Replace("False", "false")
-                    .Replace("True", "true")
-                    .Replace("OrElse", "||")
-                    .Replace("AndAlso", "&&")
-                    // TODO: should get actual build type name
-                    .Replace("value(Build).", string.Empty);
-
-            SkipReason = null; // solely for testing
-
-            foreach (var condition in conditions)
-            {
-                if (!condition.Compile().Invoke())
-                    SkipReason = GetSkipReason(condition);
-            }
-
-            return SkipReason != null;
-        }
     }
 }

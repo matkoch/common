@@ -25,11 +25,13 @@ namespace Nuke.Common.Execution
 
         public static void Execute(NukeBuild build, [CanBeNull] IReadOnlyCollection<string> skippedTargets)
         {
+            MarkSkippedTargets(build, skippedTargets);
+            
+            RequirementService.ValidateRequirements(build);
+            
             var invocationHash = GetInvocationHash();
             var previouslyExecutedTargets = GetPreviouslyExecutedTargets(invocationHash);
             File.WriteAllLines(BuildAttemptFile, new[] { invocationHash });
-
-            MarkSkippedTargets(build, skippedTargets);
 
             BuildManager.CancellationHandler += ExecuteAssuredTargets;
 
@@ -135,6 +137,7 @@ namespace Nuke.Common.Execution
                 .Where(x => x.HasSkippingCondition(x.StaticConditions))
                 .ForEach(MarkTargetSkipped);
         }
+        
 
         private static string GetInvocationHash()
         {
