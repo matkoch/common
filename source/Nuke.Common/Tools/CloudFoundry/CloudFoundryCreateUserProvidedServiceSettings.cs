@@ -46,7 +46,6 @@ namespace Nuke.Common.Tools.CloudFoundry
             info.AddValue(nameof(_credentials),GetCredentials());
             foreach (var property in GetType().GetProperties().Where(x => x.Name != nameof(Credentials)))
             {
-                Console.WriteLine(property.Name);
                 info.AddValue(property.Name, property.GetValue(this));
             }
             
