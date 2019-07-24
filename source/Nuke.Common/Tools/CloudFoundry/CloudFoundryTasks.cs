@@ -45,6 +45,11 @@ namespace Nuke.Common.Tools.CloudFoundry
             }
         }
 
+        /// <summary>
+        /// Create task which will complete when creation of an asynchronous service is complete. This uses polling to query it repeatedly
+        /// </summary>
+        /// <param name="serviceInstance">name of service to monitor</param>
+        /// <returns></returns>
         public static async Task CloudFoundryEnsureServiceReady(string serviceInstance)
         {
             bool IsCreating()
