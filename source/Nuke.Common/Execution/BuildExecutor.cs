@@ -58,7 +58,7 @@ namespace Nuke.Common.Execution
         {
             if (target.Status == ExecutionStatus.Skipped ||
                 previouslyExecutedTargets.Contains(target.Name) ||
-                HasSkippingCondition(target, target.DynamicConditions))
+                target.HasSkippingCondition(target.DynamicConditions))
             {
                 target.Status = ExecutionStatus.Skipped;
                 build.OnTargetSkipped(target.Name);
@@ -132,31 +132,8 @@ namespace Nuke.Common.Execution
             }
 
             build.ExecutionPlan
-                .Where(x => HasSkippingCondition(x, x.StaticConditions))
+                .Where(x => x.HasSkippingCondition(x.StaticConditions))
                 .ForEach(MarkTargetSkipped);
-        }
-
-        private static bool HasSkippingCondition(ExecutableTarget target, IEnumerable<Expression<Func<bool>>> conditions)
-        {
-            // TODO: trim outer parenthesis
-            string GetSkipReason(Expression<Func<bool>> condition) =>
-                condition.Body.ToString()
-                    .Replace("False", "false")
-                    .Replace("True", "true")
-                    .Replace("OrElse", "||")
-                    .Replace("AndAlso", "&&")
-                    // TODO: should get actual build type name
-                    .Replace("value(Build).", string.Empty);
-
-            target.SkipReason = null; // solely for testing
-
-            foreach (var condition in conditions)
-            {
-                if (!condition.Compile().Invoke())
-                    target.SkipReason = GetSkipReason(condition);
-            }
-
-            return target.SkipReason != null;
         }
 
         private static string GetInvocationHash()
