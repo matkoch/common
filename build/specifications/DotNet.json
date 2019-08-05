@@ -6,6 +6,7 @@
     "https://raw.githubusercontent.com/dotnet/docs/master/docs/core/tools/dotnet-restore.md",
     "https://raw.githubusercontent.com/dotnet/docs/master/docs/core/tools/dotnet-pack.md",
     "https://raw.githubusercontent.com/dotnet/docs/master/docs/core/tools/dotnet-build.md",
+    "https://raw.githubusercontent.com/dotnet/docs/master/docs/core/tools/dotnet-msbuild.md",
     "https://raw.githubusercontent.com/dotnet/docs/master/docs/core/tools/dotnet-clean.md",
     "https://raw.githubusercontent.com/dotnet/docs/master/docs/core/tools/dotnet-publish.md",
     "https://raw.githubusercontent.com/dotnet/docs/master/docs/core/tools/dotnet-nuget-push.md",
@@ -352,6 +353,97 @@
             "type": "string",
             "format": "--version-suffix {value}",
             "help": "Defines the version suffix for an asterisk (<c>*</c>) in the version field of the project file. The format follows NuGet's version guidelines."
+          }
+        ]
+      }
+    },
+    {
+      "help": "<p>The <c>dotnet msbuild</c> command allows access to a fully functional MSBuild.  The command has the exact same capabilities as the existing MSBuild command-line client for SDK-style project only. The options are all the same. For more information about the available options, see the <a href=\"https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference\">MSBuild Command-Line Reference</a>.</p>",
+      "postfix": "MSBuild",
+      "commonPropertySets": [
+        "build"
+      ],
+      "definiteArgument": "msbuild",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "ProjectFile",
+            "type": "string",
+            "format": "{value}",
+            "createOverload": true,
+            "help": "The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file."
+          },
+          {
+            "name": "DetailedSummary",
+            "type": "bool",
+            "format": "-detailedsummary",
+            "help": "Show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes."
+          },
+          {
+            "name": "Framework",
+            "type": "string",
+            "format": "-ignoreprojectextensions:{value}",
+            "help": "Ignore the specified extensions when determining which project file to build. Use a semicolon or a comma to separate multiple extensions, as the following example shows: <c>-ignoreprojectextensions:.vcproj,.sln</c>."
+          },
+          {
+            "name": "MaxCpuCount",
+            "type": "int",
+            "format": "-maxcpucount[:value]",
+            "help": "Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href=\"https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019\">Building multiple projects in parallel."
+          },
+          {
+            "name": "AutoResponse",
+            "type": "bool",
+            "format": "-noautoresponse",
+            "help": "Don't include any MSBuild.rsp files automatically."
+          },
+          {
+            "name": "NodeReuse",
+            "type": "bool",
+            "format": "-nodeReuse: {value}",
+            "help": "Enable or disable the re-use of MSBuild nodes. You can specify the following values: - True. Nodes remain after the build finishes so that subsequent builds can use them (default). - False. Nodes don't remain after the build completes."
+          },
+          {
+            "name": "NoLogo",
+            "type": "bool",
+            "format": "-nologo",
+            "help": "Don't display the startup banner or the copyright message."
+          },
+          {
+            "name": "PreProcess",
+            "type": "string",
+            "format": "-preprocess[: {value}]",
+            "help": "Create a single, aggregated project file by inlining all the files that would be imported during a build, with their boundaries marked. You can use this switch to more easily determine which files are being imported, from where the files are being imported, and which files contribute to the build. When you use this switch, the project isn't built."
+          },
+          {
+            "name": "Target",
+            "type": "string",
+            "format": "-target: {value}",
+            "help": "Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile<c/>"
+          },
+          {
+            "name": "ToolsVersion",
+            "type": "string",
+            "format": "-toolsversion: {value}",
+            "help": "Runs the Restore target prior to building the actual targets."
+          },
+          {
+            "name": "Validate",
+            "type": "string",
+            "format": "-validate:[ {value} ]",
+            "help": "Runs the Restore target prior to building the actual targets."
+          },
+          {
+            "name": "Verbosity",
+            "type": "DotNetVerbosity",
+            "format": "-verbosity:{value}",
+            "help": "Sets the verbosity level of the command. Allowed values are <c>q[uiet]</c>, <c>m[inimal]</c>, <c>n[ormal]</c>, <c>d[etailed]</c>, and <c>diag[nostic]</c>."
+          },
+          {
+            "name": "Version",
+            "type": "string",
+            "format": "--version",
+            "help": "Display version information only. The project isn't built."
           }
         ]
       }
@@ -874,6 +966,14 @@
       }
     ],
     "restore-runtime": [
+      {
+        "name": "Runtime",
+        "type": "string",
+        "format": "--runtime {value}",
+        "help": "Specifies a runtime for the package restore. This is used to restore packages for runtimes not explicitly listed in the <c>&lt;RuntimeIdentifiers&gt;</c> tag in the <em>.csproj</em> file. For a list of Runtime Identifiers (RIDs), see the <a href=\"https://docs.microsoft.com/en-us/dotnet/core/rid-catalog\">RID catalog</a>. Provide multiple RIDs by specifying this option multiple times."
+      }
+    ],
+    "build": [
       {
         "name": "Runtime",
         "type": "string",

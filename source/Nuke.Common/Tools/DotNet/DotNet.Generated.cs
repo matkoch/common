@@ -580,6 +580,93 @@ namespace Nuke.Common.Tools.DotNet
             return configurator.Invoke(DotNetBuild, DotNetLogger, degreeOfParallelism, completeOnFailure);
         }
         /// <summary>
+        ///   <p>The <c>dotnet msbuild</c> command allows access to a fully functional MSBuild.  The command has the exact same capabilities as the existing MSBuild command-line client for SDK-style project only. The options are all the same. For more information about the available options, see the <a href="https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference">MSBuild Command-Line Reference</a>.</p>
+        ///   <p>For more details, visit the <a href="https://docs.microsoft.com/en-us/dotnet/core/tools/">official website</a>.</p>
+        /// </summary>
+        public static IReadOnlyCollection<Output> DotNetMSBuild(DotNetMSBuildSettings toolSettings = null)
+        {
+            toolSettings = toolSettings ?? new DotNetMSBuildSettings();
+            var process = ProcessTasks.StartProcess(toolSettings);
+            process.AssertZeroExitCode();
+            return process.Output;
+        }
+        /// <summary>
+        ///   <p>The <c>dotnet msbuild</c> command allows access to a fully functional MSBuild.  The command has the exact same capabilities as the existing MSBuild command-line client for SDK-style project only. The options are all the same. For more information about the available options, see the <a href="https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference">MSBuild Command-Line Reference</a>.</p>
+        ///   <p>For more details, visit the <a href="https://docs.microsoft.com/en-us/dotnet/core/tools/">official website</a>.</p>
+        /// </summary>
+        /// <remarks>
+        ///   <p>This is a <a href="http://www.nuke.build/docs/authoring-builds/cli-tools.html#fluent-apis">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p>
+        ///   <ul>
+        ///     <li><c>&lt;projectFile&gt;</c> via <see cref="DotNetMSBuildSettings.ProjectFile"/></li>
+        ///     <li><c>/property</c> via <see cref="DotNetMSBuildSettings.Properties"/></li>
+        ///     <li><c>-detailedsummary</c> via <see cref="DotNetMSBuildSettings.DetailedSummary"/></li>
+        ///     <li><c>--disable-parallel</c> via <see cref="DotNetMSBuildSettings.DisableParallel"/></li>
+        ///     <li><c>--force</c> via <see cref="DotNetMSBuildSettings.Force"/></li>
+        ///     <li><c>--force-evaluate</c> via <see cref="DotNetMSBuildSettings.ForceEvaluate"/></li>
+        ///     <li><c>--ignore-failed-sources</c> via <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></li>
+        ///     <li><c>-ignoreprojectextensions</c> via <see cref="DotNetMSBuildSettings.Framework"/></li>
+        ///     <li><c>--locked-mode</c> via <see cref="DotNetMSBuildSettings.LockedMode"/></li>
+        ///     <li><c>--lock-file-path</c> via <see cref="DotNetMSBuildSettings.LockFilePath"/></li>
+        ///     <li><c>-maxcpucount[:value]</c> via <see cref="DotNetMSBuildSettings.MaxCpuCount"/></li>
+        ///     <li><c>-noautoresponse</c> via <see cref="DotNetMSBuildSettings.AutoResponse"/></li>
+        ///     <li><c>--no-cache</c> via <see cref="DotNetMSBuildSettings.NoCache"/></li>
+        ///     <li><c>--no-dependencies</c> via <see cref="DotNetMSBuildSettings.NoDependencies"/></li>
+        ///     <li><c>-nodeReuse</c> via <see cref="DotNetMSBuildSettings.NodeReuse"/></li>
+        ///     <li><c>-nologo</c> via <see cref="DotNetMSBuildSettings.NoLogo"/></li>
+        ///     <li><c>--packages</c> via <see cref="DotNetMSBuildSettings.PackageDirectory"/></li>
+        ///     <li><c>-preprocess[</c> via <see cref="DotNetMSBuildSettings.PreProcess"/></li>
+        ///     <li><c>--source</c> via <see cref="DotNetMSBuildSettings.Sources"/></li>
+        ///     <li><c>-target</c> via <see cref="DotNetMSBuildSettings.Target"/></li>
+        ///     <li><c>-toolsversion</c> via <see cref="DotNetMSBuildSettings.ToolsVersion"/></li>
+        ///     <li><c>--use-lock-file</c> via <see cref="DotNetMSBuildSettings.UseLockFile"/></li>
+        ///     <li><c>-validate:[</c> via <see cref="DotNetMSBuildSettings.Validate"/></li>
+        ///     <li><c>-verbosity</c> via <see cref="DotNetMSBuildSettings.Verbosity"/></li>
+        ///     <li><c>--version</c> via <see cref="DotNetMSBuildSettings.Version"/></li>
+        ///   </ul>
+        /// </remarks>
+        public static IReadOnlyCollection<Output> DotNetMSBuild(Configure<DotNetMSBuildSettings> configurator)
+        {
+            return DotNetMSBuild(configurator(new DotNetMSBuildSettings()));
+        }
+        /// <summary>
+        ///   <p>The <c>dotnet msbuild</c> command allows access to a fully functional MSBuild.  The command has the exact same capabilities as the existing MSBuild command-line client for SDK-style project only. The options are all the same. For more information about the available options, see the <a href="https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference">MSBuild Command-Line Reference</a>.</p>
+        ///   <p>For more details, visit the <a href="https://docs.microsoft.com/en-us/dotnet/core/tools/">official website</a>.</p>
+        /// </summary>
+        /// <remarks>
+        ///   <p>This is a <a href="http://www.nuke.build/docs/authoring-builds/cli-tools.html#fluent-apis">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p>
+        ///   <ul>
+        ///     <li><c>&lt;projectFile&gt;</c> via <see cref="DotNetMSBuildSettings.ProjectFile"/></li>
+        ///     <li><c>/property</c> via <see cref="DotNetMSBuildSettings.Properties"/></li>
+        ///     <li><c>-detailedsummary</c> via <see cref="DotNetMSBuildSettings.DetailedSummary"/></li>
+        ///     <li><c>--disable-parallel</c> via <see cref="DotNetMSBuildSettings.DisableParallel"/></li>
+        ///     <li><c>--force</c> via <see cref="DotNetMSBuildSettings.Force"/></li>
+        ///     <li><c>--force-evaluate</c> via <see cref="DotNetMSBuildSettings.ForceEvaluate"/></li>
+        ///     <li><c>--ignore-failed-sources</c> via <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></li>
+        ///     <li><c>-ignoreprojectextensions</c> via <see cref="DotNetMSBuildSettings.Framework"/></li>
+        ///     <li><c>--locked-mode</c> via <see cref="DotNetMSBuildSettings.LockedMode"/></li>
+        ///     <li><c>--lock-file-path</c> via <see cref="DotNetMSBuildSettings.LockFilePath"/></li>
+        ///     <li><c>-maxcpucount[:value]</c> via <see cref="DotNetMSBuildSettings.MaxCpuCount"/></li>
+        ///     <li><c>-noautoresponse</c> via <see cref="DotNetMSBuildSettings.AutoResponse"/></li>
+        ///     <li><c>--no-cache</c> via <see cref="DotNetMSBuildSettings.NoCache"/></li>
+        ///     <li><c>--no-dependencies</c> via <see cref="DotNetMSBuildSettings.NoDependencies"/></li>
+        ///     <li><c>-nodeReuse</c> via <see cref="DotNetMSBuildSettings.NodeReuse"/></li>
+        ///     <li><c>-nologo</c> via <see cref="DotNetMSBuildSettings.NoLogo"/></li>
+        ///     <li><c>--packages</c> via <see cref="DotNetMSBuildSettings.PackageDirectory"/></li>
+        ///     <li><c>-preprocess[</c> via <see cref="DotNetMSBuildSettings.PreProcess"/></li>
+        ///     <li><c>--source</c> via <see cref="DotNetMSBuildSettings.Sources"/></li>
+        ///     <li><c>-target</c> via <see cref="DotNetMSBuildSettings.Target"/></li>
+        ///     <li><c>-toolsversion</c> via <see cref="DotNetMSBuildSettings.ToolsVersion"/></li>
+        ///     <li><c>--use-lock-file</c> via <see cref="DotNetMSBuildSettings.UseLockFile"/></li>
+        ///     <li><c>-validate:[</c> via <see cref="DotNetMSBuildSettings.Validate"/></li>
+        ///     <li><c>-verbosity</c> via <see cref="DotNetMSBuildSettings.Verbosity"/></li>
+        ///     <li><c>--version</c> via <see cref="DotNetMSBuildSettings.Version"/></li>
+        ///   </ul>
+        /// </remarks>
+        public static IEnumerable<(DotNetMSBuildSettings Settings, IReadOnlyCollection<Output> Output)> DotNetMSBuild(CombinatorialConfigure<DotNetMSBuildSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false)
+        {
+            return configurator.Invoke(DotNetMSBuild, DotNetLogger, degreeOfParallelism, completeOnFailure);
+        }
+        /// <summary>
         ///   <p>The <c>dotnet clean</c> command cleans the output of the previous build. It's implemented as an <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild-targets">MSBuild target</a>, so the project is evaluated when the command is run. Only the outputs created during the build are cleaned. Both intermediate <em>(obj)</em> and final output <em>(bin)</em> folders are cleaned.</p>
         ///   <p>For more details, visit the <a href="https://docs.microsoft.com/en-us/dotnet/core/tools/">official website</a>.</p>
         /// </summary>
@@ -1655,6 +1742,155 @@ namespace Nuke.Common.Tools.DotNet
               .Add("--runtime {value}", Runtime)
               .Add("--verbosity {value}", Verbosity)
               .Add("--version-suffix {value}", VersionSuffix)
+              .Add("--disable-parallel", DisableParallel)
+              .Add("--force", Force)
+              .Add("--ignore-failed-sources", IgnoreFailedSources)
+              .Add("--no-cache", NoCache)
+              .Add("--no-dependencies", NoDependencies)
+              .Add("--packages {value}", PackageDirectory)
+              .Add("--source {value}", Sources)
+              .Add("--use-lock-file", UseLockFile)
+              .Add("--locked-mode", LockedMode)
+              .Add("--lock-file-path {value}", LockFilePath)
+              .Add("--force-evaluate", ForceEvaluate)
+              .Add("/property:{value}", Properties, "{key}={value}", disallowed: ';');
+            return base.ConfigureArguments(arguments);
+        }
+    }
+    #endregion
+    #region DotNetMSBuildSettings
+    /// <summary>
+    ///   Used within <see cref="DotNetTasks"/>.
+    /// </summary>
+    [PublicAPI]
+    [ExcludeFromCodeCoverage]
+    [Serializable]
+    public partial class DotNetMSBuildSettings : ToolSettings
+    {
+        /// <summary>
+        ///   Path to the DotNet executable.
+        /// </summary>
+        public override string ToolPath => base.ToolPath ?? DotNetTasks.DotNetPath;
+        public override Action<OutputType, string> CustomLogger => DotNetTasks.DotNetLogger;
+        /// <summary>
+        ///   The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file.
+        /// </summary>
+        public virtual string ProjectFile { get; internal set; }
+        /// <summary>
+        ///   Show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes.
+        /// </summary>
+        public virtual bool? DetailedSummary { get; internal set; }
+        /// <summary>
+        ///   Ignore the specified extensions when determining which project file to build. Use a semicolon or a comma to separate multiple extensions, as the following example shows: <c>-ignoreprojectextensions:.vcproj,.sln</c>.
+        /// </summary>
+        public virtual string Framework { get; internal set; }
+        /// <summary>
+        ///   Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.
+        /// </summary>
+        public virtual int? MaxCpuCount { get; internal set; }
+        /// <summary>
+        ///   Don't include any MSBuild.rsp files automatically.
+        /// </summary>
+        public virtual bool? AutoResponse { get; internal set; }
+        /// <summary>
+        ///   Enable or disable the re-use of MSBuild nodes. You can specify the following values: - True. Nodes remain after the build finishes so that subsequent builds can use them (default). - False. Nodes don't remain after the build completes.
+        /// </summary>
+        public virtual bool? NodeReuse { get; internal set; }
+        /// <summary>
+        ///   Don't display the startup banner or the copyright message.
+        /// </summary>
+        public virtual bool? NoLogo { get; internal set; }
+        /// <summary>
+        ///   Create a single, aggregated project file by inlining all the files that would be imported during a build, with their boundaries marked. You can use this switch to more easily determine which files are being imported, from where the files are being imported, and which files contribute to the build. When you use this switch, the project isn't built.
+        /// </summary>
+        public virtual string PreProcess { get; internal set; }
+        /// <summary>
+        ///   Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile<c/>
+        /// </summary>
+        public virtual string Target { get; internal set; }
+        /// <summary>
+        ///   Runs the Restore target prior to building the actual targets.
+        /// </summary>
+        public virtual string ToolsVersion { get; internal set; }
+        /// <summary>
+        ///   Runs the Restore target prior to building the actual targets.
+        /// </summary>
+        public virtual string Validate { get; internal set; }
+        /// <summary>
+        ///   Sets the verbosity level of the command. Allowed values are <c>q[uiet]</c>, <c>m[inimal]</c>, <c>n[ormal]</c>, <c>d[etailed]</c>, and <c>diag[nostic]</c>.
+        /// </summary>
+        public virtual DotNetVerbosity Verbosity { get; internal set; }
+        /// <summary>
+        ///   Display version information only. The project isn't built.
+        /// </summary>
+        public virtual string Version { get; internal set; }
+        /// <summary>
+        ///   Disables restoring multiple projects in parallel.
+        /// </summary>
+        public virtual bool? DisableParallel { get; internal set; }
+        /// <summary>
+        ///   Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.
+        /// </summary>
+        public virtual bool? Force { get; internal set; }
+        /// <summary>
+        ///   Only warn about failed sources if there are packages meeting the version requirement.
+        /// </summary>
+        public virtual bool? IgnoreFailedSources { get; internal set; }
+        /// <summary>
+        ///   Specifies to not cache packages and HTTP requests.
+        /// </summary>
+        public virtual bool? NoCache { get; internal set; }
+        /// <summary>
+        ///   When restoring a project with project-to-project (P2P) references, restore the root project and not the references.
+        /// </summary>
+        public virtual bool? NoDependencies { get; internal set; }
+        /// <summary>
+        ///   Specifies the directory for restored packages.
+        /// </summary>
+        public virtual string PackageDirectory { get; internal set; }
+        /// <summary>
+        ///   Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.
+        /// </summary>
+        public virtual IReadOnlyList<string> Sources => SourcesInternal.AsReadOnly();
+        internal List<string> SourcesInternal { get; set; } = new List<string>();
+        /// <summary>
+        ///   Enables project lock file to be generated and used with restore.
+        /// </summary>
+        public virtual bool? UseLockFile { get; internal set; }
+        /// <summary>
+        ///   Don't allow updating project lock file.
+        /// </summary>
+        public virtual bool? LockedMode { get; internal set; }
+        /// <summary>
+        ///   Output location where project lock file is written. By default, this is 'PROJECT_ROOT\packages.lock.json'.
+        /// </summary>
+        public virtual string LockFilePath { get; internal set; }
+        /// <summary>
+        ///   Forces restore to reevaluate all dependencies even if a lock file already exists.
+        /// </summary>
+        public virtual bool? ForceEvaluate { get; internal set; }
+        /// <summary>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        public virtual IReadOnlyDictionary<string, object> Properties => PropertiesInternal.AsReadOnly();
+        internal Dictionary<string, object> PropertiesInternal { get; set; } = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        protected override Arguments ConfigureArguments(Arguments arguments)
+        {
+            arguments
+              .Add("msbuild")
+              .Add("{value}", ProjectFile)
+              .Add("-detailedsummary", DetailedSummary)
+              .Add("-ignoreprojectextensions:{value}", Framework)
+              .Add("-maxcpucount[:value]", MaxCpuCount)
+              .Add("-noautoresponse", AutoResponse)
+              .Add("-nodeReuse: {value}", NodeReuse)
+              .Add("-nologo", NoLogo)
+              .Add("-preprocess[: {value}]", PreProcess)
+              .Add("-target: {value}", Target)
+              .Add("-toolsversion: {value}", ToolsVersion)
+              .Add("-validate:[ {value} ]", Validate)
+              .Add("-verbosity:{value}", Verbosity)
+              .Add("--version", Version)
               .Add("--disable-parallel", DisableParallel)
               .Add("--force", Force)
               .Add("--ignore-failed-sources", IgnoreFailedSources)
@@ -11429,6 +11665,1997 @@ namespace Nuke.Common.Tools.DotNet
         /// </summary>
         [Pure]
         public static DotNetBuildSettings ResetSymbolPackageFormat(this DotNetBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("SymbolPackageFormat");
+            return toolSettings;
+        }
+        #endregion
+        #endregion
+    }
+    #endregion
+    #region DotNetMSBuildSettingsExtensions
+    /// <summary>
+    ///   Used within <see cref="DotNetTasks"/>.
+    /// </summary>
+    [PublicAPI]
+    [ExcludeFromCodeCoverage]
+    public static partial class DotNetMSBuildSettingsExtensions
+    {
+        #region ProjectFile
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.ProjectFile"/></em></p>
+        ///   <p>The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetProjectFile(this DotNetMSBuildSettings toolSettings, string projectFile)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ProjectFile = projectFile;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.ProjectFile"/></em></p>
+        ///   <p>The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetProjectFile(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ProjectFile = null;
+            return toolSettings;
+        }
+        #endregion
+        #region DetailedSummary
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.DetailedSummary"/></em></p>
+        ///   <p>Show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetDetailedSummary(this DotNetMSBuildSettings toolSettings, bool? detailedSummary)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.DetailedSummary = detailedSummary;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.DetailedSummary"/></em></p>
+        ///   <p>Show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetDetailedSummary(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.DetailedSummary = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.DetailedSummary"/></em></p>
+        ///   <p>Show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableDetailedSummary(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.DetailedSummary = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.DetailedSummary"/></em></p>
+        ///   <p>Show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableDetailedSummary(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.DetailedSummary = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.DetailedSummary"/></em></p>
+        ///   <p>Show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleDetailedSummary(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.DetailedSummary = !toolSettings.DetailedSummary;
+            return toolSettings;
+        }
+        #endregion
+        #region Framework
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Framework"/></em></p>
+        ///   <p>Ignore the specified extensions when determining which project file to build. Use a semicolon or a comma to separate multiple extensions, as the following example shows: <c>-ignoreprojectextensions:.vcproj,.sln</c>.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetFramework(this DotNetMSBuildSettings toolSettings, string framework)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Framework = framework;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Framework"/></em></p>
+        ///   <p>Ignore the specified extensions when determining which project file to build. Use a semicolon or a comma to separate multiple extensions, as the following example shows: <c>-ignoreprojectextensions:.vcproj,.sln</c>.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetFramework(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Framework = null;
+            return toolSettings;
+        }
+        #endregion
+        #region MaxCpuCount
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.MaxCpuCount"/></em></p>
+        ///   <p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetMaxCpuCount(this DotNetMSBuildSettings toolSettings, int? maxCpuCount)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MaxCpuCount = maxCpuCount;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.MaxCpuCount"/></em></p>
+        ///   <p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetMaxCpuCount(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MaxCpuCount = null;
+            return toolSettings;
+        }
+        #endregion
+        #region AutoResponse
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.AutoResponse"/></em></p>
+        ///   <p>Don't include any MSBuild.rsp files automatically.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetAutoResponse(this DotNetMSBuildSettings toolSettings, bool? autoResponse)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.AutoResponse = autoResponse;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.AutoResponse"/></em></p>
+        ///   <p>Don't include any MSBuild.rsp files automatically.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetAutoResponse(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.AutoResponse = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.AutoResponse"/></em></p>
+        ///   <p>Don't include any MSBuild.rsp files automatically.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableAutoResponse(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.AutoResponse = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.AutoResponse"/></em></p>
+        ///   <p>Don't include any MSBuild.rsp files automatically.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableAutoResponse(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.AutoResponse = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.AutoResponse"/></em></p>
+        ///   <p>Don't include any MSBuild.rsp files automatically.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleAutoResponse(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.AutoResponse = !toolSettings.AutoResponse;
+            return toolSettings;
+        }
+        #endregion
+        #region NodeReuse
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.NodeReuse"/></em></p>
+        ///   <p>Enable or disable the re-use of MSBuild nodes. You can specify the following values: - True. Nodes remain after the build finishes so that subsequent builds can use them (default). - False. Nodes don't remain after the build completes.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetNodeReuse(this DotNetMSBuildSettings toolSettings, bool? nodeReuse)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NodeReuse = nodeReuse;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.NodeReuse"/></em></p>
+        ///   <p>Enable or disable the re-use of MSBuild nodes. You can specify the following values: - True. Nodes remain after the build finishes so that subsequent builds can use them (default). - False. Nodes don't remain after the build completes.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetNodeReuse(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NodeReuse = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.NodeReuse"/></em></p>
+        ///   <p>Enable or disable the re-use of MSBuild nodes. You can specify the following values: - True. Nodes remain after the build finishes so that subsequent builds can use them (default). - False. Nodes don't remain after the build completes.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableNodeReuse(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NodeReuse = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.NodeReuse"/></em></p>
+        ///   <p>Enable or disable the re-use of MSBuild nodes. You can specify the following values: - True. Nodes remain after the build finishes so that subsequent builds can use them (default). - False. Nodes don't remain after the build completes.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableNodeReuse(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NodeReuse = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.NodeReuse"/></em></p>
+        ///   <p>Enable or disable the re-use of MSBuild nodes. You can specify the following values: - True. Nodes remain after the build finishes so that subsequent builds can use them (default). - False. Nodes don't remain after the build completes.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleNodeReuse(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NodeReuse = !toolSettings.NodeReuse;
+            return toolSettings;
+        }
+        #endregion
+        #region NoLogo
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.NoLogo"/></em></p>
+        ///   <p>Don't display the startup banner or the copyright message.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetNoLogo(this DotNetMSBuildSettings toolSettings, bool? noLogo)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoLogo = noLogo;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.NoLogo"/></em></p>
+        ///   <p>Don't display the startup banner or the copyright message.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetNoLogo(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoLogo = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.NoLogo"/></em></p>
+        ///   <p>Don't display the startup banner or the copyright message.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableNoLogo(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoLogo = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.NoLogo"/></em></p>
+        ///   <p>Don't display the startup banner or the copyright message.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableNoLogo(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoLogo = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.NoLogo"/></em></p>
+        ///   <p>Don't display the startup banner or the copyright message.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleNoLogo(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoLogo = !toolSettings.NoLogo;
+            return toolSettings;
+        }
+        #endregion
+        #region PreProcess
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.PreProcess"/></em></p>
+        ///   <p>Create a single, aggregated project file by inlining all the files that would be imported during a build, with their boundaries marked. You can use this switch to more easily determine which files are being imported, from where the files are being imported, and which files contribute to the build. When you use this switch, the project isn't built.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetPreProcess(this DotNetMSBuildSettings toolSettings, string preProcess)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PreProcess = preProcess;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.PreProcess"/></em></p>
+        ///   <p>Create a single, aggregated project file by inlining all the files that would be imported during a build, with their boundaries marked. You can use this switch to more easily determine which files are being imported, from where the files are being imported, and which files contribute to the build. When you use this switch, the project isn't built.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetPreProcess(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PreProcess = null;
+            return toolSettings;
+        }
+        #endregion
+        #region Target
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Target"/></em></p>
+        ///   <p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile<c/></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetTarget(this DotNetMSBuildSettings toolSettings, string target)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Target = target;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Target"/></em></p>
+        ///   <p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile<c/></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetTarget(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Target = null;
+            return toolSettings;
+        }
+        #endregion
+        #region ToolsVersion
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.ToolsVersion"/></em></p>
+        ///   <p>Runs the Restore target prior to building the actual targets.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetToolsVersion(this DotNetMSBuildSettings toolSettings, string toolsVersion)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ToolsVersion = toolsVersion;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.ToolsVersion"/></em></p>
+        ///   <p>Runs the Restore target prior to building the actual targets.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetToolsVersion(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ToolsVersion = null;
+            return toolSettings;
+        }
+        #endregion
+        #region Validate
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Validate"/></em></p>
+        ///   <p>Runs the Restore target prior to building the actual targets.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetValidate(this DotNetMSBuildSettings toolSettings, string validate)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Validate = validate;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Validate"/></em></p>
+        ///   <p>Runs the Restore target prior to building the actual targets.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetValidate(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Validate = null;
+            return toolSettings;
+        }
+        #endregion
+        #region Verbosity
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Verbosity"/></em></p>
+        ///   <p>Sets the verbosity level of the command. Allowed values are <c>q[uiet]</c>, <c>m[inimal]</c>, <c>n[ormal]</c>, <c>d[etailed]</c>, and <c>diag[nostic]</c>.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetVerbosity(this DotNetMSBuildSettings toolSettings, DotNetVerbosity verbosity)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Verbosity = verbosity;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Verbosity"/></em></p>
+        ///   <p>Sets the verbosity level of the command. Allowed values are <c>q[uiet]</c>, <c>m[inimal]</c>, <c>n[ormal]</c>, <c>d[etailed]</c>, and <c>diag[nostic]</c>.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetVerbosity(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Verbosity = null;
+            return toolSettings;
+        }
+        #endregion
+        #region Version
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Version"/></em></p>
+        ///   <p>Display version information only. The project isn't built.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetVersion(this DotNetMSBuildSettings toolSettings, string version)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Version = version;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Version"/></em></p>
+        ///   <p>Display version information only. The project isn't built.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetVersion(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Version = null;
+            return toolSettings;
+        }
+        #endregion
+        #region DisableParallel
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.DisableParallel"/></em></p>
+        ///   <p>Disables restoring multiple projects in parallel.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetDisableParallel(this DotNetMSBuildSettings toolSettings, bool? disableParallel)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.DisableParallel = disableParallel;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.DisableParallel"/></em></p>
+        ///   <p>Disables restoring multiple projects in parallel.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetDisableParallel(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.DisableParallel = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.DisableParallel"/></em></p>
+        ///   <p>Disables restoring multiple projects in parallel.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableDisableParallel(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.DisableParallel = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.DisableParallel"/></em></p>
+        ///   <p>Disables restoring multiple projects in parallel.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableDisableParallel(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.DisableParallel = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.DisableParallel"/></em></p>
+        ///   <p>Disables restoring multiple projects in parallel.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleDisableParallel(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.DisableParallel = !toolSettings.DisableParallel;
+            return toolSettings;
+        }
+        #endregion
+        #region Force
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Force"/></em></p>
+        ///   <p>Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetForce(this DotNetMSBuildSettings toolSettings, bool? force)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Force = force;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Force"/></em></p>
+        ///   <p>Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetForce(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Force = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.Force"/></em></p>
+        ///   <p>Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableForce(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Force = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.Force"/></em></p>
+        ///   <p>Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableForce(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Force = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.Force"/></em></p>
+        ///   <p>Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleForce(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Force = !toolSettings.Force;
+            return toolSettings;
+        }
+        #endregion
+        #region IgnoreFailedSources
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></em></p>
+        ///   <p>Only warn about failed sources if there are packages meeting the version requirement.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetIgnoreFailedSources(this DotNetMSBuildSettings toolSettings, bool? ignoreFailedSources)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.IgnoreFailedSources = ignoreFailedSources;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></em></p>
+        ///   <p>Only warn about failed sources if there are packages meeting the version requirement.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetIgnoreFailedSources(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.IgnoreFailedSources = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></em></p>
+        ///   <p>Only warn about failed sources if there are packages meeting the version requirement.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableIgnoreFailedSources(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.IgnoreFailedSources = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></em></p>
+        ///   <p>Only warn about failed sources if there are packages meeting the version requirement.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableIgnoreFailedSources(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.IgnoreFailedSources = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></em></p>
+        ///   <p>Only warn about failed sources if there are packages meeting the version requirement.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleIgnoreFailedSources(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.IgnoreFailedSources = !toolSettings.IgnoreFailedSources;
+            return toolSettings;
+        }
+        #endregion
+        #region NoCache
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.NoCache"/></em></p>
+        ///   <p>Specifies to not cache packages and HTTP requests.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetNoCache(this DotNetMSBuildSettings toolSettings, bool? noCache)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoCache = noCache;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.NoCache"/></em></p>
+        ///   <p>Specifies to not cache packages and HTTP requests.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetNoCache(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoCache = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.NoCache"/></em></p>
+        ///   <p>Specifies to not cache packages and HTTP requests.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableNoCache(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoCache = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.NoCache"/></em></p>
+        ///   <p>Specifies to not cache packages and HTTP requests.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableNoCache(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoCache = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.NoCache"/></em></p>
+        ///   <p>Specifies to not cache packages and HTTP requests.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleNoCache(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoCache = !toolSettings.NoCache;
+            return toolSettings;
+        }
+        #endregion
+        #region NoDependencies
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.NoDependencies"/></em></p>
+        ///   <p>When restoring a project with project-to-project (P2P) references, restore the root project and not the references.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetNoDependencies(this DotNetMSBuildSettings toolSettings, bool? noDependencies)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoDependencies = noDependencies;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.NoDependencies"/></em></p>
+        ///   <p>When restoring a project with project-to-project (P2P) references, restore the root project and not the references.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetNoDependencies(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoDependencies = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.NoDependencies"/></em></p>
+        ///   <p>When restoring a project with project-to-project (P2P) references, restore the root project and not the references.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableNoDependencies(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoDependencies = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.NoDependencies"/></em></p>
+        ///   <p>When restoring a project with project-to-project (P2P) references, restore the root project and not the references.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableNoDependencies(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoDependencies = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.NoDependencies"/></em></p>
+        ///   <p>When restoring a project with project-to-project (P2P) references, restore the root project and not the references.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleNoDependencies(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoDependencies = !toolSettings.NoDependencies;
+            return toolSettings;
+        }
+        #endregion
+        #region PackageDirectory
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.PackageDirectory"/></em></p>
+        ///   <p>Specifies the directory for restored packages.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetPackageDirectory(this DotNetMSBuildSettings toolSettings, string packageDirectory)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PackageDirectory = packageDirectory;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.PackageDirectory"/></em></p>
+        ///   <p>Specifies the directory for restored packages.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetPackageDirectory(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PackageDirectory = null;
+            return toolSettings;
+        }
+        #endregion
+        #region Sources
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Sources"/> to a new list</em></p>
+        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetSources(this DotNetMSBuildSettings toolSettings, params string[] sources)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.SourcesInternal = sources.ToList();
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Sources"/> to a new list</em></p>
+        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetSources(this DotNetMSBuildSettings toolSettings, IEnumerable<string> sources)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.SourcesInternal = sources.ToList();
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <see cref="DotNetMSBuildSettings.Sources"/></em></p>
+        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddSources(this DotNetMSBuildSettings toolSettings, params string[] sources)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.SourcesInternal.AddRange(sources);
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <see cref="DotNetMSBuildSettings.Sources"/></em></p>
+        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddSources(this DotNetMSBuildSettings toolSettings, IEnumerable<string> sources)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.SourcesInternal.AddRange(sources);
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Clears <see cref="DotNetMSBuildSettings.Sources"/></em></p>
+        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ClearSources(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.SourcesInternal.Clear();
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <see cref="DotNetMSBuildSettings.Sources"/></em></p>
+        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemoveSources(this DotNetMSBuildSettings toolSettings, params string[] sources)
+        {
+            toolSettings = toolSettings.NewInstance();
+            var hashSet = new HashSet<string>(sources);
+            toolSettings.SourcesInternal.RemoveAll(x => hashSet.Contains(x));
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <see cref="DotNetMSBuildSettings.Sources"/></em></p>
+        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemoveSources(this DotNetMSBuildSettings toolSettings, IEnumerable<string> sources)
+        {
+            toolSettings = toolSettings.NewInstance();
+            var hashSet = new HashSet<string>(sources);
+            toolSettings.SourcesInternal.RemoveAll(x => hashSet.Contains(x));
+            return toolSettings;
+        }
+        #endregion
+        #region UseLockFile
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.UseLockFile"/></em></p>
+        ///   <p>Enables project lock file to be generated and used with restore.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetUseLockFile(this DotNetMSBuildSettings toolSettings, bool? useLockFile)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.UseLockFile = useLockFile;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.UseLockFile"/></em></p>
+        ///   <p>Enables project lock file to be generated and used with restore.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetUseLockFile(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.UseLockFile = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.UseLockFile"/></em></p>
+        ///   <p>Enables project lock file to be generated and used with restore.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableUseLockFile(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.UseLockFile = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.UseLockFile"/></em></p>
+        ///   <p>Enables project lock file to be generated and used with restore.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableUseLockFile(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.UseLockFile = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.UseLockFile"/></em></p>
+        ///   <p>Enables project lock file to be generated and used with restore.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleUseLockFile(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.UseLockFile = !toolSettings.UseLockFile;
+            return toolSettings;
+        }
+        #endregion
+        #region LockedMode
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.LockedMode"/></em></p>
+        ///   <p>Don't allow updating project lock file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetLockedMode(this DotNetMSBuildSettings toolSettings, bool? lockedMode)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.LockedMode = lockedMode;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.LockedMode"/></em></p>
+        ///   <p>Don't allow updating project lock file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetLockedMode(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.LockedMode = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.LockedMode"/></em></p>
+        ///   <p>Don't allow updating project lock file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableLockedMode(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.LockedMode = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.LockedMode"/></em></p>
+        ///   <p>Don't allow updating project lock file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableLockedMode(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.LockedMode = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.LockedMode"/></em></p>
+        ///   <p>Don't allow updating project lock file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleLockedMode(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.LockedMode = !toolSettings.LockedMode;
+            return toolSettings;
+        }
+        #endregion
+        #region LockFilePath
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.LockFilePath"/></em></p>
+        ///   <p>Output location where project lock file is written. By default, this is 'PROJECT_ROOT\packages.lock.json'.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetLockFilePath(this DotNetMSBuildSettings toolSettings, string lockFilePath)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.LockFilePath = lockFilePath;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.LockFilePath"/></em></p>
+        ///   <p>Output location where project lock file is written. By default, this is 'PROJECT_ROOT\packages.lock.json'.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetLockFilePath(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.LockFilePath = null;
+            return toolSettings;
+        }
+        #endregion
+        #region ForceEvaluate
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.ForceEvaluate"/></em></p>
+        ///   <p>Forces restore to reevaluate all dependencies even if a lock file already exists.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetForceEvaluate(this DotNetMSBuildSettings toolSettings, bool? forceEvaluate)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ForceEvaluate = forceEvaluate;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.ForceEvaluate"/></em></p>
+        ///   <p>Forces restore to reevaluate all dependencies even if a lock file already exists.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetForceEvaluate(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ForceEvaluate = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.ForceEvaluate"/></em></p>
+        ///   <p>Forces restore to reevaluate all dependencies even if a lock file already exists.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableForceEvaluate(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ForceEvaluate = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.ForceEvaluate"/></em></p>
+        ///   <p>Forces restore to reevaluate all dependencies even if a lock file already exists.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableForceEvaluate(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ForceEvaluate = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.ForceEvaluate"/></em></p>
+        ///   <p>Forces restore to reevaluate all dependencies even if a lock file already exists.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleForceEvaluate(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ForceEvaluate = !toolSettings.ForceEvaluate;
+            return toolSettings;
+        }
+        #endregion
+        #region Properties
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Properties"/> to a new dictionary</em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetProperties(this DotNetMSBuildSettings toolSettings, IDictionary<string, object> properties)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal = properties.ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Clears <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ClearProperties(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Clear();
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds a new key-value-pair <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddProperty(this DotNetMSBuildSettings toolSettings, string propertyKey, object propertyValue)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Add(propertyKey, propertyValue);
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes a key-value-pair from <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemoveProperty(this DotNetMSBuildSettings toolSettings, string propertyKey)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove(propertyKey);
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Sets a key-value-pair in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetProperty(this DotNetMSBuildSettings toolSettings, string propertyKey, object propertyValue)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal[propertyKey] = propertyValue;
+            return toolSettings;
+        }
+        #region RunCodeAnalysis
+        /// <summary>
+        ///   <p><em>Sets <c>RunCodeAnalysis</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetRunCodeAnalysis(this DotNetMSBuildSettings toolSettings, bool? runCodeAnalysis)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["RunCodeAnalysis"] = runCodeAnalysis;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>RunCodeAnalysis</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetRunCodeAnalysis(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("RunCodeAnalysis");
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <c>RunCodeAnalysis</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableRunCodeAnalysis(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["RunCodeAnalysis"] = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <c>RunCodeAnalysis</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableRunCodeAnalysis(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["RunCodeAnalysis"] = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <c>RunCodeAnalysis</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleRunCodeAnalysis(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.ToggleBoolean(toolSettings.PropertiesInternal, "RunCodeAnalysis");
+            return toolSettings;
+        }
+        #endregion
+        #region NoWarn
+        /// <summary>
+        ///   <p><em>Sets <c>NoWarn</c> in <see cref="DotNetMSBuildSettings.Properties"/> to a new collection</em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetNoWarns(this DotNetMSBuildSettings toolSettings, params int[] noWarn)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.SetCollection(toolSettings.PropertiesInternal, "NoWarn", noWarn, ';');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Sets <c>NoWarn</c> in <see cref="DotNetMSBuildSettings.Properties"/> to a new collection</em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetNoWarns(this DotNetMSBuildSettings toolSettings, IEnumerable<int> noWarn)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.SetCollection(toolSettings.PropertiesInternal, "NoWarn", noWarn, ';');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <c>NoWarn</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddNoWarns(this DotNetMSBuildSettings toolSettings, params int[] noWarn)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.AddItems(toolSettings.PropertiesInternal, "NoWarn", noWarn, ';');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <c>NoWarn</c> in existing <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddNoWarns(this DotNetMSBuildSettings toolSettings, IEnumerable<int> noWarn)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.AddItems(toolSettings.PropertiesInternal, "NoWarn", noWarn, ';');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Clears <c>NoWarn</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ClearNoWarns(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("NoWarn");
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <c>NoWarn</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemoveNoWarns(this DotNetMSBuildSettings toolSettings, params int[] noWarn)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.RemoveItems(toolSettings.PropertiesInternal, "NoWarn", noWarn, ';');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <c>NoWarn</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemoveNoWarns(this DotNetMSBuildSettings toolSettings, IEnumerable<int> noWarn)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.RemoveItems(toolSettings.PropertiesInternal, "NoWarn", noWarn, ';');
+            return toolSettings;
+        }
+        #endregion
+        #region WarningsAsErrors
+        /// <summary>
+        ///   <p><em>Sets <c>WarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/> to a new collection</em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetWarningsAsErrors(this DotNetMSBuildSettings toolSettings, params int[] warningsAsErrors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.SetCollection(toolSettings.PropertiesInternal, "WarningsAsErrors", warningsAsErrors, ';');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Sets <c>WarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/> to a new collection</em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetWarningsAsErrors(this DotNetMSBuildSettings toolSettings, IEnumerable<int> warningsAsErrors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.SetCollection(toolSettings.PropertiesInternal, "WarningsAsErrors", warningsAsErrors, ';');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <c>WarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddWarningsAsErrors(this DotNetMSBuildSettings toolSettings, params int[] warningsAsErrors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.AddItems(toolSettings.PropertiesInternal, "WarningsAsErrors", warningsAsErrors, ';');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <c>WarningsAsErrors</c> in existing <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddWarningsAsErrors(this DotNetMSBuildSettings toolSettings, IEnumerable<int> warningsAsErrors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.AddItems(toolSettings.PropertiesInternal, "WarningsAsErrors", warningsAsErrors, ';');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Clears <c>WarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ClearWarningsAsErrors(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("WarningsAsErrors");
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <c>WarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemoveWarningsAsErrors(this DotNetMSBuildSettings toolSettings, params int[] warningsAsErrors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.RemoveItems(toolSettings.PropertiesInternal, "WarningsAsErrors", warningsAsErrors, ';');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <c>WarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemoveWarningsAsErrors(this DotNetMSBuildSettings toolSettings, IEnumerable<int> warningsAsErrors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.RemoveItems(toolSettings.PropertiesInternal, "WarningsAsErrors", warningsAsErrors, ';');
+            return toolSettings;
+        }
+        #endregion
+        #region WarningLevel
+        /// <summary>
+        ///   <p><em>Sets <c>WarningLevel</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetWarningLevel(this DotNetMSBuildSettings toolSettings, int? warningLevel)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["WarningLevel"] = warningLevel;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>WarningLevel</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetWarningLevel(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("WarningLevel");
+            return toolSettings;
+        }
+        #endregion
+        #region TreatWarningsAsErrors
+        /// <summary>
+        ///   <p><em>Sets <c>TreatWarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetTreatWarningsAsErrors(this DotNetMSBuildSettings toolSettings, bool? treatWarningsAsErrors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["TreatWarningsAsErrors"] = treatWarningsAsErrors;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>TreatWarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetTreatWarningsAsErrors(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("TreatWarningsAsErrors");
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <c>TreatWarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnableTreatWarningsAsErrors(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["TreatWarningsAsErrors"] = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <c>TreatWarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisableTreatWarningsAsErrors(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["TreatWarningsAsErrors"] = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <c>TreatWarningsAsErrors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ToggleTreatWarningsAsErrors(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.ToggleBoolean(toolSettings.PropertiesInternal, "TreatWarningsAsErrors");
+            return toolSettings;
+        }
+        #endregion
+        #region AssemblyVersion
+        /// <summary>
+        ///   <p><em>Sets <c>AssemblyVersion</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetAssemblyVersion(this DotNetMSBuildSettings toolSettings, string assemblyVersion)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["AssemblyVersion"] = assemblyVersion;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>AssemblyVersion</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetAssemblyVersion(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("AssemblyVersion");
+            return toolSettings;
+        }
+        #endregion
+        #region FileVersion
+        /// <summary>
+        ///   <p><em>Sets <c>FileVersion</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetFileVersion(this DotNetMSBuildSettings toolSettings, string fileVersion)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["FileVersion"] = fileVersion;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>FileVersion</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetFileVersion(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("FileVersion");
+            return toolSettings;
+        }
+        #endregion
+        #region InformationalVersion
+        /// <summary>
+        ///   <p><em>Sets <c>InformationalVersion</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetInformationalVersion(this DotNetMSBuildSettings toolSettings, string informationalVersion)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["InformationalVersion"] = informationalVersion;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>InformationalVersion</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetInformationalVersion(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("InformationalVersion");
+            return toolSettings;
+        }
+        #endregion
+        #region PackageId
+        /// <summary>
+        ///   <p><em>Sets <c>PackageId</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetPackageId(this DotNetMSBuildSettings toolSettings, string packageId)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["PackageId"] = packageId;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>PackageId</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetPackageId(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("PackageId");
+            return toolSettings;
+        }
+        #endregion
+        #region Version
+        /// <summary>
+        ///   <p><em>Sets <c>Version</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetVersion(this DotNetMSBuildSettings toolSettings, string version)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["Version"] = version;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>Version</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetVersion(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("Version");
+            return toolSettings;
+        }
+        #endregion
+        #region VersionPrefix
+        /// <summary>
+        ///   <p><em>Sets <c>VersionPrefix</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetVersionPrefix(this DotNetMSBuildSettings toolSettings, string versionPrefix)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["VersionPrefix"] = versionPrefix;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>VersionPrefix</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetVersionPrefix(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("VersionPrefix");
+            return toolSettings;
+        }
+        #endregion
+        #region Authors
+        /// <summary>
+        ///   <p><em>Sets <c>Authors</c> in <see cref="DotNetMSBuildSettings.Properties"/> to a new collection</em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetAuthors(this DotNetMSBuildSettings toolSettings, params string[] authors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.SetCollection(toolSettings.PropertiesInternal, "Authors", authors, ',');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Sets <c>Authors</c> in <see cref="DotNetMSBuildSettings.Properties"/> to a new collection</em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetAuthors(this DotNetMSBuildSettings toolSettings, IEnumerable<string> authors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.SetCollection(toolSettings.PropertiesInternal, "Authors", authors, ',');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <c>Authors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddAuthors(this DotNetMSBuildSettings toolSettings, params string[] authors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.AddItems(toolSettings.PropertiesInternal, "Authors", authors, ',');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <c>Authors</c> in existing <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddAuthors(this DotNetMSBuildSettings toolSettings, IEnumerable<string> authors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.AddItems(toolSettings.PropertiesInternal, "Authors", authors, ',');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Clears <c>Authors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ClearAuthors(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("Authors");
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <c>Authors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemoveAuthors(this DotNetMSBuildSettings toolSettings, params string[] authors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.RemoveItems(toolSettings.PropertiesInternal, "Authors", authors, ',');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <c>Authors</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemoveAuthors(this DotNetMSBuildSettings toolSettings, IEnumerable<string> authors)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.RemoveItems(toolSettings.PropertiesInternal, "Authors", authors, ',');
+            return toolSettings;
+        }
+        #endregion
+        #region Title
+        /// <summary>
+        ///   <p><em>Sets <c>Title</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetTitle(this DotNetMSBuildSettings toolSettings, string title)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["Title"] = title;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>Title</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetTitle(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("Title");
+            return toolSettings;
+        }
+        #endregion
+        #region Description
+        /// <summary>
+        ///   <p><em>Sets <c>Description</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetDescription(this DotNetMSBuildSettings toolSettings, string description)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["Description"] = description;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>Description</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetDescription(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("Description");
+            return toolSettings;
+        }
+        #endregion
+        #region Copyright
+        /// <summary>
+        ///   <p><em>Sets <c>Copyright</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetCopyright(this DotNetMSBuildSettings toolSettings, string copyright)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["Copyright"] = copyright;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>Copyright</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetCopyright(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("Copyright");
+            return toolSettings;
+        }
+        #endregion
+        #region PackageRequireLicenseAcceptance
+        /// <summary>
+        ///   <p><em>Sets <c>PackageRequireLicenseAcceptance</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetPackageRequireLicenseAcceptance(this DotNetMSBuildSettings toolSettings, bool? packageRequireLicenseAcceptance)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["PackageRequireLicenseAcceptance"] = packageRequireLicenseAcceptance;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>PackageRequireLicenseAcceptance</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetPackageRequireLicenseAcceptance(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("PackageRequireLicenseAcceptance");
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <c>PackageRequireLicenseAcceptance</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings EnablePackageRequireLicenseAcceptance(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["PackageRequireLicenseAcceptance"] = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <c>PackageRequireLicenseAcceptance</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings DisablePackageRequireLicenseAcceptance(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["PackageRequireLicenseAcceptance"] = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <c>PackageRequireLicenseAcceptance</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings TogglePackageRequireLicenseAcceptance(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.ToggleBoolean(toolSettings.PropertiesInternal, "PackageRequireLicenseAcceptance");
+            return toolSettings;
+        }
+        #endregion
+        #region PackageLicenseUrl
+        /// <summary>
+        ///   <p><em>Sets <c>PackageLicenseUrl</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetPackageLicenseUrl(this DotNetMSBuildSettings toolSettings, string packageLicenseUrl)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["PackageLicenseUrl"] = packageLicenseUrl;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>PackageLicenseUrl</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetPackageLicenseUrl(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("PackageLicenseUrl");
+            return toolSettings;
+        }
+        #endregion
+        #region PackageProjectUrl
+        /// <summary>
+        ///   <p><em>Sets <c>PackageProjectUrl</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetPackageProjectUrl(this DotNetMSBuildSettings toolSettings, string packageProjectUrl)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["PackageProjectUrl"] = packageProjectUrl;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>PackageProjectUrl</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetPackageProjectUrl(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("PackageProjectUrl");
+            return toolSettings;
+        }
+        #endregion
+        #region PackageIconUrl
+        /// <summary>
+        ///   <p><em>Sets <c>PackageIconUrl</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetPackageIconUrl(this DotNetMSBuildSettings toolSettings, string packageIconUrl)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["PackageIconUrl"] = packageIconUrl;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>PackageIconUrl</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetPackageIconUrl(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("PackageIconUrl");
+            return toolSettings;
+        }
+        #endregion
+        #region PackageTags
+        /// <summary>
+        ///   <p><em>Sets <c>PackageTags</c> in <see cref="DotNetMSBuildSettings.Properties"/> to a new collection</em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetPackageTags(this DotNetMSBuildSettings toolSettings, params string[] packageTags)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.SetCollection(toolSettings.PropertiesInternal, "PackageTags", packageTags, ' ');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Sets <c>PackageTags</c> in <see cref="DotNetMSBuildSettings.Properties"/> to a new collection</em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetPackageTags(this DotNetMSBuildSettings toolSettings, IEnumerable<string> packageTags)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.SetCollection(toolSettings.PropertiesInternal, "PackageTags", packageTags, ' ');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <c>PackageTags</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddPackageTags(this DotNetMSBuildSettings toolSettings, params string[] packageTags)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.AddItems(toolSettings.PropertiesInternal, "PackageTags", packageTags, ' ');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <c>PackageTags</c> in existing <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings AddPackageTags(this DotNetMSBuildSettings toolSettings, IEnumerable<string> packageTags)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.AddItems(toolSettings.PropertiesInternal, "PackageTags", packageTags, ' ');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Clears <c>PackageTags</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ClearPackageTags(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("PackageTags");
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <c>PackageTags</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemovePackageTags(this DotNetMSBuildSettings toolSettings, params string[] packageTags)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.RemoveItems(toolSettings.PropertiesInternal, "PackageTags", packageTags, ' ');
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <c>PackageTags</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings RemovePackageTags(this DotNetMSBuildSettings toolSettings, IEnumerable<string> packageTags)
+        {
+            toolSettings = toolSettings.NewInstance();
+            ExtensionHelper.RemoveItems(toolSettings.PropertiesInternal, "PackageTags", packageTags, ' ');
+            return toolSettings;
+        }
+        #endregion
+        #region PackageReleaseNotes
+        /// <summary>
+        ///   <p><em>Sets <c>PackageReleaseNotes</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetPackageReleaseNotes(this DotNetMSBuildSettings toolSettings, string packageReleaseNotes)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["PackageReleaseNotes"] = packageReleaseNotes;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>PackageReleaseNotes</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetPackageReleaseNotes(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("PackageReleaseNotes");
+            return toolSettings;
+        }
+        #endregion
+        #region RepositoryUrl
+        /// <summary>
+        ///   <p><em>Sets <c>RepositoryUrl</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetRepositoryUrl(this DotNetMSBuildSettings toolSettings, string repositoryUrl)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["RepositoryUrl"] = repositoryUrl;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>RepositoryUrl</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetRepositoryUrl(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("RepositoryUrl");
+            return toolSettings;
+        }
+        #endregion
+        #region RepositoryType
+        /// <summary>
+        ///   <p><em>Sets <c>RepositoryType</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetRepositoryType(this DotNetMSBuildSettings toolSettings, string repositoryType)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["RepositoryType"] = repositoryType;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>RepositoryType</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetRepositoryType(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal.Remove("RepositoryType");
+            return toolSettings;
+        }
+        #endregion
+        #region SymbolPackageFormat
+        /// <summary>
+        ///   <p><em>Sets <c>SymbolPackageFormat</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Format for packaging symbols.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetSymbolPackageFormat(this DotNetMSBuildSettings toolSettings, DotNetSymbolPackageFormat symbolPackageFormat)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PropertiesInternal["SymbolPackageFormat"] = symbolPackageFormat;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <c>SymbolPackageFormat</c> in <see cref="DotNetMSBuildSettings.Properties"/></em></p>
+        ///   <p>Format for packaging symbols.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetSymbolPackageFormat(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
             toolSettings.PropertiesInternal.Remove("SymbolPackageFormat");
