@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Nuke.Common;
+using Nuke.Common.BuildServers;
 using Nuke.Common.Execution;
 using Nuke.Common.Git;
 using Nuke.Common.ProjectModel;
@@ -32,6 +33,12 @@ using static Nuke.Common.Tools.Slack.SlackTasks;
 [CheckBuildProjectConfigurations]
 [DotNetVerbosityMapping]
 [UnsetVisualStudioEnvironmentVariables]
+[TeamCityConfigurationGenerator(
+    DefaultBranch = "develop",
+    VcsTriggeredTargets = new[] { nameof(Pack), nameof(Test) },
+    ManuallyTriggeredTargets = new[] { nameof(Publish) },
+    NonEntryTargets = new[] { nameof(Restore) },
+    ExcludedTargets = new[] { nameof(Clean) })]
 partial class Build : NukeBuild
 {
     public static int Main() => Execute<Build>(x => x.Pack);
@@ -108,6 +115,7 @@ partial class Build : NukeBuild
 
     Target Pack => _ => _
         .DependsOn(Compile)
+        .Produces(OutputDirectory / "*.nupkg")
         .Executes(() =>
         {
             DotNetPack(s => s
@@ -160,7 +168,10 @@ partial class Build : NukeBuild
 
     Target Publish => _ => _
         .DependsOn(Clean, Test, Pack)
-        .Requires(() => ApiKey, () => SlackWebhook, () => GitterAuthToken)
+        .Consumes(Pack)
+        .Requires(() => ApiKey)
+        .Requires(() => SlackWebhook)
+        .Requires(() => GitterAuthToken)
         .Requires(() => GitHasCleanWorkingCopy())
         .Requires(() => Configuration.Equals(Configuration.Release))
         .Requires(() => GitRepository.Branch.EqualsOrdinalIgnoreCase(MasterBranch) ||
