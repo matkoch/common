@@ -1,15 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  
+
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <EmbeddedResource Include="**\*.flf" />
     <!--<None Remove="execution-plan.html" />-->
+    <EmbeddedResource Include="BuildServers\teamcity.pom.xml" />
     <EmbeddedResource Include="Execution\execution-plan.html" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.0.2" />
     <PackageReference Include="Colorful.Console" Version="1.2.9" />
@@ -28,12 +29,12 @@
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="YamlDotNet" Version="5.2.1" />
   </ItemGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework)' == ''">
     <None Include="$(MSBuildProjectName).targets" PackagePath="build" Pack="true" />
     <None Include="..\Nuke.MSBuildTaskRunner\Nuke.MSBuildTaskRunner.targets" PackagePath="build" Pack="true" />
     <None Include="..\Nuke.MSBuildTaskRunner\bin\$(Configuration)\netcoreapp2.0\publish\**\*.*" PackagePath="build" Pack="true" />
     <!--<None Include="..\Nuke.MSBuildTaskRunner\bin\$(Configuration)\net461\publish\**\*.*" PackagePath="build\netfx" Pack="true" />-->
   </ItemGroup>
-  
+
 </Project>
