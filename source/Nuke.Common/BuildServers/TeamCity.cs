@@ -106,6 +106,7 @@ namespace Nuke.Common.BuildServers
         public ITeamCityRestClient RestClient => _restClient.Value;
 
         public string BuildConfiguration => Variable("TEAMCITY_BUILDCONF_NAME");
+        public string BuildTypeId => SystemProperties["TEAMCITY_BUILDTYPE_ID"];
         [NoConvert] public string BuildNumber => Variable("BUILD_NUMBER");
         public string Version => Variable("TEAMCITY_VERSION");
         public string ProjectName => Variable("TEAMCITY_PROJECT_NAME");
