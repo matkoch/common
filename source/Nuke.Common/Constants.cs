@@ -19,6 +19,7 @@ namespace Nuke.Common
         internal const string SkippedTargetsParameterName = "Skip";
 
         public const string VisualStudioDebugParameterName = "visual-studio-debug";
+        public const string TeamCityConfigurationParameterName = "configure-teamcity";
         internal const string CompletionParameterName = "shell-completion";
 
         [CanBeNull]
