@@ -599,29 +599,23 @@ namespace Nuke.Common.Tools.DotNet
         ///   <ul>
         ///     <li><c>&lt;projectFile&gt;</c> via <see cref="DotNetMSBuildSettings.ProjectFile"/></li>
         ///     <li><c>/property</c> via <see cref="DotNetMSBuildSettings.Properties"/></li>
+        ///     <li><c>--configuration</c> via <see cref="DotNetMSBuildSettings.Configuration"/></li>
         ///     <li><c>-detailedsummary</c> via <see cref="DotNetMSBuildSettings.DetailedSummary"/></li>
-        ///     <li><c>--disable-parallel</c> via <see cref="DotNetMSBuildSettings.DisableParallel"/></li>
-        ///     <li><c>--force</c> via <see cref="DotNetMSBuildSettings.Force"/></li>
-        ///     <li><c>--force-evaluate</c> via <see cref="DotNetMSBuildSettings.ForceEvaluate"/></li>
-        ///     <li><c>--ignore-failed-sources</c> via <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></li>
         ///     <li><c>-ignoreprojectextensions</c> via <see cref="DotNetMSBuildSettings.Framework"/></li>
-        ///     <li><c>--locked-mode</c> via <see cref="DotNetMSBuildSettings.LockedMode"/></li>
-        ///     <li><c>--lock-file-path</c> via <see cref="DotNetMSBuildSettings.LockFilePath"/></li>
         ///     <li><c>-maxcpucount[:value]</c> via <see cref="DotNetMSBuildSettings.MaxCpuCount"/></li>
         ///     <li><c>-noautoresponse</c> via <see cref="DotNetMSBuildSettings.AutoResponse"/></li>
-        ///     <li><c>--no-cache</c> via <see cref="DotNetMSBuildSettings.NoCache"/></li>
-        ///     <li><c>--no-dependencies</c> via <see cref="DotNetMSBuildSettings.NoDependencies"/></li>
         ///     <li><c>-nodeReuse</c> via <see cref="DotNetMSBuildSettings.NodeReuse"/></li>
+        ///     <li><c>--no-incremental</c> via <see cref="DotNetMSBuildSettings.NoIncremental"/></li>
         ///     <li><c>-nologo</c> via <see cref="DotNetMSBuildSettings.NoLogo"/></li>
-        ///     <li><c>--packages</c> via <see cref="DotNetMSBuildSettings.PackageDirectory"/></li>
+        ///     <li><c>--no-restore</c> via <see cref="DotNetMSBuildSettings.NoRestore"/></li>
+        ///     <li><c>--output</c> via <see cref="DotNetMSBuildSettings.OutputDirectory"/></li>
         ///     <li><c>-preprocess[</c> via <see cref="DotNetMSBuildSettings.PreProcess"/></li>
-        ///     <li><c>--source</c> via <see cref="DotNetMSBuildSettings.Sources"/></li>
+        ///     <li><c>--runtime</c> via <see cref="DotNetMSBuildSettings.Runtime"/></li>
         ///     <li><c>-target</c> via <see cref="DotNetMSBuildSettings.Target"/></li>
         ///     <li><c>-toolsversion</c> via <see cref="DotNetMSBuildSettings.ToolsVersion"/></li>
-        ///     <li><c>--use-lock-file</c> via <see cref="DotNetMSBuildSettings.UseLockFile"/></li>
         ///     <li><c>-validate:[</c> via <see cref="DotNetMSBuildSettings.Validate"/></li>
         ///     <li><c>-verbosity</c> via <see cref="DotNetMSBuildSettings.Verbosity"/></li>
-        ///     <li><c>--version</c> via <see cref="DotNetMSBuildSettings.Version"/></li>
+        ///     <li><c>--version-suffix</c> via <see cref="DotNetMSBuildSettings.VersionSuffix"/></li>
         ///   </ul>
         /// </remarks>
         public static IReadOnlyCollection<Output> DotNetMSBuild(Configure<DotNetMSBuildSettings> configurator)
@@ -637,29 +631,23 @@ namespace Nuke.Common.Tools.DotNet
         ///   <ul>
         ///     <li><c>&lt;projectFile&gt;</c> via <see cref="DotNetMSBuildSettings.ProjectFile"/></li>
         ///     <li><c>/property</c> via <see cref="DotNetMSBuildSettings.Properties"/></li>
+        ///     <li><c>--configuration</c> via <see cref="DotNetMSBuildSettings.Configuration"/></li>
         ///     <li><c>-detailedsummary</c> via <see cref="DotNetMSBuildSettings.DetailedSummary"/></li>
-        ///     <li><c>--disable-parallel</c> via <see cref="DotNetMSBuildSettings.DisableParallel"/></li>
-        ///     <li><c>--force</c> via <see cref="DotNetMSBuildSettings.Force"/></li>
-        ///     <li><c>--force-evaluate</c> via <see cref="DotNetMSBuildSettings.ForceEvaluate"/></li>
-        ///     <li><c>--ignore-failed-sources</c> via <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></li>
         ///     <li><c>-ignoreprojectextensions</c> via <see cref="DotNetMSBuildSettings.Framework"/></li>
-        ///     <li><c>--locked-mode</c> via <see cref="DotNetMSBuildSettings.LockedMode"/></li>
-        ///     <li><c>--lock-file-path</c> via <see cref="DotNetMSBuildSettings.LockFilePath"/></li>
         ///     <li><c>-maxcpucount[:value]</c> via <see cref="DotNetMSBuildSettings.MaxCpuCount"/></li>
         ///     <li><c>-noautoresponse</c> via <see cref="DotNetMSBuildSettings.AutoResponse"/></li>
-        ///     <li><c>--no-cache</c> via <see cref="DotNetMSBuildSettings.NoCache"/></li>
-        ///     <li><c>--no-dependencies</c> via <see cref="DotNetMSBuildSettings.NoDependencies"/></li>
         ///     <li><c>-nodeReuse</c> via <see cref="DotNetMSBuildSettings.NodeReuse"/></li>
+        ///     <li><c>--no-incremental</c> via <see cref="DotNetMSBuildSettings.NoIncremental"/></li>
         ///     <li><c>-nologo</c> via <see cref="DotNetMSBuildSettings.NoLogo"/></li>
-        ///     <li><c>--packages</c> via <see cref="DotNetMSBuildSettings.PackageDirectory"/></li>
+        ///     <li><c>--no-restore</c> via <see cref="DotNetMSBuildSettings.NoRestore"/></li>
+        ///     <li><c>--output</c> via <see cref="DotNetMSBuildSettings.OutputDirectory"/></li>
         ///     <li><c>-preprocess[</c> via <see cref="DotNetMSBuildSettings.PreProcess"/></li>
-        ///     <li><c>--source</c> via <see cref="DotNetMSBuildSettings.Sources"/></li>
+        ///     <li><c>--runtime</c> via <see cref="DotNetMSBuildSettings.Runtime"/></li>
         ///     <li><c>-target</c> via <see cref="DotNetMSBuildSettings.Target"/></li>
         ///     <li><c>-toolsversion</c> via <see cref="DotNetMSBuildSettings.ToolsVersion"/></li>
-        ///     <li><c>--use-lock-file</c> via <see cref="DotNetMSBuildSettings.UseLockFile"/></li>
         ///     <li><c>-validate:[</c> via <see cref="DotNetMSBuildSettings.Validate"/></li>
         ///     <li><c>-verbosity</c> via <see cref="DotNetMSBuildSettings.Verbosity"/></li>
-        ///     <li><c>--version</c> via <see cref="DotNetMSBuildSettings.Version"/></li>
+        ///     <li><c>--version-suffix</c> via <see cref="DotNetMSBuildSettings.VersionSuffix"/></li>
         ///   </ul>
         /// </remarks>
         public static IEnumerable<(DotNetMSBuildSettings Settings, IReadOnlyCollection<Output> Output)> DotNetMSBuild(CombinatorialConfigure<DotNetMSBuildSettings> configurator, int degreeOfParallelism = 1, bool completeOnFailure = false)
@@ -1821,54 +1809,29 @@ namespace Nuke.Common.Tools.DotNet
         /// </summary>
         public virtual DotNetVerbosity Verbosity { get; internal set; }
         /// <summary>
-        ///   Display version information only. The project isn't built.
+        ///   Defines the build configuration. If omitted, the build configuration defaults to <c>Debug</c>. Use <c>Release</c> build a Release configuration.
         /// </summary>
-        public virtual string Version { get; internal set; }
+        public virtual string Configuration { get; internal set; }
         /// <summary>
-        ///   Disables restoring multiple projects in parallel.
+        ///   Marks the build as unsafe for incremental build. This turns off incremental compilation and forces a clean rebuild of the project's dependency graph.
         /// </summary>
-        public virtual bool? DisableParallel { get; internal set; }
+        public virtual bool? NoIncremental { get; internal set; }
         /// <summary>
-        ///   Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.
+        ///   Doesn't perform an implicit restore during build.
         /// </summary>
-        public virtual bool? Force { get; internal set; }
+        public virtual bool? NoRestore { get; internal set; }
         /// <summary>
-        ///   Only warn about failed sources if there are packages meeting the version requirement.
+        ///   Directory in which to place the built binaries. You also need to define <c>--framework</c> when you specify this option.
         /// </summary>
-        public virtual bool? IgnoreFailedSources { get; internal set; }
+        public virtual string OutputDirectory { get; internal set; }
         /// <summary>
-        ///   Specifies to not cache packages and HTTP requests.
+        ///   Specifies the target runtime. For a list of Runtime Identifiers (RIDs), see the <a href="https://docs.microsoft.com/en-us/dotnet/core/rid-catalog">RID catalog</a>.
         /// </summary>
-        public virtual bool? NoCache { get; internal set; }
+        public virtual string Runtime { get; internal set; }
         /// <summary>
-        ///   When restoring a project with project-to-project (P2P) references, restore the root project and not the references.
+        ///   Defines the version suffix for an asterisk (<c>*</c>) in the version field of the project file. The format follows NuGet's version guidelines.
         /// </summary>
-        public virtual bool? NoDependencies { get; internal set; }
-        /// <summary>
-        ///   Specifies the directory for restored packages.
-        /// </summary>
-        public virtual string PackageDirectory { get; internal set; }
-        /// <summary>
-        ///   Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.
-        /// </summary>
-        public virtual IReadOnlyList<string> Sources => SourcesInternal.AsReadOnly();
-        internal List<string> SourcesInternal { get; set; } = new List<string>();
-        /// <summary>
-        ///   Enables project lock file to be generated and used with restore.
-        /// </summary>
-        public virtual bool? UseLockFile { get; internal set; }
-        /// <summary>
-        ///   Don't allow updating project lock file.
-        /// </summary>
-        public virtual bool? LockedMode { get; internal set; }
-        /// <summary>
-        ///   Output location where project lock file is written. By default, this is 'PROJECT_ROOT\packages.lock.json'.
-        /// </summary>
-        public virtual string LockFilePath { get; internal set; }
-        /// <summary>
-        ///   Forces restore to reevaluate all dependencies even if a lock file already exists.
-        /// </summary>
-        public virtual bool? ForceEvaluate { get; internal set; }
+        public virtual string VersionSuffix { get; internal set; }
         /// <summary>
         ///   <p>Set or override the specified project-level properties, where name is the property name and value is the property value. Specify each property separately, or use a semicolon or comma to separate multiple properties, as the following example shows:</p><p><c>/property:WarningLevel=2;OutDir=bin\Debug</c></p>
         /// </summary>
@@ -1890,18 +1853,12 @@ namespace Nuke.Common.Tools.DotNet
               .Add("-toolsversion: {value}", ToolsVersion)
               .Add("-validate:[ {value} ]", Validate)
               .Add("-verbosity:{value}", Verbosity)
-              .Add("--version", Version)
-              .Add("--disable-parallel", DisableParallel)
-              .Add("--force", Force)
-              .Add("--ignore-failed-sources", IgnoreFailedSources)
-              .Add("--no-cache", NoCache)
-              .Add("--no-dependencies", NoDependencies)
-              .Add("--packages {value}", PackageDirectory)
-              .Add("--source {value}", Sources)
-              .Add("--use-lock-file", UseLockFile)
-              .Add("--locked-mode", LockedMode)
-              .Add("--lock-file-path {value}", LockFilePath)
-              .Add("--force-evaluate", ForceEvaluate)
+              .Add("--configuration {value}", Configuration)
+              .Add("--no-incremental", NoIncremental)
+              .Add("--no-restore", NoRestore)
+              .Add("--output {value}", OutputDirectory)
+              .Add("--runtime {value}", Runtime)
+              .Add("--version-suffix {value}", VersionSuffix)
               .Add("/property:{value}", Properties, "{key}={value}", disallowed: ';');
             return base.ConfigureArguments(arguments);
         }
@@ -12102,612 +12059,213 @@ namespace Nuke.Common.Tools.DotNet
             return toolSettings;
         }
         #endregion
-        #region Version
+        #region Configuration
         /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Version"/></em></p>
-        ///   <p>Display version information only. The project isn't built.</p>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Configuration"/></em></p>
+        ///   <p>Defines the build configuration. If omitted, the build configuration defaults to <c>Debug</c>. Use <c>Release</c> build a Release configuration.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings SetVersion(this DotNetMSBuildSettings toolSettings, string version)
+        public static DotNetMSBuildSettings SetConfiguration(this DotNetMSBuildSettings toolSettings, string configuration)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.Version = version;
+            toolSettings.Configuration = configuration;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Version"/></em></p>
-        ///   <p>Display version information only. The project isn't built.</p>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Configuration"/></em></p>
+        ///   <p>Defines the build configuration. If omitted, the build configuration defaults to <c>Debug</c>. Use <c>Release</c> build a Release configuration.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings ResetVersion(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings ResetConfiguration(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.Version = null;
-            return toolSettings;
-        }
-        #endregion
-        #region DisableParallel
-        /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.DisableParallel"/></em></p>
-        ///   <p>Disables restoring multiple projects in parallel.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings SetDisableParallel(this DotNetMSBuildSettings toolSettings, bool? disableParallel)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.DisableParallel = disableParallel;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.DisableParallel"/></em></p>
-        ///   <p>Disables restoring multiple projects in parallel.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ResetDisableParallel(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.DisableParallel = null;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.DisableParallel"/></em></p>
-        ///   <p>Disables restoring multiple projects in parallel.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings EnableDisableParallel(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.DisableParallel = true;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.DisableParallel"/></em></p>
-        ///   <p>Disables restoring multiple projects in parallel.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings DisableDisableParallel(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.DisableParallel = false;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.DisableParallel"/></em></p>
-        ///   <p>Disables restoring multiple projects in parallel.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ToggleDisableParallel(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.DisableParallel = !toolSettings.DisableParallel;
+            toolSettings.Configuration = null;
             return toolSettings;
         }
         #endregion
-        #region Force
+        #region NoIncremental
         /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Force"/></em></p>
-        ///   <p>Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.</p>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.NoIncremental"/></em></p>
+        ///   <p>Marks the build as unsafe for incremental build. This turns off incremental compilation and forces a clean rebuild of the project's dependency graph.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings SetForce(this DotNetMSBuildSettings toolSettings, bool? force)
+        public static DotNetMSBuildSettings SetNoIncremental(this DotNetMSBuildSettings toolSettings, bool? noIncremental)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.Force = force;
+            toolSettings.NoIncremental = noIncremental;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Force"/></em></p>
-        ///   <p>Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.</p>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.NoIncremental"/></em></p>
+        ///   <p>Marks the build as unsafe for incremental build. This turns off incremental compilation and forces a clean rebuild of the project's dependency graph.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings ResetForce(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings ResetNoIncremental(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.Force = null;
+            toolSettings.NoIncremental = null;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.Force"/></em></p>
-        ///   <p>Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.</p>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.NoIncremental"/></em></p>
+        ///   <p>Marks the build as unsafe for incremental build. This turns off incremental compilation and forces a clean rebuild of the project's dependency graph.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings EnableForce(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings EnableNoIncremental(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.Force = true;
+            toolSettings.NoIncremental = true;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.Force"/></em></p>
-        ///   <p>Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.</p>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.NoIncremental"/></em></p>
+        ///   <p>Marks the build as unsafe for incremental build. This turns off incremental compilation and forces a clean rebuild of the project's dependency graph.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings DisableForce(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings DisableNoIncremental(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.Force = false;
+            toolSettings.NoIncremental = false;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.Force"/></em></p>
-        ///   <p>Forces all dependencies to be resolved even if the last restore was successful. This is equivalent to deleting the <em>project.assets.json</em> file.</p>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.NoIncremental"/></em></p>
+        ///   <p>Marks the build as unsafe for incremental build. This turns off incremental compilation and forces a clean rebuild of the project's dependency graph.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings ToggleForce(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings ToggleNoIncremental(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.Force = !toolSettings.Force;
-            return toolSettings;
-        }
-        #endregion
-        #region IgnoreFailedSources
-        /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></em></p>
-        ///   <p>Only warn about failed sources if there are packages meeting the version requirement.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings SetIgnoreFailedSources(this DotNetMSBuildSettings toolSettings, bool? ignoreFailedSources)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.IgnoreFailedSources = ignoreFailedSources;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></em></p>
-        ///   <p>Only warn about failed sources if there are packages meeting the version requirement.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ResetIgnoreFailedSources(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.IgnoreFailedSources = null;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></em></p>
-        ///   <p>Only warn about failed sources if there are packages meeting the version requirement.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings EnableIgnoreFailedSources(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.IgnoreFailedSources = true;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></em></p>
-        ///   <p>Only warn about failed sources if there are packages meeting the version requirement.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings DisableIgnoreFailedSources(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.IgnoreFailedSources = false;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.IgnoreFailedSources"/></em></p>
-        ///   <p>Only warn about failed sources if there are packages meeting the version requirement.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ToggleIgnoreFailedSources(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.IgnoreFailedSources = !toolSettings.IgnoreFailedSources;
+            toolSettings.NoIncremental = !toolSettings.NoIncremental;
             return toolSettings;
         }
         #endregion
-        #region NoCache
+        #region NoRestore
         /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.NoCache"/></em></p>
-        ///   <p>Specifies to not cache packages and HTTP requests.</p>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.NoRestore"/></em></p>
+        ///   <p>Doesn't perform an implicit restore during build.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings SetNoCache(this DotNetMSBuildSettings toolSettings, bool? noCache)
+        public static DotNetMSBuildSettings SetNoRestore(this DotNetMSBuildSettings toolSettings, bool? noRestore)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.NoCache = noCache;
+            toolSettings.NoRestore = noRestore;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.NoCache"/></em></p>
-        ///   <p>Specifies to not cache packages and HTTP requests.</p>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.NoRestore"/></em></p>
+        ///   <p>Doesn't perform an implicit restore during build.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings ResetNoCache(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings ResetNoRestore(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.NoCache = null;
+            toolSettings.NoRestore = null;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.NoCache"/></em></p>
-        ///   <p>Specifies to not cache packages and HTTP requests.</p>
+        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.NoRestore"/></em></p>
+        ///   <p>Doesn't perform an implicit restore during build.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings EnableNoCache(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings EnableNoRestore(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.NoCache = true;
+            toolSettings.NoRestore = true;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.NoCache"/></em></p>
-        ///   <p>Specifies to not cache packages and HTTP requests.</p>
+        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.NoRestore"/></em></p>
+        ///   <p>Doesn't perform an implicit restore during build.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings DisableNoCache(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings DisableNoRestore(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.NoCache = false;
+            toolSettings.NoRestore = false;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.NoCache"/></em></p>
-        ///   <p>Specifies to not cache packages and HTTP requests.</p>
+        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.NoRestore"/></em></p>
+        ///   <p>Doesn't perform an implicit restore during build.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings ToggleNoCache(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings ToggleNoRestore(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.NoCache = !toolSettings.NoCache;
-            return toolSettings;
-        }
-        #endregion
-        #region NoDependencies
-        /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.NoDependencies"/></em></p>
-        ///   <p>When restoring a project with project-to-project (P2P) references, restore the root project and not the references.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings SetNoDependencies(this DotNetMSBuildSettings toolSettings, bool? noDependencies)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.NoDependencies = noDependencies;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.NoDependencies"/></em></p>
-        ///   <p>When restoring a project with project-to-project (P2P) references, restore the root project and not the references.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ResetNoDependencies(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.NoDependencies = null;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.NoDependencies"/></em></p>
-        ///   <p>When restoring a project with project-to-project (P2P) references, restore the root project and not the references.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings EnableNoDependencies(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.NoDependencies = true;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.NoDependencies"/></em></p>
-        ///   <p>When restoring a project with project-to-project (P2P) references, restore the root project and not the references.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings DisableNoDependencies(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.NoDependencies = false;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.NoDependencies"/></em></p>
-        ///   <p>When restoring a project with project-to-project (P2P) references, restore the root project and not the references.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ToggleNoDependencies(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.NoDependencies = !toolSettings.NoDependencies;
+            toolSettings.NoRestore = !toolSettings.NoRestore;
             return toolSettings;
         }
         #endregion
-        #region PackageDirectory
+        #region OutputDirectory
         /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.PackageDirectory"/></em></p>
-        ///   <p>Specifies the directory for restored packages.</p>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.OutputDirectory"/></em></p>
+        ///   <p>Directory in which to place the built binaries. You also need to define <c>--framework</c> when you specify this option.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings SetPackageDirectory(this DotNetMSBuildSettings toolSettings, string packageDirectory)
+        public static DotNetMSBuildSettings SetOutputDirectory(this DotNetMSBuildSettings toolSettings, string outputDirectory)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.PackageDirectory = packageDirectory;
+            toolSettings.OutputDirectory = outputDirectory;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.PackageDirectory"/></em></p>
-        ///   <p>Specifies the directory for restored packages.</p>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.OutputDirectory"/></em></p>
+        ///   <p>Directory in which to place the built binaries. You also need to define <c>--framework</c> when you specify this option.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings ResetPackageDirectory(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings ResetOutputDirectory(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.PackageDirectory = null;
-            return toolSettings;
-        }
-        #endregion
-        #region Sources
-        /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Sources"/> to a new list</em></p>
-        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings SetSources(this DotNetMSBuildSettings toolSettings, params string[] sources)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.SourcesInternal = sources.ToList();
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Sources"/> to a new list</em></p>
-        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings SetSources(this DotNetMSBuildSettings toolSettings, IEnumerable<string> sources)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.SourcesInternal = sources.ToList();
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Adds values to <see cref="DotNetMSBuildSettings.Sources"/></em></p>
-        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings AddSources(this DotNetMSBuildSettings toolSettings, params string[] sources)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.SourcesInternal.AddRange(sources);
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Adds values to <see cref="DotNetMSBuildSettings.Sources"/></em></p>
-        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings AddSources(this DotNetMSBuildSettings toolSettings, IEnumerable<string> sources)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.SourcesInternal.AddRange(sources);
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Clears <see cref="DotNetMSBuildSettings.Sources"/></em></p>
-        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ClearSources(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.SourcesInternal.Clear();
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Removes values from <see cref="DotNetMSBuildSettings.Sources"/></em></p>
-        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings RemoveSources(this DotNetMSBuildSettings toolSettings, params string[] sources)
-        {
-            toolSettings = toolSettings.NewInstance();
-            var hashSet = new HashSet<string>(sources);
-            toolSettings.SourcesInternal.RemoveAll(x => hashSet.Contains(x));
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Removes values from <see cref="DotNetMSBuildSettings.Sources"/></em></p>
-        ///   <p>Specifies a NuGet package source to use during the restore operation. This overrides all of the sources specified in the <em>NuGet.config</em> file(s). Multiple sources can be provided by specifying this option multiple times.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings RemoveSources(this DotNetMSBuildSettings toolSettings, IEnumerable<string> sources)
-        {
-            toolSettings = toolSettings.NewInstance();
-            var hashSet = new HashSet<string>(sources);
-            toolSettings.SourcesInternal.RemoveAll(x => hashSet.Contains(x));
+            toolSettings.OutputDirectory = null;
             return toolSettings;
         }
         #endregion
-        #region UseLockFile
+        #region Runtime
         /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.UseLockFile"/></em></p>
-        ///   <p>Enables project lock file to be generated and used with restore.</p>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Runtime"/></em></p>
+        ///   <p>Specifies the target runtime. For a list of Runtime Identifiers (RIDs), see the <a href="https://docs.microsoft.com/en-us/dotnet/core/rid-catalog">RID catalog</a>.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings SetUseLockFile(this DotNetMSBuildSettings toolSettings, bool? useLockFile)
+        public static DotNetMSBuildSettings SetRuntime(this DotNetMSBuildSettings toolSettings, string runtime)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.UseLockFile = useLockFile;
+            toolSettings.Runtime = runtime;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.UseLockFile"/></em></p>
-        ///   <p>Enables project lock file to be generated and used with restore.</p>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Runtime"/></em></p>
+        ///   <p>Specifies the target runtime. For a list of Runtime Identifiers (RIDs), see the <a href="https://docs.microsoft.com/en-us/dotnet/core/rid-catalog">RID catalog</a>.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings ResetUseLockFile(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings ResetRuntime(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.UseLockFile = null;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.UseLockFile"/></em></p>
-        ///   <p>Enables project lock file to be generated and used with restore.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings EnableUseLockFile(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.UseLockFile = true;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.UseLockFile"/></em></p>
-        ///   <p>Enables project lock file to be generated and used with restore.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings DisableUseLockFile(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.UseLockFile = false;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.UseLockFile"/></em></p>
-        ///   <p>Enables project lock file to be generated and used with restore.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ToggleUseLockFile(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.UseLockFile = !toolSettings.UseLockFile;
+            toolSettings.Runtime = null;
             return toolSettings;
         }
         #endregion
-        #region LockedMode
+        #region VersionSuffix
         /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.LockedMode"/></em></p>
-        ///   <p>Don't allow updating project lock file.</p>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.VersionSuffix"/></em></p>
+        ///   <p>Defines the version suffix for an asterisk (<c>*</c>) in the version field of the project file. The format follows NuGet's version guidelines.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings SetLockedMode(this DotNetMSBuildSettings toolSettings, bool? lockedMode)
+        public static DotNetMSBuildSettings SetVersionSuffix(this DotNetMSBuildSettings toolSettings, string versionSuffix)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.LockedMode = lockedMode;
+            toolSettings.VersionSuffix = versionSuffix;
             return toolSettings;
         }
         /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.LockedMode"/></em></p>
-        ///   <p>Don't allow updating project lock file.</p>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.VersionSuffix"/></em></p>
+        ///   <p>Defines the version suffix for an asterisk (<c>*</c>) in the version field of the project file. The format follows NuGet's version guidelines.</p>
         /// </summary>
         [Pure]
-        public static DotNetMSBuildSettings ResetLockedMode(this DotNetMSBuildSettings toolSettings)
+        public static DotNetMSBuildSettings ResetVersionSuffix(this DotNetMSBuildSettings toolSettings)
         {
             toolSettings = toolSettings.NewInstance();
-            toolSettings.LockedMode = null;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.LockedMode"/></em></p>
-        ///   <p>Don't allow updating project lock file.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings EnableLockedMode(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.LockedMode = true;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.LockedMode"/></em></p>
-        ///   <p>Don't allow updating project lock file.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings DisableLockedMode(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.LockedMode = false;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.LockedMode"/></em></p>
-        ///   <p>Don't allow updating project lock file.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ToggleLockedMode(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.LockedMode = !toolSettings.LockedMode;
-            return toolSettings;
-        }
-        #endregion
-        #region LockFilePath
-        /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.LockFilePath"/></em></p>
-        ///   <p>Output location where project lock file is written. By default, this is 'PROJECT_ROOT\packages.lock.json'.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings SetLockFilePath(this DotNetMSBuildSettings toolSettings, string lockFilePath)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.LockFilePath = lockFilePath;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.LockFilePath"/></em></p>
-        ///   <p>Output location where project lock file is written. By default, this is 'PROJECT_ROOT\packages.lock.json'.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ResetLockFilePath(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.LockFilePath = null;
-            return toolSettings;
-        }
-        #endregion
-        #region ForceEvaluate
-        /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.ForceEvaluate"/></em></p>
-        ///   <p>Forces restore to reevaluate all dependencies even if a lock file already exists.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings SetForceEvaluate(this DotNetMSBuildSettings toolSettings, bool? forceEvaluate)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.ForceEvaluate = forceEvaluate;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.ForceEvaluate"/></em></p>
-        ///   <p>Forces restore to reevaluate all dependencies even if a lock file already exists.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ResetForceEvaluate(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.ForceEvaluate = null;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Enables <see cref="DotNetMSBuildSettings.ForceEvaluate"/></em></p>
-        ///   <p>Forces restore to reevaluate all dependencies even if a lock file already exists.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings EnableForceEvaluate(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.ForceEvaluate = true;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Disables <see cref="DotNetMSBuildSettings.ForceEvaluate"/></em></p>
-        ///   <p>Forces restore to reevaluate all dependencies even if a lock file already exists.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings DisableForceEvaluate(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.ForceEvaluate = false;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Toggles <see cref="DotNetMSBuildSettings.ForceEvaluate"/></em></p>
-        ///   <p>Forces restore to reevaluate all dependencies even if a lock file already exists.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ToggleForceEvaluate(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.ForceEvaluate = !toolSettings.ForceEvaluate;
+            toolSettings.VersionSuffix = null;
             return toolSettings;
         }
         #endregion
