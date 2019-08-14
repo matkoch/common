@@ -1773,7 +1773,7 @@ namespace Nuke.Common.Tools.DotNet
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.
+        ///   Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel</a>.
         /// </summary>
         public virtual int? MaxCpuCount { get; internal set; }
         /// <summary>
@@ -1793,7 +1793,7 @@ namespace Nuke.Common.Tools.DotNet
         /// </summary>
         public virtual string PreProcess { get; internal set; }
         /// <summary>
-        ///   Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile<c/>
+        ///   Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile</c>
         /// </summary>
         public virtual string Target { get; internal set; }
         /// <summary>
@@ -11747,7 +11747,7 @@ namespace Nuke.Common.Tools.DotNet
         #region MaxCpuCount
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetMSBuildSettings.MaxCpuCount"/></em></p>
-        ///   <p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.</p>
+        ///   <p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.</a></p>
         /// </summary>
         [Pure]
         public static DotNetMSBuildSettings SetMaxCpuCount(this DotNetMSBuildSettings toolSettings, int? maxCpuCount)
@@ -11758,7 +11758,7 @@ namespace Nuke.Common.Tools.DotNet
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetMSBuildSettings.MaxCpuCount"/></em></p>
-        ///   <p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.</p>
+        ///   <p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.</a></p>
         /// </summary>
         [Pure]
         public static DotNetMSBuildSettings ResetMaxCpuCount(this DotNetMSBuildSettings toolSettings)
@@ -11966,7 +11966,7 @@ namespace Nuke.Common.Tools.DotNet
         #region Target
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Target"/></em></p>
-        ///   <p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile<c/></p>
+        ///   <p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile</c></p>
         /// </summary>
         [Pure]
         public static DotNetMSBuildSettings SetTarget(this DotNetMSBuildSettings toolSettings, string target)
@@ -11977,7 +11977,7 @@ namespace Nuke.Common.Tools.DotNet
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Target"/></em></p>
-        ///   <p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile<c/></p>
+        ///   <p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile</c></p>
         /// </summary>
         [Pure]
         public static DotNetMSBuildSettings ResetTarget(this DotNetMSBuildSettings toolSettings)
