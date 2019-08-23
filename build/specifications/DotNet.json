@@ -368,13 +368,6 @@
       "settingsClass": {
         "properties": [
           {
-            "name": "ProjectFile",
-            "type": "string",
-            "format": "{value}",
-            "createOverload": true,
-            "help": "The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file."
-          },
-          {
             "name": "DetailedSummary",
             "type": "bool",
             "format": "-detailedsummary",

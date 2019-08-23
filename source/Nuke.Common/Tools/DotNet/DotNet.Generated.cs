@@ -583,6 +583,30 @@ namespace Nuke.Common.Tools.DotNet
         ///   <p>The <c>dotnet msbuild</c> command allows access to a fully functional MSBuild.  The command has the exact same capabilities as the existing MSBuild command-line client for SDK-style project only. The options are all the same. For more information about the available options, see the <a href="https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference">MSBuild Command-Line Reference</a>.</p>
         ///   <p>For more details, visit the <a href="https://docs.microsoft.com/en-us/dotnet/core/tools/">official website</a>.</p>
         /// </summary>
+        /// <remarks>
+        ///   <p>This is a <a href="http://www.nuke.build/docs/authoring-builds/cli-tools.html#fluent-apis">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p>
+        ///   <ul>
+        ///     <li><c>&lt;projectFile&gt;</c> via <see cref="DotNetMSBuildSettings.ProjectFile"/></li>
+        ///     <li><c>/property</c> via <see cref="DotNetMSBuildSettings.Properties"/></li>
+        ///     <li><c>--configuration</c> via <see cref="DotNetMSBuildSettings.Configuration"/></li>
+        ///     <li><c>-detailedsummary</c> via <see cref="DotNetMSBuildSettings.DetailedSummary"/></li>
+        ///     <li><c>-ignoreprojectextensions</c> via <see cref="DotNetMSBuildSettings.Framework"/></li>
+        ///     <li><c>-maxcpucount[:value]</c> via <see cref="DotNetMSBuildSettings.MaxCpuCount"/></li>
+        ///     <li><c>-noautoresponse</c> via <see cref="DotNetMSBuildSettings.AutoResponse"/></li>
+        ///     <li><c>-nodeReuse</c> via <see cref="DotNetMSBuildSettings.NodeReuse"/></li>
+        ///     <li><c>--no-incremental</c> via <see cref="DotNetMSBuildSettings.NoIncremental"/></li>
+        ///     <li><c>-nologo</c> via <see cref="DotNetMSBuildSettings.NoLogo"/></li>
+        ///     <li><c>--no-restore</c> via <see cref="DotNetMSBuildSettings.NoRestore"/></li>
+        ///     <li><c>--output</c> via <see cref="DotNetMSBuildSettings.OutputDirectory"/></li>
+        ///     <li><c>-preprocess[</c> via <see cref="DotNetMSBuildSettings.PreProcess"/></li>
+        ///     <li><c>--runtime</c> via <see cref="DotNetMSBuildSettings.Runtime"/></li>
+        ///     <li><c>-target</c> via <see cref="DotNetMSBuildSettings.Target"/></li>
+        ///     <li><c>-toolsversion</c> via <see cref="DotNetMSBuildSettings.ToolsVersion"/></li>
+        ///     <li><c>-validate:[</c> via <see cref="DotNetMSBuildSettings.Validate"/></li>
+        ///     <li><c>-verbosity</c> via <see cref="DotNetMSBuildSettings.Verbosity"/></li>
+        ///     <li><c>--version-suffix</c> via <see cref="DotNetMSBuildSettings.VersionSuffix"/></li>
+        ///   </ul>
+        /// </remarks>
         public static IReadOnlyCollection<Output> DotNetMSBuild(DotNetMSBuildSettings toolSettings = null)
         {
             toolSettings = toolSettings ?? new DotNetMSBuildSettings();
@@ -1761,10 +1785,6 @@ namespace Nuke.Common.Tools.DotNet
         public override string ToolPath => base.ToolPath ?? DotNetTasks.DotNetPath;
         public override Action<OutputType, string> CustomLogger => DotNetTasks.DotNetLogger;
         /// <summary>
-        ///   The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file.
-        /// </summary>
-        public virtual string ProjectFile { get; internal set; }
-        /// <summary>
         ///   Show detailed information at the end of the build log about the configurations that were built and how they were scheduled to nodes.
         /// </summary>
         public virtual bool? DetailedSummary { get; internal set; }
@@ -1773,7 +1793,7 @@ namespace Nuke.Common.Tools.DotNet
         /// </summary>
         public virtual string Framework { get; internal set; }
         /// <summary>
-        ///   Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel</a>.
+        ///   Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.
         /// </summary>
         public virtual int? MaxCpuCount { get; internal set; }
         /// <summary>
@@ -1793,7 +1813,7 @@ namespace Nuke.Common.Tools.DotNet
         /// </summary>
         public virtual string PreProcess { get; internal set; }
         /// <summary>
-        ///   Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile</c>
+        ///   Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile<c/>
         /// </summary>
         public virtual string Target { get; internal set; }
         /// <summary>
@@ -1808,6 +1828,10 @@ namespace Nuke.Common.Tools.DotNet
         ///   Sets the verbosity level of the command. Allowed values are <c>q[uiet]</c>, <c>m[inimal]</c>, <c>n[ormal]</c>, <c>d[etailed]</c>, and <c>diag[nostic]</c>.
         /// </summary>
         public virtual DotNetVerbosity Verbosity { get; internal set; }
+        /// <summary>
+        ///   The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file.
+        /// </summary>
+        public virtual string ProjectFile { get; internal set; }
         /// <summary>
         ///   Defines the build configuration. If omitted, the build configuration defaults to <c>Debug</c>. Use <c>Release</c> build a Release configuration.
         /// </summary>
@@ -1841,7 +1865,6 @@ namespace Nuke.Common.Tools.DotNet
         {
             arguments
               .Add("msbuild")
-              .Add("{value}", ProjectFile)
               .Add("-detailedsummary", DetailedSummary)
               .Add("-ignoreprojectextensions:{value}", Framework)
               .Add("-maxcpucount[:value]", MaxCpuCount)
@@ -1853,6 +1876,7 @@ namespace Nuke.Common.Tools.DotNet
               .Add("-toolsversion: {value}", ToolsVersion)
               .Add("-validate:[ {value} ]", Validate)
               .Add("-verbosity:{value}", Verbosity)
+              .Add("{value}", ProjectFile)
               .Add("--configuration {value}", Configuration)
               .Add("--no-incremental", NoIncremental)
               .Add("--no-restore", NoRestore)
@@ -11639,30 +11663,6 @@ namespace Nuke.Common.Tools.DotNet
     [ExcludeFromCodeCoverage]
     public static partial class DotNetMSBuildSettingsExtensions
     {
-        #region ProjectFile
-        /// <summary>
-        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.ProjectFile"/></em></p>
-        ///   <p>The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings SetProjectFile(this DotNetMSBuildSettings toolSettings, string projectFile)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.ProjectFile = projectFile;
-            return toolSettings;
-        }
-        /// <summary>
-        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.ProjectFile"/></em></p>
-        ///   <p>The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file.</p>
-        /// </summary>
-        [Pure]
-        public static DotNetMSBuildSettings ResetProjectFile(this DotNetMSBuildSettings toolSettings)
-        {
-            toolSettings = toolSettings.NewInstance();
-            toolSettings.ProjectFile = null;
-            return toolSettings;
-        }
-        #endregion
         #region DetailedSummary
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetMSBuildSettings.DetailedSummary"/></em></p>
@@ -11747,7 +11747,7 @@ namespace Nuke.Common.Tools.DotNet
         #region MaxCpuCount
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetMSBuildSettings.MaxCpuCount"/></em></p>
-        ///   <p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.</a></p>
+        ///   <p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.</p>
         /// </summary>
         [Pure]
         public static DotNetMSBuildSettings SetMaxCpuCount(this DotNetMSBuildSettings toolSettings, int? maxCpuCount)
@@ -11758,7 +11758,7 @@ namespace Nuke.Common.Tools.DotNet
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetMSBuildSettings.MaxCpuCount"/></em></p>
-        ///   <p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.</a></p>
+        ///   <p>Specifies the maximum number of concurrent processes to use when building. If you don't include this switch, the default value is 1. If you include this switch without specifying a value, MSBuild will use up to the number of processors in the computer. For more information, see <a href="https://docs.microsoft.com/en-us/visualstudio/msbuild/building-multiple-projects-in-parallel-with-msbuild?view=vs-2019">Building multiple projects in parallel.</p>
         /// </summary>
         [Pure]
         public static DotNetMSBuildSettings ResetMaxCpuCount(this DotNetMSBuildSettings toolSettings)
@@ -11966,7 +11966,7 @@ namespace Nuke.Common.Tools.DotNet
         #region Target
         /// <summary>
         ///   <p><em>Sets <see cref="DotNetMSBuildSettings.Target"/></em></p>
-        ///   <p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile</c></p>
+        ///   <p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile<c/></p>
         /// </summary>
         [Pure]
         public static DotNetMSBuildSettings SetTarget(this DotNetMSBuildSettings toolSettings, string target)
@@ -11977,7 +11977,7 @@ namespace Nuke.Common.Tools.DotNet
         }
         /// <summary>
         ///   <p><em>Resets <see cref="DotNetMSBuildSettings.Target"/></em></p>
-        ///   <p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile</c></p>
+        ///   <p>Build the specified targets in the project. Specify each target separately, or use a semicolon or comma to separate multiple targets, as the following example shows: <c>-target:Resources;Compile<c/></p>
         /// </summary>
         [Pure]
         public static DotNetMSBuildSettings ResetTarget(this DotNetMSBuildSettings toolSettings)
@@ -12056,6 +12056,30 @@ namespace Nuke.Common.Tools.DotNet
         {
             toolSettings = toolSettings.NewInstance();
             toolSettings.Verbosity = null;
+            return toolSettings;
+        }
+        #endregion
+        #region ProjectFile
+        /// <summary>
+        ///   <p><em>Sets <see cref="DotNetMSBuildSettings.ProjectFile"/></em></p>
+        ///   <p>The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings SetProjectFile(this DotNetMSBuildSettings toolSettings, string projectFile)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ProjectFile = projectFile;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="DotNetMSBuildSettings.ProjectFile"/></em></p>
+        ///   <p>The project file to build. If a project file is not specified, MSBuild searches the current working directory for a file that has a file extension that ends in proj and uses that file.</p>
+        /// </summary>
+        [Pure]
+        public static DotNetMSBuildSettings ResetProjectFile(this DotNetMSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ProjectFile = null;
             return toolSettings;
         }
         #endregion
