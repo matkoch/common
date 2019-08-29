@@ -141,6 +141,7 @@ partial class Build : NukeBuild
             DotNetTest(s => s
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
+                .SetVerbosity(DotNetVerbosity.Normal)
                 .CombineWith(
                     Solution.GetProjects("*.Tests"), (cs, v) => cs
                         .SetProjectFile(v)));
