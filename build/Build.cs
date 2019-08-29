@@ -141,8 +141,6 @@ partial class Build : NukeBuild
             DotNetTest(s => s
                 .SetConfiguration(Configuration)
                 .EnableNoBuild()
-                .SetLogger("trx")
-                .SetResultsDirectory(OutputDirectory)
                 .CombineWith(
                     Solution.GetProjects("*.Tests"), (cs, v) => cs
                         .SetProjectFile(v)));
