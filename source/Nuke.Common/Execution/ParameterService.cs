@@ -52,6 +52,37 @@ namespace Nuke.Common.Execution
         }
 
         [CanBeNull]
+        public string GetParameterGeneratedDescription(MemberInfo member, NukeBuild build) 
+        {
+            var description = new List<string>();
+            var attribute = member.GetCustomAttribute<ParameterAttribute>();
+            var defaultValue = member.GetValue(build);
+            var parameterType = (member as FieldInfo)?.FieldType ?? (member as PropertyInfo)?.PropertyType;
+            var elementType = parameterType?.GetElementType();
+            var parameterIsEnum = parameterType?.IsEnum == true;
+            var quoteStr = ((elementType ?? parameterType) == typeof(string) || parameterIsEnum) ? "\"" : "";
+
+            string QuoteValue(object value) => $"{quoteStr}{value}{quoteStr}";
+            string QuoteValueList(IEnumerable<object> valueList) => string.Join(", ", valueList.Select(QuoteValue));
+
+            if (parameterIsEnum)
+                description.Add($"The available values are {QuoteValueList(Enum.GetNames(parameterType))}");
+            else if (elementType != null) 
+                description.Add($"List of {elementType.Name} values, separated by \"{attribute.Separator ?? " "}\"");
+
+            if (defaultValue != null) 
+            {
+                if (defaultValue is IEnumerable<object>)
+                    defaultValue = $"[{QuoteValueList((IEnumerable<object>)defaultValue)}]";
+                else
+                    defaultValue = QuoteValue(defaultValue);
+                description.Add($"The default value is {defaultValue}");
+            }
+
+            return description.Count > 0 ? string.Join(". ", description) : null;
+        }
+
+        [CanBeNull]
         public IEnumerable<(string Text, object Object)> GetParameterValueSet(MemberInfo member, object instance)
         {
             var attribute = member.GetCustomAttribute<ParameterAttribute>();
