@@ -36,9 +36,9 @@ namespace Nuke.Common
             return rootDirectory / ".tmp";
         }
 
-        internal static PathConstruction.AbsolutePath GetCompletionFile(PathConstruction.AbsolutePath rootDirectory)
+        internal static PathConstruction.AbsolutePath GetCompletionFile(PathConstruction.AbsolutePath rootDirectory, int version)
         {
-            var completionFileName = CompletionParameterName + ".yml";
+            var completionFileName = $"{CompletionParameterName}-v{version}.yml";
             return File.Exists(rootDirectory / completionFileName)
                 ? rootDirectory / completionFileName
                 : GetTemporaryDirectory(rootDirectory) / completionFileName;

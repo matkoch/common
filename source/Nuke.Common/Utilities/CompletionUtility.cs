@@ -15,7 +15,8 @@ namespace Nuke.Common.Utilities
     {
         public static IEnumerable<string> GetRelevantCompletionItems(
             string words,
-            IDictionary<string, string[]> completionItems)
+            IDictionary<string, string[]> completionItems,
+            bool includeDescriptions = false)
         {
             completionItems = new Dictionary<string, string[]>(completionItems, StringComparer.OrdinalIgnoreCase);
             var suggestedItems = new List<string>();
@@ -31,10 +32,13 @@ namespace Nuke.Common.Utilities
                                 currentWord.TrimStart('-').Length == 0 ||
                                 currentWord.StartsWith("--");
                 var items = completionItems.Keys
-                    .Except(parameters, StringComparer.InvariantCultureIgnoreCase)
-                    .Select(x => useDashes
-                        ? $"--{ParameterService.GetParameterDashedName(x)}"
-                        : $"-{x}");
+                    .Select(GetItemWithDescription)
+                    .Where(x => !parameters.Contains(x.Item, StringComparer.InvariantCultureIgnoreCase))
+                    .Select(x => (
+                        Item: useDashes
+                            ? $"--{ParameterService.GetParameterDashedName(x.Item)}"
+                            : $"-{x.Item}",
+                        x.Description));
 
                 AddItems(items);
             }
@@ -46,18 +50,26 @@ namespace Nuke.Common.Utilities
                     .TakeWhile(x => !ParameterService.IsParameter(x))
                     .Select(ParameterService.GetParameterMemberName);
 
-                var items = completionItems.GetValueOrDefault(parameter)?.Except(passedItems, StringComparer.OrdinalIgnoreCase) ??
-                            new string[0];
+                var items = completionItems
+                                .SingleOrDefault(x => x.Key.EqualsOrdinalIgnoreCase(parameter) || x.Key.StartsWith($"{parameter}#"))
+                                .Value?
+                                .Select(GetItemWithDescription)
+                                .Where(x => !passedItems.Contains(x.Item, StringComparer.InvariantCultureIgnoreCase)) ??
+                            new List<(string Item, string Description)>();
 
                 if (parameter.EqualsOrdinalIgnoreCase(Constants.InvokedTargetsParameterName))
-                    items = items.Select(x => x.SplitCamelHumpsWithSeparator("-", Constants.KnownWords));
+                {
+                    items = items.Select(x => (
+                        Item: x.Item.SplitCamelHumpsWithSeparator("-", Constants.KnownWords),
+                        x.Description));
+                }
 
                 AddItems(items);
             }
 
-            void AddItems(IEnumerable<string> items)
+            void AddItems(IEnumerable<(string Item, string Description)> itemsWithDescriptions)
             {
-                foreach (var item in items)
+                foreach (var (item, description) in itemsWithDescriptions)
                 {
                     if (currentWord == null)
                         suggestedItems.Add(item);
@@ -75,7 +87,19 @@ namespace Nuke.Common.Utilities
 
                         suggestedItems.Add(normalizedItem);
                     }
+
+                    if (includeDescriptions)
+                    {
+                        var lastIndex = suggestedItems.Count - 1;
+                        suggestedItems[lastIndex] = $"{suggestedItems[lastIndex]}#{description}";
+                    }
                 }
+            }
+
+            (string Item, string Description) GetItemWithDescription(string rawItem)
+            {
+                var values = rawItem.Split(new[] { '#' }, count: 2);
+                return (values.First(), values.Skip(1).FirstOrDefault());
             }
 
             if (lastParameter == null)

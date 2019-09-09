@@ -35,7 +35,7 @@ namespace Nuke.GlobalTool
                 return 0;
             }
 
-            var completionFile = Constants.GetCompletionFile((PathConstruction.AbsolutePath) rootDirectory);
+            var completionFile = Constants.GetCompletionFile((PathConstruction.AbsolutePath) rootDirectory, version: 2);
             if (!File.Exists(completionFile))
             {
                 Build(buildScript.NotNull(), $"--{Constants.CompletionParameterName}");

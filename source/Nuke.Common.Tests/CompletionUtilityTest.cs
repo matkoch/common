@@ -43,5 +43,32 @@ namespace Nuke.Common.Tests
                 .Should()
                 .BeEquivalentTo(expectedItems);
         }
+
+        [Fact]
+        public void TestGetRelevantCompletionItemsWithDescriptions()
+        {
+            var completionItems =
+                new Dictionary<string, string[]>
+                {
+                    {
+                        $"{Constants.InvokedTargetsParameterName}#Description for targets",
+                        new[]
+                        {
+                            "Compile#Compile description",
+                            "GitHubPublish#"
+                        }
+                    },
+                    { "ApiKey#api-key description", null },
+                    { "NuGetSource#", null }
+                };
+            CompletionUtility.GetRelevantCompletionItems(string.Empty, completionItems, includeDescriptions: true)
+                .Should()
+                .BeEquivalentTo(
+                    "Compile#Compile description",
+                    "GitHub-Publish#",
+                    "--target#Description for targets",
+                    "--api-key#api-key description",
+                    "--nuget-source#");
+        }
     }
 }
