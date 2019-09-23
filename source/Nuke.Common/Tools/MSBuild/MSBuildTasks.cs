@@ -1,4 +1,4 @@
-// Copyright 2019 Maintainers of NUKE.
+﻿// Copyright 2019 Maintainers of NUKE.
 // Distributed under the MIT License.
 // https://github.com/nuke-build/nuke/blob/master/LICENSE
 
@@ -104,5 +104,17 @@ namespace Nuke.Common.Tools.MSBuild
 
             return lookup;
         }
+
+        internal static void CustomLogger(OutputType type, string output)
+        {
+            if (type == OutputType.Err || output.Contains(": error"))
+                Logger.Error(output);
+            else if (output.Contains(": warning"))
+                Logger.Warn(output);
+            else
+                Logger.Normal(output);
+
+        }
     }
 }
+
