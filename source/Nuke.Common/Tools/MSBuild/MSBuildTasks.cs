@@ -107,9 +107,9 @@ namespace Nuke.Common.Tools.MSBuild
 
         internal static void CustomLogger(OutputType type, string output)
         {
-            if (type == OutputType.Err || output.Contains(": error"))
+            if (type == OutputType.Err || output.IndexOf(": error", StringComparison.Ordinal) != -1)
                 Logger.Error(output);
-            else if (output.Contains(": warning"))
+            else if (output.IndexOf(": warning", StringComparison.Ordinal) != -1)
                 Logger.Warn(output);
             else
                 Logger.Normal(output);
