@@ -278,14 +278,14 @@
           },
           {
             "name": "ConsoleLogger",
-            "type": "MSBuildConsoleLoggerParameters",
+            "type": "MSBuildConsoleLogger",
             "format": "{value}",
             "customValue": true,
             "help": "Specifies parameters for the console logger, which displays build information in the console window."
           },
           {
-            "name": "FileLogger",
-            "type": "List<MSBuildFileLoggerParameters>",
+            "name": "FileLoggers",
+            "type": "List<MSBuildFileLogger>",
             "format": "{value}",
             "customValue": true,
             "help": "Log build output to one or more files. Up to 9 loggers can be added."
@@ -296,7 +296,7 @@
   ],
   "dataClasses": [
     {
-      "name": "MSBuildConsoleLoggerParameters",
+      "name": "MSBuildConsoleLogger",
       "extensionMethods": true,
       "properties": [
         {
@@ -357,12 +357,12 @@
         {
           "name": "Verbosity",
           "type": "MSBuildVerbosity",
-          "help": "Override the -verbosity setting for this logger."
+          "help": "Override the <c>-verbosity</c> setting for this logger."
         }
       ]
     },
     {
-      "name": "MSBuildFileLoggerParameters",
+      "name": "MSBuildFileLogger",
       "extensionMethods": true,
       "properties": [
         {
@@ -413,7 +413,7 @@
         {
           "name": "Verbosity",
           "type": "MSBuildVerbosity",
-          "help": "Override the -verbosity setting for this logger."
+          "help": "Override the <c>-verbosity</c> setting for this logger."
         },
         {
           "name": "LogFile",

@@ -48,20 +48,20 @@ namespace Nuke.Common.Tools.MSBuild
         }
 
 
-        internal string GetFileLogger()
+        internal string GetFileLoggers()
         {
-            if (FileLogger == null)
+            if (FileLoggers == null)
                 return null;
 
             var result = new StringBuilder();
 
             // A maximum of 9 loggers are supported.
-            for (var i = 0; i < FileLogger.Count && i < 9; i++)
+            for (var i = 0; i < FileLoggers.Count && i < 9; i++)
             {
                 if (i != 0)
                     result.Append(' ');
 
-                var fileLogger = FileLogger[i];
+                var fileLogger = FileLoggers[i];
                 var builder = new MSBuildParameterBuilder($"/flp{i + 1}", true)
                    .Add("PerformanceSummary", fileLogger.PerformanceSummary)
                    .Add("Summary", "NoSummary", fileLogger.Summary)

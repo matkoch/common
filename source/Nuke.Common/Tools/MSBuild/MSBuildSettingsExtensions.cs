@@ -31,21 +31,21 @@ namespace Nuke.Common.Tools.MSBuild
                 .EnableNoConsoleLogger();
         }
 
-        public static MSBuildSettings AddFileLogger(this MSBuildSettings toolSettings, params Func<MSBuildFileLoggerParameters, MSBuildFileLoggerParameters>[] configurators)
+        public static MSBuildSettings AddFileLogger(this MSBuildSettings toolSettings, params Func<MSBuildFileLogger, MSBuildFileLogger>[] configurators)
         {
-            var instance = new MSBuildFileLoggerParameters();
-            return toolSettings.AddFileLogger(configurators.Select(configurator => configurator(instance)));
+            var instance = new MSBuildFileLogger();
+            return toolSettings.AddFileLoggers(configurators.Select(configurator => configurator(instance)));
         }
 
-        public static MSBuildSettings SetFileLogger(this MSBuildSettings toolSettings, params Func<MSBuildFileLoggerParameters, MSBuildFileLoggerParameters>[] configurators)
+        public static MSBuildSettings SetFileLogger(this MSBuildSettings toolSettings, params Func<MSBuildFileLogger, MSBuildFileLogger>[] configurators)
         {
-            var instance = new MSBuildFileLoggerParameters();
-            return toolSettings.SetFileLogger(configurators.Select(configurator => configurator(instance)));
+            var instance = new MSBuildFileLogger();
+            return toolSettings.SetFileLoggers(configurators.Select(configurator => configurator(instance)));
         }
 
-        public static MSBuildSettings SetConsoleLogger(this MSBuildSettings toolSettings, Func<MSBuildConsoleLoggerParameters, MSBuildConsoleLoggerParameters> configurator)
+        public static MSBuildSettings SetConsoleLogger(this MSBuildSettings toolSettings, Func<MSBuildConsoleLogger, MSBuildConsoleLogger> configurator)
         {
-            var instance = new MSBuildConsoleLoggerParameters();
+            var instance = new MSBuildConsoleLogger();
             return toolSettings.SetConsoleLogger(configurator(instance));
         }
     }
