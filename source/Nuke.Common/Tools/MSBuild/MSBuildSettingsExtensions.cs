@@ -1,4 +1,4 @@
-// Copyright 2019 Maintainers of NUKE.
+﻿// Copyright 2019 Maintainers of NUKE.
 // Distributed under the MIT License.
 // https://github.com/nuke-build/nuke/blob/master/LICENSE
 
@@ -29,6 +29,24 @@ namespace Nuke.Common.Tools.MSBuild
             return toolSettings
                 .AddLoggers($"JetBrains.BuildServer.MSBuildLoggers.MSBuildLogger,{teamCityLogger}")
                 .EnableNoConsoleLogger();
+        }
+
+        public static MSBuildSettings AddFileLogger(this MSBuildSettings toolSettings, params Func<MSBuildFileLoggerParameters, MSBuildFileLoggerParameters>[] configurators)
+        {
+            var instance = new MSBuildFileLoggerParameters();
+            return toolSettings.AddFileLogger(configurators.Select(configurator => configurator(instance)));
+        }
+
+        public static MSBuildSettings SetFileLogger(this MSBuildSettings toolSettings, params Func<MSBuildFileLoggerParameters, MSBuildFileLoggerParameters>[] configurators)
+        {
+            var instance = new MSBuildFileLoggerParameters();
+            return toolSettings.SetFileLogger(configurators.Select(configurator => configurator(instance)));
+        }
+
+        public static MSBuildSettings SetConsoleLogger(this MSBuildSettings toolSettings, Func<MSBuildConsoleLoggerParameters, MSBuildConsoleLoggerParameters> configurator)
+        {
+            var instance = new MSBuildConsoleLoggerParameters();
+            return toolSettings.SetConsoleLogger(configurator(instance));
         }
     }
 }

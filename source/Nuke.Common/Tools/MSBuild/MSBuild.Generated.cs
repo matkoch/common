@@ -1,5 +1,5 @@
-// Generated from https://github.com/nuke-build/common/blob/master/build/specifications/MSBuild.json
-// Generated with Nuke.CodeGeneration version LOCAL (OSX,.NETStandard,Version=v2.0)
+// Generated from https://github.com/alphaleonis/nuke-build-common/blob/master/build/specifications/MSBuild.json
+// Generated with Nuke.CodeGeneration version LOCAL (Windows,.NETStandard,Version=v2.0)
 
 using JetBrains.Annotations;
 using Newtonsoft.Json;
@@ -51,6 +51,8 @@ namespace Nuke.Common.Tools.MSBuild
         /// <remarks>
         ///   <p>This is a <a href="http://www.nuke.build/docs/authoring-builds/cli-tools.html#fluent-apis">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p>
         ///   <ul>
+        ///     <li><c>&lt;consoleLogger&gt;</c> via <see cref="MSBuildSettings.ConsoleLogger"/></li>
+        ///     <li><c>&lt;fileLogger&gt;</c> via <see cref="MSBuildSettings.FileLogger"/></li>
         ///     <li><c>&lt;targetPath&gt;</c> via <see cref="MSBuildSettings.TargetPath"/></li>
         ///     <li><c>/detailedsummary</c> via <see cref="MSBuildSettings.DetailedSummary"/></li>
         ///     <li><c>/logger</c> via <see cref="MSBuildSettings.Loggers"/></li>
@@ -80,6 +82,8 @@ namespace Nuke.Common.Tools.MSBuild
         /// <remarks>
         ///   <p>This is a <a href="http://www.nuke.build/docs/authoring-builds/cli-tools.html#fluent-apis">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p>
         ///   <ul>
+        ///     <li><c>&lt;consoleLogger&gt;</c> via <see cref="MSBuildSettings.ConsoleLogger"/></li>
+        ///     <li><c>&lt;fileLogger&gt;</c> via <see cref="MSBuildSettings.FileLogger"/></li>
         ///     <li><c>&lt;targetPath&gt;</c> via <see cref="MSBuildSettings.TargetPath"/></li>
         ///     <li><c>/detailedsummary</c> via <see cref="MSBuildSettings.DetailedSummary"/></li>
         ///     <li><c>/logger</c> via <see cref="MSBuildSettings.Loggers"/></li>
@@ -106,6 +110,8 @@ namespace Nuke.Common.Tools.MSBuild
         /// <remarks>
         ///   <p>This is a <a href="http://www.nuke.build/docs/authoring-builds/cli-tools.html#fluent-apis">CLI wrapper with fluent API</a> that allows to modify the following arguments:</p>
         ///   <ul>
+        ///     <li><c>&lt;consoleLogger&gt;</c> via <see cref="MSBuildSettings.ConsoleLogger"/></li>
+        ///     <li><c>&lt;fileLogger&gt;</c> via <see cref="MSBuildSettings.FileLogger"/></li>
         ///     <li><c>&lt;targetPath&gt;</c> via <see cref="MSBuildSettings.TargetPath"/></li>
         ///     <li><c>/detailedsummary</c> via <see cref="MSBuildSettings.DetailedSummary"/></li>
         ///     <li><c>/logger</c> via <see cref="MSBuildSettings.Loggers"/></li>
@@ -203,6 +209,15 @@ namespace Nuke.Common.Tools.MSBuild
         ///   Disable the default console logger, and don't log events to the console.
         /// </summary>
         public virtual bool? NoConsoleLogger { get; internal set; }
+        /// <summary>
+        ///   Specifies parameters for the console logger, which displays build information in the console window.
+        /// </summary>
+        public virtual MSBuildConsoleLoggerParameters ConsoleLogger { get; internal set; }
+        /// <summary>
+        ///   Log build output to one or more files. Up to 9 loggers can be added.
+        /// </summary>
+        public virtual IReadOnlyList<MSBuildFileLoggerParameters> FileLogger => FileLoggerInternal.AsReadOnly();
+        internal List<MSBuildFileLoggerParameters> FileLoggerInternal { get; set; } = new List<MSBuildFileLoggerParameters>();
         protected override Arguments ConfigureArguments(Arguments arguments)
         {
             arguments
@@ -218,9 +233,133 @@ namespace Nuke.Common.Tools.MSBuild
               .Add("/toolsversion:{value}", ToolsVersion)
               .Add("/verbosity:{value}", Verbosity)
               .Add("/logger:{value}", Loggers)
-              .Add("/noconsolelogger", NoConsoleLogger);
+              .Add("/noconsolelogger", NoConsoleLogger)
+              .Add("{value}", GetConsoleLogger(), customValue: true)
+              .Add("{value}", GetFileLogger(), customValue: true);
             return base.ConfigureArguments(arguments);
         }
+    }
+    #endregion
+    #region MSBuildConsoleLoggerParameters
+    /// <summary>
+    ///   Used within <see cref="MSBuildTasks"/>.
+    /// </summary>
+    [PublicAPI]
+    [ExcludeFromCodeCoverage]
+    [Serializable]
+    public partial class MSBuildConsoleLoggerParameters : ISettingsEntity
+    {
+        /// <summary>
+        ///    Show the time that's spent in tasks, targets, and projects.
+        /// </summary>
+        public virtual bool? PerformanceSummary { get; internal set; }
+        /// <summary>
+        ///   Show the error and warning summary at the end.
+        /// </summary>
+        public virtual bool? Summary { get; internal set; }
+        /// <summary>
+        ///   Show only errors.
+        /// </summary>
+        public virtual bool? ErrorsOnly { get; internal set; }
+        /// <summary>
+        ///   Show only warnings.
+        /// </summary>
+        public virtual bool? WarningsOnly { get; internal set; }
+        /// <summary>
+        ///   Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.
+        /// </summary>
+        public virtual bool? NoItemAndPropertyList { get; internal set; }
+        /// <summary>
+        ///   Show TaskCommandLineEvent messages.
+        /// </summary>
+        public virtual bool? ShowCommandLine { get; internal set; }
+        /// <summary>
+        ///   Show the timestamp as a prefix to any message.
+        /// </summary>
+        public virtual bool? ShowTimestamp { get; internal set; }
+        /// <summary>
+        ///   Show the event ID for each started event, finished event, and message.
+        /// </summary>
+        public virtual bool? ShowEventId { get; internal set; }
+        /// <summary>
+        ///   Don't align the text to the size of the console buffer.
+        /// </summary>
+        public virtual bool? ForceNoAlign { get; internal set; }
+        /// <summary>
+        ///   If disabled, use the default console colors for all logging messages. (default is enabled)
+        /// </summary>
+        public virtual bool? ConsoleColor { get; internal set; }
+        /// <summary>
+        ///   Enable/Disable the multiprocessor logging style of output.
+        /// </summary>
+        public virtual bool? MultiProcessorLogging { get; internal set; }
+        /// <summary>
+        ///   Override the -verbosity setting for this logger.
+        /// </summary>
+        public virtual MSBuildVerbosity Verbosity { get; internal set; }
+    }
+    #endregion
+    #region MSBuildFileLoggerParameters
+    /// <summary>
+    ///   Used within <see cref="MSBuildTasks"/>.
+    /// </summary>
+    [PublicAPI]
+    [ExcludeFromCodeCoverage]
+    [Serializable]
+    public partial class MSBuildFileLoggerParameters : ISettingsEntity
+    {
+        /// <summary>
+        ///    Show the time that's spent in tasks, targets, and projects.
+        /// </summary>
+        public virtual bool? PerformanceSummary { get; internal set; }
+        /// <summary>
+        ///   Show the error and warning summary at the end.
+        /// </summary>
+        public virtual bool? Summary { get; internal set; }
+        /// <summary>
+        ///   Show only errors.
+        /// </summary>
+        public virtual bool? ErrorsOnly { get; internal set; }
+        /// <summary>
+        ///   Show only warnings.
+        /// </summary>
+        public virtual bool? WarningsOnly { get; internal set; }
+        /// <summary>
+        ///   Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.
+        /// </summary>
+        public virtual bool? NoItemAndPropertyList { get; internal set; }
+        /// <summary>
+        ///   Show TaskCommandLineEvent messages.
+        /// </summary>
+        public virtual bool? ShowCommandLine { get; internal set; }
+        /// <summary>
+        ///   Show the timestamp as a prefix to any message.
+        /// </summary>
+        public virtual bool? ShowTimestamp { get; internal set; }
+        /// <summary>
+        ///   Show the event ID for each started event, finished event, and message.
+        /// </summary>
+        public virtual bool? ShowEventId { get; internal set; }
+        /// <summary>
+        ///   Enable/Disable the multiprocessor logging style of output.
+        /// </summary>
+        public virtual bool? MultiProcessorLogging { get; internal set; }
+        /// <summary>
+        ///   Override the -verbosity setting for this logger.
+        /// </summary>
+        public virtual MSBuildVerbosity Verbosity { get; internal set; }
+        /// <summary>
+        ///   The path to the log file into which the build log is written. The distributed file logger prefixes this path to the names of its log files.
+        /// </summary>
+        public virtual string LogFile { get; internal set; }
+        /// <summary>
+        ///   Determines whether the build log is appended to the log file or overwrites it. When you set the switch, the build log is appended to the log file. When the switch is not present, the contents of an existing log file are overwritten.
+        /// </summary>
+        public virtual bool? Append { get; internal set; }
+        /// <summary>
+        ///   Specifies the encoding for the file (for example, UTF-8, Unicode, or ASCII).
+        /// </summary>
+        public virtual string Encoding { get; internal set; }
     }
     #endregion
     #region MSBuildSettingsExtensions
@@ -2373,6 +2512,1424 @@ namespace Nuke.Common.Tools.MSBuild
         {
             toolSettings = toolSettings.NewInstance();
             toolSettings.NoConsoleLogger = !toolSettings.NoConsoleLogger;
+            return toolSettings;
+        }
+        #endregion
+        #region ConsoleLogger
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildSettings.ConsoleLogger"/></em></p>
+        ///   <p>Specifies parameters for the console logger, which displays build information in the console window.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildSettings SetConsoleLogger(this MSBuildSettings toolSettings, MSBuildConsoleLoggerParameters consoleLogger)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ConsoleLogger = consoleLogger;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildSettings.ConsoleLogger"/></em></p>
+        ///   <p>Specifies parameters for the console logger, which displays build information in the console window.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildSettings ResetConsoleLogger(this MSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ConsoleLogger = null;
+            return toolSettings;
+        }
+        #endregion
+        #region FileLogger
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildSettings.FileLogger"/> to a new list</em></p>
+        ///   <p>Log build output to one or more files. Up to 9 loggers can be added.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildSettings SetFileLogger(this MSBuildSettings toolSettings, params MSBuildFileLoggerParameters[] fileLogger)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.FileLoggerInternal = fileLogger.ToList();
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildSettings.FileLogger"/> to a new list</em></p>
+        ///   <p>Log build output to one or more files. Up to 9 loggers can be added.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildSettings SetFileLogger(this MSBuildSettings toolSettings, IEnumerable<MSBuildFileLoggerParameters> fileLogger)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.FileLoggerInternal = fileLogger.ToList();
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <see cref="MSBuildSettings.FileLogger"/></em></p>
+        ///   <p>Log build output to one or more files. Up to 9 loggers can be added.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildSettings AddFileLogger(this MSBuildSettings toolSettings, params MSBuildFileLoggerParameters[] fileLogger)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.FileLoggerInternal.AddRange(fileLogger);
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Adds values to <see cref="MSBuildSettings.FileLogger"/></em></p>
+        ///   <p>Log build output to one or more files. Up to 9 loggers can be added.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildSettings AddFileLogger(this MSBuildSettings toolSettings, IEnumerable<MSBuildFileLoggerParameters> fileLogger)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.FileLoggerInternal.AddRange(fileLogger);
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Clears <see cref="MSBuildSettings.FileLogger"/></em></p>
+        ///   <p>Log build output to one or more files. Up to 9 loggers can be added.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildSettings ClearFileLogger(this MSBuildSettings toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.FileLoggerInternal.Clear();
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <see cref="MSBuildSettings.FileLogger"/></em></p>
+        ///   <p>Log build output to one or more files. Up to 9 loggers can be added.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildSettings RemoveFileLogger(this MSBuildSettings toolSettings, params MSBuildFileLoggerParameters[] fileLogger)
+        {
+            toolSettings = toolSettings.NewInstance();
+            var hashSet = new HashSet<MSBuildFileLoggerParameters>(fileLogger);
+            toolSettings.FileLoggerInternal.RemoveAll(x => hashSet.Contains(x));
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Removes values from <see cref="MSBuildSettings.FileLogger"/></em></p>
+        ///   <p>Log build output to one or more files. Up to 9 loggers can be added.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildSettings RemoveFileLogger(this MSBuildSettings toolSettings, IEnumerable<MSBuildFileLoggerParameters> fileLogger)
+        {
+            toolSettings = toolSettings.NewInstance();
+            var hashSet = new HashSet<MSBuildFileLoggerParameters>(fileLogger);
+            toolSettings.FileLoggerInternal.RemoveAll(x => hashSet.Contains(x));
+            return toolSettings;
+        }
+        #endregion
+    }
+    #endregion
+    #region MSBuildConsoleLoggerParametersExtensions
+    /// <summary>
+    ///   Used within <see cref="MSBuildTasks"/>.
+    /// </summary>
+    [PublicAPI]
+    [ExcludeFromCodeCoverage]
+    public static partial class MSBuildConsoleLoggerParametersExtensions
+    {
+        #region PerformanceSummary
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.PerformanceSummary"/></em></p>
+        ///   <p> Show the time that's spent in tasks, targets, and projects.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetPerformanceSummary(this MSBuildConsoleLoggerParameters toolSettings, bool? performanceSummary)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PerformanceSummary = performanceSummary;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.PerformanceSummary"/></em></p>
+        ///   <p> Show the time that's spent in tasks, targets, and projects.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetPerformanceSummary(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PerformanceSummary = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.PerformanceSummary"/></em></p>
+        ///   <p> Show the time that's spent in tasks, targets, and projects.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnablePerformanceSummary(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PerformanceSummary = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.PerformanceSummary"/></em></p>
+        ///   <p> Show the time that's spent in tasks, targets, and projects.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisablePerformanceSummary(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PerformanceSummary = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.PerformanceSummary"/></em></p>
+        ///   <p> Show the time that's spent in tasks, targets, and projects.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters TogglePerformanceSummary(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PerformanceSummary = !toolSettings.PerformanceSummary;
+            return toolSettings;
+        }
+        #endregion
+        #region Summary
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.Summary"/></em></p>
+        ///   <p>Show the error and warning summary at the end.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetSummary(this MSBuildConsoleLoggerParameters toolSettings, bool? summary)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Summary = summary;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.Summary"/></em></p>
+        ///   <p>Show the error and warning summary at the end.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetSummary(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Summary = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.Summary"/></em></p>
+        ///   <p>Show the error and warning summary at the end.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnableSummary(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Summary = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.Summary"/></em></p>
+        ///   <p>Show the error and warning summary at the end.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisableSummary(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Summary = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.Summary"/></em></p>
+        ///   <p>Show the error and warning summary at the end.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ToggleSummary(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Summary = !toolSettings.Summary;
+            return toolSettings;
+        }
+        #endregion
+        #region ErrorsOnly
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.ErrorsOnly"/></em></p>
+        ///   <p>Show only errors.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetErrorsOnly(this MSBuildConsoleLoggerParameters toolSettings, bool? errorsOnly)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ErrorsOnly = errorsOnly;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.ErrorsOnly"/></em></p>
+        ///   <p>Show only errors.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetErrorsOnly(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ErrorsOnly = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.ErrorsOnly"/></em></p>
+        ///   <p>Show only errors.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnableErrorsOnly(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ErrorsOnly = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.ErrorsOnly"/></em></p>
+        ///   <p>Show only errors.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisableErrorsOnly(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ErrorsOnly = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.ErrorsOnly"/></em></p>
+        ///   <p>Show only errors.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ToggleErrorsOnly(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ErrorsOnly = !toolSettings.ErrorsOnly;
+            return toolSettings;
+        }
+        #endregion
+        #region WarningsOnly
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.WarningsOnly"/></em></p>
+        ///   <p>Show only warnings.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetWarningsOnly(this MSBuildConsoleLoggerParameters toolSettings, bool? warningsOnly)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.WarningsOnly = warningsOnly;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.WarningsOnly"/></em></p>
+        ///   <p>Show only warnings.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetWarningsOnly(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.WarningsOnly = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.WarningsOnly"/></em></p>
+        ///   <p>Show only warnings.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnableWarningsOnly(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.WarningsOnly = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.WarningsOnly"/></em></p>
+        ///   <p>Show only warnings.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisableWarningsOnly(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.WarningsOnly = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.WarningsOnly"/></em></p>
+        ///   <p>Show only warnings.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ToggleWarningsOnly(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.WarningsOnly = !toolSettings.WarningsOnly;
+            return toolSettings;
+        }
+        #endregion
+        #region NoItemAndPropertyList
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.NoItemAndPropertyList"/></em></p>
+        ///   <p>Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetNoItemAndPropertyList(this MSBuildConsoleLoggerParameters toolSettings, bool? noItemAndPropertyList)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoItemAndPropertyList = noItemAndPropertyList;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.NoItemAndPropertyList"/></em></p>
+        ///   <p>Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetNoItemAndPropertyList(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoItemAndPropertyList = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.NoItemAndPropertyList"/></em></p>
+        ///   <p>Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnableNoItemAndPropertyList(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoItemAndPropertyList = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.NoItemAndPropertyList"/></em></p>
+        ///   <p>Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisableNoItemAndPropertyList(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoItemAndPropertyList = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.NoItemAndPropertyList"/></em></p>
+        ///   <p>Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ToggleNoItemAndPropertyList(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoItemAndPropertyList = !toolSettings.NoItemAndPropertyList;
+            return toolSettings;
+        }
+        #endregion
+        #region ShowCommandLine
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.ShowCommandLine"/></em></p>
+        ///   <p>Show TaskCommandLineEvent messages.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetShowCommandLine(this MSBuildConsoleLoggerParameters toolSettings, bool? showCommandLine)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowCommandLine = showCommandLine;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.ShowCommandLine"/></em></p>
+        ///   <p>Show TaskCommandLineEvent messages.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetShowCommandLine(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowCommandLine = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.ShowCommandLine"/></em></p>
+        ///   <p>Show TaskCommandLineEvent messages.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnableShowCommandLine(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowCommandLine = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.ShowCommandLine"/></em></p>
+        ///   <p>Show TaskCommandLineEvent messages.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisableShowCommandLine(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowCommandLine = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.ShowCommandLine"/></em></p>
+        ///   <p>Show TaskCommandLineEvent messages.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ToggleShowCommandLine(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowCommandLine = !toolSettings.ShowCommandLine;
+            return toolSettings;
+        }
+        #endregion
+        #region ShowTimestamp
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.ShowTimestamp"/></em></p>
+        ///   <p>Show the timestamp as a prefix to any message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetShowTimestamp(this MSBuildConsoleLoggerParameters toolSettings, bool? showTimestamp)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowTimestamp = showTimestamp;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.ShowTimestamp"/></em></p>
+        ///   <p>Show the timestamp as a prefix to any message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetShowTimestamp(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowTimestamp = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.ShowTimestamp"/></em></p>
+        ///   <p>Show the timestamp as a prefix to any message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnableShowTimestamp(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowTimestamp = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.ShowTimestamp"/></em></p>
+        ///   <p>Show the timestamp as a prefix to any message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisableShowTimestamp(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowTimestamp = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.ShowTimestamp"/></em></p>
+        ///   <p>Show the timestamp as a prefix to any message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ToggleShowTimestamp(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowTimestamp = !toolSettings.ShowTimestamp;
+            return toolSettings;
+        }
+        #endregion
+        #region ShowEventId
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.ShowEventId"/></em></p>
+        ///   <p>Show the event ID for each started event, finished event, and message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetShowEventId(this MSBuildConsoleLoggerParameters toolSettings, bool? showEventId)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowEventId = showEventId;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.ShowEventId"/></em></p>
+        ///   <p>Show the event ID for each started event, finished event, and message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetShowEventId(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowEventId = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.ShowEventId"/></em></p>
+        ///   <p>Show the event ID for each started event, finished event, and message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnableShowEventId(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowEventId = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.ShowEventId"/></em></p>
+        ///   <p>Show the event ID for each started event, finished event, and message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisableShowEventId(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowEventId = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.ShowEventId"/></em></p>
+        ///   <p>Show the event ID for each started event, finished event, and message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ToggleShowEventId(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowEventId = !toolSettings.ShowEventId;
+            return toolSettings;
+        }
+        #endregion
+        #region ForceNoAlign
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.ForceNoAlign"/></em></p>
+        ///   <p>Don't align the text to the size of the console buffer.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetForceNoAlign(this MSBuildConsoleLoggerParameters toolSettings, bool? forceNoAlign)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ForceNoAlign = forceNoAlign;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.ForceNoAlign"/></em></p>
+        ///   <p>Don't align the text to the size of the console buffer.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetForceNoAlign(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ForceNoAlign = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.ForceNoAlign"/></em></p>
+        ///   <p>Don't align the text to the size of the console buffer.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnableForceNoAlign(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ForceNoAlign = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.ForceNoAlign"/></em></p>
+        ///   <p>Don't align the text to the size of the console buffer.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisableForceNoAlign(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ForceNoAlign = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.ForceNoAlign"/></em></p>
+        ///   <p>Don't align the text to the size of the console buffer.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ToggleForceNoAlign(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ForceNoAlign = !toolSettings.ForceNoAlign;
+            return toolSettings;
+        }
+        #endregion
+        #region ConsoleColor
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.ConsoleColor"/></em></p>
+        ///   <p>If disabled, use the default console colors for all logging messages. (default is enabled)</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetConsoleColor(this MSBuildConsoleLoggerParameters toolSettings, bool? consoleColor)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ConsoleColor = consoleColor;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.ConsoleColor"/></em></p>
+        ///   <p>If disabled, use the default console colors for all logging messages. (default is enabled)</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetConsoleColor(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ConsoleColor = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.ConsoleColor"/></em></p>
+        ///   <p>If disabled, use the default console colors for all logging messages. (default is enabled)</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnableConsoleColor(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ConsoleColor = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.ConsoleColor"/></em></p>
+        ///   <p>If disabled, use the default console colors for all logging messages. (default is enabled)</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisableConsoleColor(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ConsoleColor = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.ConsoleColor"/></em></p>
+        ///   <p>If disabled, use the default console colors for all logging messages. (default is enabled)</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ToggleConsoleColor(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ConsoleColor = !toolSettings.ConsoleColor;
+            return toolSettings;
+        }
+        #endregion
+        #region MultiProcessorLogging
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.MultiProcessorLogging"/></em></p>
+        ///   <p>Enable/Disable the multiprocessor logging style of output.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetMultiProcessorLogging(this MSBuildConsoleLoggerParameters toolSettings, bool? multiProcessorLogging)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MultiProcessorLogging = multiProcessorLogging;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.MultiProcessorLogging"/></em></p>
+        ///   <p>Enable/Disable the multiprocessor logging style of output.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetMultiProcessorLogging(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MultiProcessorLogging = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildConsoleLoggerParameters.MultiProcessorLogging"/></em></p>
+        ///   <p>Enable/Disable the multiprocessor logging style of output.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters EnableMultiProcessorLogging(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MultiProcessorLogging = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildConsoleLoggerParameters.MultiProcessorLogging"/></em></p>
+        ///   <p>Enable/Disable the multiprocessor logging style of output.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters DisableMultiProcessorLogging(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MultiProcessorLogging = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildConsoleLoggerParameters.MultiProcessorLogging"/></em></p>
+        ///   <p>Enable/Disable the multiprocessor logging style of output.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ToggleMultiProcessorLogging(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MultiProcessorLogging = !toolSettings.MultiProcessorLogging;
+            return toolSettings;
+        }
+        #endregion
+        #region Verbosity
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildConsoleLoggerParameters.Verbosity"/></em></p>
+        ///   <p>Override the -verbosity setting for this logger.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters SetVerbosity(this MSBuildConsoleLoggerParameters toolSettings, MSBuildVerbosity verbosity)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Verbosity = verbosity;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildConsoleLoggerParameters.Verbosity"/></em></p>
+        ///   <p>Override the -verbosity setting for this logger.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildConsoleLoggerParameters ResetVerbosity(this MSBuildConsoleLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Verbosity = null;
+            return toolSettings;
+        }
+        #endregion
+    }
+    #endregion
+    #region MSBuildFileLoggerParametersExtensions
+    /// <summary>
+    ///   Used within <see cref="MSBuildTasks"/>.
+    /// </summary>
+    [PublicAPI]
+    [ExcludeFromCodeCoverage]
+    public static partial class MSBuildFileLoggerParametersExtensions
+    {
+        #region PerformanceSummary
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.PerformanceSummary"/></em></p>
+        ///   <p> Show the time that's spent in tasks, targets, and projects.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetPerformanceSummary(this MSBuildFileLoggerParameters toolSettings, bool? performanceSummary)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PerformanceSummary = performanceSummary;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.PerformanceSummary"/></em></p>
+        ///   <p> Show the time that's spent in tasks, targets, and projects.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetPerformanceSummary(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PerformanceSummary = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildFileLoggerParameters.PerformanceSummary"/></em></p>
+        ///   <p> Show the time that's spent in tasks, targets, and projects.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters EnablePerformanceSummary(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PerformanceSummary = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildFileLoggerParameters.PerformanceSummary"/></em></p>
+        ///   <p> Show the time that's spent in tasks, targets, and projects.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters DisablePerformanceSummary(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PerformanceSummary = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildFileLoggerParameters.PerformanceSummary"/></em></p>
+        ///   <p> Show the time that's spent in tasks, targets, and projects.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters TogglePerformanceSummary(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.PerformanceSummary = !toolSettings.PerformanceSummary;
+            return toolSettings;
+        }
+        #endregion
+        #region Summary
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.Summary"/></em></p>
+        ///   <p>Show the error and warning summary at the end.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetSummary(this MSBuildFileLoggerParameters toolSettings, bool? summary)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Summary = summary;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.Summary"/></em></p>
+        ///   <p>Show the error and warning summary at the end.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetSummary(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Summary = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildFileLoggerParameters.Summary"/></em></p>
+        ///   <p>Show the error and warning summary at the end.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters EnableSummary(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Summary = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildFileLoggerParameters.Summary"/></em></p>
+        ///   <p>Show the error and warning summary at the end.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters DisableSummary(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Summary = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildFileLoggerParameters.Summary"/></em></p>
+        ///   <p>Show the error and warning summary at the end.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ToggleSummary(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Summary = !toolSettings.Summary;
+            return toolSettings;
+        }
+        #endregion
+        #region ErrorsOnly
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.ErrorsOnly"/></em></p>
+        ///   <p>Show only errors.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetErrorsOnly(this MSBuildFileLoggerParameters toolSettings, bool? errorsOnly)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ErrorsOnly = errorsOnly;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.ErrorsOnly"/></em></p>
+        ///   <p>Show only errors.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetErrorsOnly(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ErrorsOnly = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildFileLoggerParameters.ErrorsOnly"/></em></p>
+        ///   <p>Show only errors.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters EnableErrorsOnly(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ErrorsOnly = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildFileLoggerParameters.ErrorsOnly"/></em></p>
+        ///   <p>Show only errors.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters DisableErrorsOnly(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ErrorsOnly = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildFileLoggerParameters.ErrorsOnly"/></em></p>
+        ///   <p>Show only errors.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ToggleErrorsOnly(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ErrorsOnly = !toolSettings.ErrorsOnly;
+            return toolSettings;
+        }
+        #endregion
+        #region WarningsOnly
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.WarningsOnly"/></em></p>
+        ///   <p>Show only warnings.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetWarningsOnly(this MSBuildFileLoggerParameters toolSettings, bool? warningsOnly)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.WarningsOnly = warningsOnly;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.WarningsOnly"/></em></p>
+        ///   <p>Show only warnings.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetWarningsOnly(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.WarningsOnly = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildFileLoggerParameters.WarningsOnly"/></em></p>
+        ///   <p>Show only warnings.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters EnableWarningsOnly(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.WarningsOnly = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildFileLoggerParameters.WarningsOnly"/></em></p>
+        ///   <p>Show only warnings.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters DisableWarningsOnly(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.WarningsOnly = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildFileLoggerParameters.WarningsOnly"/></em></p>
+        ///   <p>Show only warnings.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ToggleWarningsOnly(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.WarningsOnly = !toolSettings.WarningsOnly;
+            return toolSettings;
+        }
+        #endregion
+        #region NoItemAndPropertyList
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.NoItemAndPropertyList"/></em></p>
+        ///   <p>Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetNoItemAndPropertyList(this MSBuildFileLoggerParameters toolSettings, bool? noItemAndPropertyList)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoItemAndPropertyList = noItemAndPropertyList;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.NoItemAndPropertyList"/></em></p>
+        ///   <p>Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetNoItemAndPropertyList(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoItemAndPropertyList = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildFileLoggerParameters.NoItemAndPropertyList"/></em></p>
+        ///   <p>Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters EnableNoItemAndPropertyList(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoItemAndPropertyList = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildFileLoggerParameters.NoItemAndPropertyList"/></em></p>
+        ///   <p>Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters DisableNoItemAndPropertyList(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoItemAndPropertyList = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildFileLoggerParameters.NoItemAndPropertyList"/></em></p>
+        ///   <p>Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ToggleNoItemAndPropertyList(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.NoItemAndPropertyList = !toolSettings.NoItemAndPropertyList;
+            return toolSettings;
+        }
+        #endregion
+        #region ShowCommandLine
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.ShowCommandLine"/></em></p>
+        ///   <p>Show TaskCommandLineEvent messages.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetShowCommandLine(this MSBuildFileLoggerParameters toolSettings, bool? showCommandLine)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowCommandLine = showCommandLine;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.ShowCommandLine"/></em></p>
+        ///   <p>Show TaskCommandLineEvent messages.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetShowCommandLine(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowCommandLine = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildFileLoggerParameters.ShowCommandLine"/></em></p>
+        ///   <p>Show TaskCommandLineEvent messages.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters EnableShowCommandLine(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowCommandLine = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildFileLoggerParameters.ShowCommandLine"/></em></p>
+        ///   <p>Show TaskCommandLineEvent messages.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters DisableShowCommandLine(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowCommandLine = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildFileLoggerParameters.ShowCommandLine"/></em></p>
+        ///   <p>Show TaskCommandLineEvent messages.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ToggleShowCommandLine(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowCommandLine = !toolSettings.ShowCommandLine;
+            return toolSettings;
+        }
+        #endregion
+        #region ShowTimestamp
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.ShowTimestamp"/></em></p>
+        ///   <p>Show the timestamp as a prefix to any message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetShowTimestamp(this MSBuildFileLoggerParameters toolSettings, bool? showTimestamp)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowTimestamp = showTimestamp;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.ShowTimestamp"/></em></p>
+        ///   <p>Show the timestamp as a prefix to any message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetShowTimestamp(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowTimestamp = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildFileLoggerParameters.ShowTimestamp"/></em></p>
+        ///   <p>Show the timestamp as a prefix to any message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters EnableShowTimestamp(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowTimestamp = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildFileLoggerParameters.ShowTimestamp"/></em></p>
+        ///   <p>Show the timestamp as a prefix to any message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters DisableShowTimestamp(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowTimestamp = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildFileLoggerParameters.ShowTimestamp"/></em></p>
+        ///   <p>Show the timestamp as a prefix to any message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ToggleShowTimestamp(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowTimestamp = !toolSettings.ShowTimestamp;
+            return toolSettings;
+        }
+        #endregion
+        #region ShowEventId
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.ShowEventId"/></em></p>
+        ///   <p>Show the event ID for each started event, finished event, and message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetShowEventId(this MSBuildFileLoggerParameters toolSettings, bool? showEventId)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowEventId = showEventId;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.ShowEventId"/></em></p>
+        ///   <p>Show the event ID for each started event, finished event, and message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetShowEventId(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowEventId = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildFileLoggerParameters.ShowEventId"/></em></p>
+        ///   <p>Show the event ID for each started event, finished event, and message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters EnableShowEventId(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowEventId = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildFileLoggerParameters.ShowEventId"/></em></p>
+        ///   <p>Show the event ID for each started event, finished event, and message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters DisableShowEventId(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowEventId = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildFileLoggerParameters.ShowEventId"/></em></p>
+        ///   <p>Show the event ID for each started event, finished event, and message.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ToggleShowEventId(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.ShowEventId = !toolSettings.ShowEventId;
+            return toolSettings;
+        }
+        #endregion
+        #region MultiProcessorLogging
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.MultiProcessorLogging"/></em></p>
+        ///   <p>Enable/Disable the multiprocessor logging style of output.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetMultiProcessorLogging(this MSBuildFileLoggerParameters toolSettings, bool? multiProcessorLogging)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MultiProcessorLogging = multiProcessorLogging;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.MultiProcessorLogging"/></em></p>
+        ///   <p>Enable/Disable the multiprocessor logging style of output.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetMultiProcessorLogging(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MultiProcessorLogging = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildFileLoggerParameters.MultiProcessorLogging"/></em></p>
+        ///   <p>Enable/Disable the multiprocessor logging style of output.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters EnableMultiProcessorLogging(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MultiProcessorLogging = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildFileLoggerParameters.MultiProcessorLogging"/></em></p>
+        ///   <p>Enable/Disable the multiprocessor logging style of output.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters DisableMultiProcessorLogging(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MultiProcessorLogging = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildFileLoggerParameters.MultiProcessorLogging"/></em></p>
+        ///   <p>Enable/Disable the multiprocessor logging style of output.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ToggleMultiProcessorLogging(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.MultiProcessorLogging = !toolSettings.MultiProcessorLogging;
+            return toolSettings;
+        }
+        #endregion
+        #region Verbosity
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.Verbosity"/></em></p>
+        ///   <p>Override the -verbosity setting for this logger.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetVerbosity(this MSBuildFileLoggerParameters toolSettings, MSBuildVerbosity verbosity)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Verbosity = verbosity;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.Verbosity"/></em></p>
+        ///   <p>Override the -verbosity setting for this logger.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetVerbosity(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Verbosity = null;
+            return toolSettings;
+        }
+        #endregion
+        #region LogFile
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.LogFile"/></em></p>
+        ///   <p>The path to the log file into which the build log is written. The distributed file logger prefixes this path to the names of its log files.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetLogFile(this MSBuildFileLoggerParameters toolSettings, string logFile)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.LogFile = logFile;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.LogFile"/></em></p>
+        ///   <p>The path to the log file into which the build log is written. The distributed file logger prefixes this path to the names of its log files.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetLogFile(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.LogFile = null;
+            return toolSettings;
+        }
+        #endregion
+        #region Append
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.Append"/></em></p>
+        ///   <p>Determines whether the build log is appended to the log file or overwrites it. When you set the switch, the build log is appended to the log file. When the switch is not present, the contents of an existing log file are overwritten.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetAppend(this MSBuildFileLoggerParameters toolSettings, bool? append)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Append = append;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.Append"/></em></p>
+        ///   <p>Determines whether the build log is appended to the log file or overwrites it. When you set the switch, the build log is appended to the log file. When the switch is not present, the contents of an existing log file are overwritten.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetAppend(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Append = null;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Enables <see cref="MSBuildFileLoggerParameters.Append"/></em></p>
+        ///   <p>Determines whether the build log is appended to the log file or overwrites it. When you set the switch, the build log is appended to the log file. When the switch is not present, the contents of an existing log file are overwritten.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters EnableAppend(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Append = true;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Disables <see cref="MSBuildFileLoggerParameters.Append"/></em></p>
+        ///   <p>Determines whether the build log is appended to the log file or overwrites it. When you set the switch, the build log is appended to the log file. When the switch is not present, the contents of an existing log file are overwritten.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters DisableAppend(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Append = false;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Toggles <see cref="MSBuildFileLoggerParameters.Append"/></em></p>
+        ///   <p>Determines whether the build log is appended to the log file or overwrites it. When you set the switch, the build log is appended to the log file. When the switch is not present, the contents of an existing log file are overwritten.</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ToggleAppend(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Append = !toolSettings.Append;
+            return toolSettings;
+        }
+        #endregion
+        #region Encoding
+        /// <summary>
+        ///   <p><em>Sets <see cref="MSBuildFileLoggerParameters.Encoding"/></em></p>
+        ///   <p>Specifies the encoding for the file (for example, UTF-8, Unicode, or ASCII).</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters SetEncoding(this MSBuildFileLoggerParameters toolSettings, string encoding)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Encoding = encoding;
+            return toolSettings;
+        }
+        /// <summary>
+        ///   <p><em>Resets <see cref="MSBuildFileLoggerParameters.Encoding"/></em></p>
+        ///   <p>Specifies the encoding for the file (for example, UTF-8, Unicode, or ASCII).</p>
+        /// </summary>
+        [Pure]
+        public static MSBuildFileLoggerParameters ResetEncoding(this MSBuildFileLoggerParameters toolSettings)
+        {
+            toolSettings = toolSettings.NewInstance();
+            toolSettings.Encoding = null;
             return toolSettings;
         }
         #endregion

@@ -275,9 +275,162 @@
             "type": "bool",
             "format": "/noconsolelogger",
             "help": "Disable the default console logger, and don't log events to the console."
+          },
+          {
+            "name": "ConsoleLogger",
+            "type": "MSBuildConsoleLoggerParameters",
+            "format": "{value}",
+            "customValue": true,
+            "help": "Specifies parameters for the console logger, which displays build information in the console window."
+          },
+          {
+            "name": "FileLogger",
+            "type": "List<MSBuildFileLoggerParameters>",
+            "format": "{value}",
+            "customValue": true,
+            "help": "Log build output to one or more files. Up to 9 loggers can be added."
           }
         ]
       }
+    }
+  ],
+  "dataClasses": [
+    {
+      "name": "MSBuildConsoleLoggerParameters",
+      "extensionMethods": true,
+      "properties": [
+        {
+          "name": "PerformanceSummary",
+          "type": "bool",
+          "help": " Show the time that's spent in tasks, targets, and projects."
+        },
+        {
+          "name": "Summary",
+          "type": "bool",
+          "help": "Show the error and warning summary at the end."
+        },
+        {
+          "name": "ErrorsOnly",
+          "type": "bool",
+          "help": "Show only errors."
+        },
+        {
+          "name": "WarningsOnly",
+          "type": "bool",
+          "help": "Show only warnings."
+        },
+        {
+          "name": "NoItemAndPropertyList",
+          "type": "bool",
+          "help": "Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic."
+        },
+        {
+          "name": "ShowCommandLine",
+          "type": "bool",
+          "help": "Show TaskCommandLineEvent messages."
+        },
+        {
+          "name": "ShowTimestamp",
+          "type": "bool",
+          "help": "Show the timestamp as a prefix to any message."
+        },
+        {
+          "name": "ShowEventId",
+          "type": "bool",
+          "help": "Show the event ID for each started event, finished event, and message."
+        },
+        {
+          "name": "ForceNoAlign",
+          "type": "bool",
+          "help": "Don't align the text to the size of the console buffer."
+        },
+        {
+          "name": "ConsoleColor",
+          "type": "bool",
+          "help": "If disabled, use the default console colors for all logging messages. (default is enabled)"
+        },
+        {
+          "name": "MultiProcessorLogging",
+          "type": "bool",
+          "help": "Enable/Disable the multiprocessor logging style of output."
+        },
+        {
+          "name": "Verbosity",
+          "type": "MSBuildVerbosity",
+          "help": "Override the -verbosity setting for this logger."
+        }
+      ]
+    },
+    {
+      "name": "MSBuildFileLoggerParameters",
+      "extensionMethods": true,
+      "properties": [
+        {
+          "name": "PerformanceSummary",
+          "type": "bool",
+          "help": " Show the time that's spent in tasks, targets, and projects."
+        },
+        {
+          "name": "Summary",
+          "type": "bool",
+          "help": "Show the error and warning summary at the end."
+        },
+        {
+          "name": "ErrorsOnly",
+          "type": "bool",
+          "help": "Show only errors."
+        },
+        {
+          "name": "WarningsOnly",
+          "type": "bool",
+          "help": "Show only warnings."
+        },
+        {
+          "name": "NoItemAndPropertyList",
+          "type": "bool",
+          "help": "Don't show the list of items and properties that would appear at the start of each project build if the verbosity level is set to diagnostic."
+        },
+        {
+          "name": "ShowCommandLine",
+          "type": "bool",
+          "help": "Show TaskCommandLineEvent messages."
+        },
+        {
+          "name": "ShowTimestamp",
+          "type": "bool",
+          "help": "Show the timestamp as a prefix to any message."
+        },
+        {
+          "name": "ShowEventId",
+          "type": "bool",
+          "help": "Show the event ID for each started event, finished event, and message."
+        },
+        {
+          "name": "MultiProcessorLogging",
+          "type": "bool",
+          "help": "Enable/Disable the multiprocessor logging style of output."
+        },
+        {
+          "name": "Verbosity",
+          "type": "MSBuildVerbosity",
+          "help": "Override the -verbosity setting for this logger."
+        },
+        {
+          "name": "LogFile",
+          "type": "string",
+          "help": "The path to the log file into which the build log is written. The distributed file logger prefixes this path to the names of its log files."
+        },
+        {
+          "name": "Append",
+          "type": "bool",
+          "help": "Determines whether the build log is appended to the log file or overwrites it. When you set the switch, the build log is appended to the log file. When the switch is not present, the contents of an existing log file are overwritten."
+        },
+        {
+          "name": "Encoding",
+          "type": "string",
+          "help": "Specifies the encoding for the file (for example, UTF-8, Unicode, or ASCII)."
+        }
+      ]
     }
   ],
   "enumerations": [
