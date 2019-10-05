@@ -45,7 +45,7 @@ namespace Nuke.Common
         [ContractAnnotation("=> halt")]
         public static void Fail(string text)
         {
-            throw new Exception(text);
+            throw new ControlFlowException(text);
         }
 
         /// <summary>

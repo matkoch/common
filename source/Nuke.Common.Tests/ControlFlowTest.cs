@@ -14,7 +14,7 @@ namespace Nuke.Common.Tests
     public class ControlFlowTest
     {
         [Fact]
-        public void Test()
+        public void ExecuteWithRetrySucceedsAfterMultipleExceptions()
         {
             var executions = 0;
 
@@ -27,6 +27,19 @@ namespace Nuke.Common.Tests
 
             ControlFlow.ExecuteWithRetry(OnSecondExecution);
             executions.Should().Be(2);
+        }
+
+		[Fact]
+        public void ExecuteWithRetryEventuallyThrowsControlFlowException()
+        {
+            void RepeatedFailure()
+            {
+				throw new Exception();
+            }
+
+            Assert.Throws<ControlFlowException>(() => {
+				ControlFlow.ExecuteWithRetry(RepeatedFailure);
+			});
         }
     }
 }

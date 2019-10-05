@@ -118,7 +118,7 @@ namespace Nuke.Common.Tests
         [InlineData("/", "/", '/', "Second path must not be rooted.")]
         public void TestCombine_Throws(string path1, string path2, char? separator, string expected)
         {
-            Assert.Throws<Exception>(() => Combine(path1, path2, separator)).Message.Should().Be($"Assertion failed: {expected}");
+            Assert.Throws<ControlFlowException>(() => Combine(path1, path2, separator)).Message.Should().Be($"Assertion failed: {expected}");
         }
 
         [Theory]
@@ -150,7 +150,7 @@ namespace Nuke.Common.Tests
         [InlineData("/bin/foo/bar", '\\', "For Unix-rooted paths the separator must be '/'.")]
         public void TestNormalizePath_Throws(string input, char? separator, string message)
         {
-            Assert.Throws<Exception>(() => NormalizePath(input, separator)).Message.Should().Be($"Assertion failed: {message}");
+            Assert.Throws<ControlFlowException>(() => NormalizePath(input, separator)).Message.Should().Be($"Assertion failed: {message}");
         }
 
         [Theory]
@@ -190,7 +190,7 @@ namespace Nuke.Common.Tests
         [InlineData(new object[] { "foo", "bar" }, "Path 'foo' must be rooted.")]
         public void AbsolutePath_Throws(object[] parts, string expected)
         {
-            Assert.Throws<Exception>(() => ParseAbsolutePath(parts)).Message.Should().Be($"Assertion failed: {expected}");
+            Assert.Throws<ControlFlowException>(() => ParseAbsolutePath(parts)).Message.Should().Be($"Assertion failed: {expected}");
         }
 
         [Fact]
