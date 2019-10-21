@@ -1,0 +1,359 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nuke-build/common/master/source/Nuke.CodeGeneration/schema.json",
+  "references": [
+    "https://github.com/AArnott/Nerdbank.GitVersioning/blob/master/src/nbgv/Program.cs",
+    "https://github.com/AArnott/Nerdbank.GitVersioning/blob/master/src/NerdBank.GitVersioning/VersionOracle.cs"
+  ],
+  "name": "Nbgv",
+  "officialUrl": "https://github.com/AArnott/Nerdbank.GitVersioning",
+  "help": "This package adds precise, semver-compatible git commit information to every assembly, VSIX, NuGet and NPM package, and more. It implicitly supports all cloud build services and CI server software because it simply uses git itself and integrates naturally in MSBuild, gulp and other build scripts.",
+  "packageId": "nbgv",
+  "packageExecutable": "nbgv.dll",
+  "tasks": [
+    {
+      "help": " Prepares a project to have version stamps applied using Nerdbank.GitVersioning.",
+      "postfix": "Install",
+      "definiteArgument": "install",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "Version",
+            "type": "string",
+            "format": "--version {value}",
+            "help": "The initial version to set. The default is 1.0-beta."
+          }
+        ]
+      }
+    },
+    {
+      "help": "Gets the version information for a project.",
+      "postfix": "GetVersion",
+      "returnType": "Nbgv",
+      "definiteArgument": "get-version",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "Format",
+            "type": "NbgvFormat",
+            "format": "--format {value}",
+            "help": "The format to write the version information. Allowed values are: text, json. The default is text."
+          },
+          {
+            "name": "Variable",
+            "type": "string",
+            "format": "--variable {value}",
+            "help": "The name of just one version property to print to stdout. When specified, the output is always in raw text. Useful in scripts."
+          },
+          {
+            "name": "Commit",
+            "type": "string",
+            "format": "{value}",
+            "help": "The commit/ref to get the version information for. The default is HEAD."
+          }
+        ]
+      }
+    },
+    {
+      "help": "Updates the version stamp that is applied to a project.",
+      "postfix": "SetVersion",
+      "definiteArgument": "set-version",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "Version",
+            "type": "string",
+            "format": "{value}",
+            "help": "The version to set."
+          }
+        ]
+      }
+    },
+    {
+      "help": "Creates a git tag to mark a version.",
+      "postfix": "Tag",
+      "definiteArgument": "tag",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "VersionOrRef",
+            "type": "string",
+            "format": "{value}",
+            "help": "The a.b.c[.d] version or git ref to be tagged. If not specified, HEAD is used."
+          }
+        ]
+      }
+    },
+    {
+      "help": "Gets the commit(s) that match a given version.",
+      "postfix": "GetCommits",
+      "returnType": "List<string>",
+      "definiteArgument": "get-commits",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "Quiet",
+            "type": "bool",
+            "format": "--quiet",
+            "help": "Use minimal output."
+          },
+          {
+            "name": "Version",
+            "type": "string",
+            "format": "{value}",
+            "help": "The a.b.c[.d] version to find."
+          }
+        ]
+      }
+    },
+    {
+      "help": "Communicates with the ambient cloud build to set the build number and/or other cloud build variables.",
+      "postfix": "Cloud",
+      "definiteArgument": "cloud",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "Version",
+            "type": "string",
+            "format": "--version {value}",
+            "help": "The string to use for the cloud build number. If not specified, the computed version will be used."
+          },
+          {
+            "name": "CiSystem",
+            "type": "NbgvCiSystem",
+            "format": "--ci-system {value}",
+            "help": "Force activation for a particular CI system. If not specified, auto-detection will be used. Supported values are: AppVeyor, VisualStudioTeamServices, TeamCity, AtlassianBamboo, Jenkins, GitLab, Travis"
+          },
+          {
+            "name": "AllVars",
+            "type": "bool",
+            "format": "--all-vars",
+            "help": "Defines ALL version variables as cloud build variables, with a \"NBGV_\" prefix."
+          },
+          {
+            "name": "CommonVars",
+            "type": "bool",
+            "format": "--common-vars",
+            "help": "Defines a few common version variables as cloud build variables, with a \"Git\" prefix (e.g. GitBuildVersion, GitBuildVersionSimple, GitAssemblyInformationalVersion)."
+          },
+          {
+            "name": "Define",
+            "type": "Dictionary<string, string>",
+            "format": "--define {value}",
+            "itemFormat": "{key}={value}",
+            "separator": " ",
+            "help": "Additional cloud build variables to define. Each should be in the NAME=VALUE syntax."
+          }
+        ]
+      }
+    },
+    {
+      "help": "Prepares a release by creating a release branch for the current version and adjusting the version on the current branch.",
+      "postfix": "PrepareRelease",
+      "definiteArgument": "prepare-release",
+      "settingsClass": {
+        "properties": [
+          {
+            "name": "NextVersion",
+            "type": "string",
+            "format": "--nextVersion {value}",
+            "help": "The version to set for the current branch. If omitted, the next version is determined automatically by incrementing the current version."
+          },
+          {
+            "name": "VersionIncrement",
+            "type": "string",
+            "format": "--versionIncrement {value}",
+            "help": "Overrides the 'versionIncrement' setting set in version.json for determining the next version of the current branch."
+          },
+          {
+            "name": "Tag",
+            "type": "string",
+            "format": "{value}",
+            "help": "The prerelease tag to apply on the release branch (if any). If not specified, any existing prerelease tag will be removed. The preceding hyphen may be omitted."
+          }
+        ]
+      }
+    }
+  ],
+  "commonTaskProperties": [
+    {
+      "name": "Project",
+      "type": "string",
+      "format": "--project {value}",
+      "help": "The path to the project or project directory. The default is the current directory."
+    },
+    {
+      "name": "Help",
+      "type": "bool",
+      "format": "--help",
+      "help": "Use after a command to get more help about a particular command."
+    }
+  ],
+  "dataClasses": [
+    {
+      "name": "Nbgv",
+      "properties": [
+        {
+          "name": "CloudBuildNumber",
+          "type": "string"
+        },
+        {
+          "name": "CloudBuildNumberEnabled",
+          "type": "bool"
+        },
+        {
+          "name": "BuildMetadataWithCommitId",
+          "type": "List<string>"
+        },
+        {
+          "name": "VersionFileFound",
+          "type": "bool"
+        },
+        {
+          "name": "AssemblyVersion",
+          "type": "string"
+        },
+        {
+          "name": "AssemblyFileVersion",
+          "type": "string"
+        },
+        {
+          "name": "AssemblyInformationalVersion",
+          "type": "string"
+        },
+        {
+          "name": "PublicRelease",
+          "type": "bool"
+        },
+        {
+          "name": "PrereleaseVersion",
+          "type": "string"
+        },
+        {
+          "name": "PrereleaseVersionNoLeadingHyphen",
+          "type": "string"
+        },
+        {
+          "name": "SimpleVersion",
+          "type": "string"
+        },
+        {
+          "name": "BuildNumber",
+          "type": "int"
+        },
+        {
+          "name": "VersionRevision",
+          "type": "int"
+        },
+        {
+          "name": "MajorMinorVersion",
+          "type": "string"
+        },
+        {
+          "name": "VersionMajor",
+          "type": "int"
+        },
+        {
+          "name": "VersionMinor",
+          "type": "int"
+        },
+        {
+          "name": "GitCommitId",
+          "type": "string"
+        },
+        {
+          "name": "GitCommitIdShort",
+          "type": "string"
+        },
+        {
+          "name": "GitCommitDate",
+          "type": "DateTimeOffset?"
+        },
+        {
+          "name": "VersionHeight",
+          "type": "int"
+        },
+        {
+          "name": "VersionHeightOffset",
+          "type": "int"
+        },
+        {
+          "name": "BuildingRef",
+          "type": "string"
+        },
+        {
+          "name": "Version",
+          "type": "string"
+        },
+        {
+          "name": "CloudBuildAllVarsEnabled",
+          "type": "bool"
+        },
+        {
+          "name": "CloudBuildAllVars",
+          "type": "Dictionary<string, string>"
+        },
+        {
+          "name": "CloudBuildVersionVarsEnabled",
+          "type": "bool"
+        },
+        {
+          "name": "CloudBuildVersionVars",
+          "type": "Dictionary<string, string>"
+        },
+        {
+          "name": "BuildMetadata",
+          "type": "List<string>"
+        },
+        {
+          "name": "BuildMetadataFragment",
+          "type": "string"
+        },
+        {
+          "name": "NuGetPackageVersion",
+          "type": "string"
+        },
+        {
+          "name": "ChocolateyPackageVersion",
+          "type": "string"
+        },
+        {
+          "name": "NpmPackageVersion",
+          "type": "string"
+        },
+        {
+          "name": "SemVer1",
+          "type": "string"
+        },
+        {
+          "name": "SemVer2",
+          "type": "string"
+        },
+        {
+          "name": "SemVer1NumericIdentifierPadding",
+          "type": "int"
+        }
+      ]
+    }
+  ],
+  "enumerations": [
+    {
+      "name": "NbgvFormat",
+      "values": [
+        "text",
+        "json"
+      ]
+    },
+    {
+      "name": "NbgvCiSystem",
+      "values": [
+        "AppVeyor",
+        "VisualStudioTeamServices",
+        "TeamCity",
+        "AtlassianBamboo",
+        "Jenkins",
+        "GitLab",
+        "Travis"
+      ]
+    }
+  ]
+}
