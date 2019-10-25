@@ -3,13 +3,16 @@ Configuration:
 - Debug
 - Release
 Continue: 
+GitHubToken: 
 GitterAuthToken: 
 Help: 
 Host:
 - AppVeyor
-- AzureDevOps
+- AzurePipelines
+- Bamboo
 - Bitrise
 - Console
+- GitHubActions
 - GitLab
 - Jenkins
 - TeamCity
@@ -23,6 +26,7 @@ Skip:
 - Changelog
 - Clean
 - Compile
+- Coverage
 - Generate
 - Hotfix
 - Install
@@ -40,6 +44,7 @@ Target:
 - Changelog
 - Clean
 - Compile
+- Coverage
 - Generate
 - Hotfix
 - Install

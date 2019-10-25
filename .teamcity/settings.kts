@@ -43,6 +43,13 @@ project {
             value = "https://api.nuget.org/v3/index.json",
             allowEmpty = true,
             display = ParameterDisplay.NORMAL)
+        text (
+            "env.GitHubToken",
+            label = "GitHubToken",
+            description = "GitHub token",
+            value = "",
+            allowEmpty = true,
+            display = ParameterDisplay.NORMAL)
         param(
             "teamcity.runner.commandline.stdstreams.encoding",
             "IBM-437"
@@ -66,7 +73,7 @@ object Compile : BuildType({
     steps {
         powerShell {
             scriptMode = file { path = "build.ps1" }
-            param("jetbrains_powershell_scriptArguments","Restore Compile --skip")
+            param("jetbrains_powershell_scriptArguments", "Restore Compile --skip")
             noProfile = true
         }
     }
@@ -82,7 +89,7 @@ object Pack : BuildType({
     steps {
         powerShell {
             scriptMode = file { path = "build.ps1" }
-            param("jetbrains_powershell_scriptArguments","Pack --skip")
+            param("jetbrains_powershell_scriptArguments", "Pack --skip")
             noProfile = true
         }
     }
@@ -115,14 +122,16 @@ object Test_P1T2 : BuildType({
     name = "🚦 Test 🧩 1/2"
     vcs {
         root(VcsRoot)
+        cleanCheckout = true
     }
     artifactRules = """
         output/*.trx
+        output/*.xml
     """.trimIndent()
     steps {
         powerShell {
             scriptMode = file { path = "build.ps1" }
-            param("jetbrains_powershell_scriptArguments","Test --skip --partition-Test 1/2")
+            param("jetbrains_powershell_scriptArguments", "Test --skip --test-partition 1")
             noProfile = true
         }
     }
@@ -137,14 +146,16 @@ object Test_P2T2 : BuildType({
     name = "🚦 Test 🧩 2/2"
     vcs {
         root(VcsRoot)
+        cleanCheckout = true
     }
     artifactRules = """
         output/*.trx
+        output/*.xml
     """.trimIndent()
     steps {
         powerShell {
             scriptMode = file { path = "build.ps1" }
-            param("jetbrains_powershell_scriptArguments","Test --skip --partition-Test 2/2")
+            param("jetbrains_powershell_scriptArguments", "Test --skip --test-partition 2")
             noProfile = true
         }
     }
@@ -164,6 +175,7 @@ object Test : BuildType({
     }
     artifactRules = """
         output/*.trx
+        output/*.xml
     """.trimIndent()
     triggers {
         vcs {
@@ -202,7 +214,7 @@ object Publish : BuildType({
     steps {
         powerShell {
             scriptMode = file { path = "build.ps1" }
-            param("jetbrains_powershell_scriptArguments","Publish --skip")
+            param("jetbrains_powershell_scriptArguments", "Publish --skip")
             noProfile = true
         }
     }
@@ -253,7 +265,7 @@ object Announce : BuildType({
     steps {
         powerShell {
             scriptMode = file { path = "build.ps1" }
-            param("jetbrains_powershell_scriptArguments","Announce --skip")
+            param("jetbrains_powershell_scriptArguments", "Announce --skip")
             noProfile = true
         }
     }

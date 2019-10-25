@@ -3,7 +3,7 @@
 // https://github.com/nuke-build/nuke/blob/master/LICENSE
 
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using JetBrains.Annotations;
@@ -128,5 +128,25 @@ namespace Nuke.Common
         /// Skip all dependencies which are not required by another target.
         /// </summary>
         Skip
+    }
+
+    public interface IExecutableTarget
+    {
+        ITargetDefinition Definition { get; }
+        string Name { get; }
+        string Description { get; }
+        bool Listed { get; }
+        IEnumerable<Expression<Func<bool>>> DynamicConditions { get; }
+        IEnumerable<Expression<Func<bool>>> StaticConditions { get; }
+        DependencyBehavior DependencyBehavior { get; }
+        bool AssuredAfterFailure { get; }
+        bool ProceedAfterFailure { get; }
+        IEnumerable<LambdaExpression> Requirements { get; }
+        IEnumerable<Action> Actions { get; }
+        IEnumerable<IExecutableTarget> ExecutionDependencies { get; }
+        IEnumerable<IExecutableTarget> OrderDependencies { get; }
+        IEnumerable<IExecutableTarget> TriggerDependencies { get; }
+        IEnumerable<IExecutableTarget> Triggers { get; }
+        IEnumerable<IExecutableTarget> AllDependencies { get; }
     }
 }

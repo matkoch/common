@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using JetBrains.Annotations;
 
-namespace Nuke.Common.CI.AzureDevOps
+namespace Nuke.Common.CI.AzurePipelines
 {
     /// <summary>
     /// Interface according to the <a href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&amp;tabs=yaml">official website</a>.
@@ -18,17 +18,17 @@ namespace Nuke.Common.CI.AzureDevOps
     [PublicAPI]
     [BuildServer]
     [ExcludeFromCodeCoverage]
-    public class AzureDevOps
+    public class AzurePipelines
     {
-        private static Lazy<AzureDevOps> s_instance = new Lazy<AzureDevOps>(() => new AzureDevOps());
+        private static Lazy<AzurePipelines> s_instance = new Lazy<AzurePipelines>(() => new AzurePipelines());
 
-        public static AzureDevOps Instance => NukeBuild.Host == HostType.AzureDevOps ? s_instance.Value : null;
+        public static AzurePipelines Instance => NukeBuild.Host == HostType.AzurePipelines ? s_instance.Value : null;
 
-        internal static bool IsRunningAzureDevOps => Environment.GetEnvironmentVariable("TF_BUILD") != null;
+        internal static bool IsRunningAzurePipelines => Environment.GetEnvironmentVariable("TF_BUILD") != null;
 
         private readonly Action<string> _messageSink;
 
-        internal AzureDevOps(Action<string> messageSink = null)
+        internal AzurePipelines(Action<string> messageSink = null)
         {
             _messageSink = messageSink ?? Console.WriteLine;
         }
@@ -36,7 +36,7 @@ namespace Nuke.Common.CI.AzureDevOps
         public string AgentBuildDirectory => EnvironmentInfo.GetVariable<string>("AGENT_BUILDDIRECTORY");
         public string AgentHomeDirectory => EnvironmentInfo.GetVariable<string>("AGENT_HOMEDIRECTORY");
         public long AgentId => EnvironmentInfo.GetVariable<long>("AGENT_ID");
-        public AzureDevOpsJobStatus AgentJobStatus => EnvironmentInfo.GetVariable<AzureDevOpsJobStatus>("AGENT_JOBSTATUS");
+        public AzurePipelinesJobStatus AgentJobStatus => EnvironmentInfo.GetVariable<AzurePipelinesJobStatus>("AGENT_JOBSTATUS");
         public string AgentMachineName => EnvironmentInfo.GetVariable<string>("AGENT_MACHINENAME");
         public string AgentName => EnvironmentInfo.GetVariable<string>("AGENT_NAME");
         public string AgentWorkFolder => EnvironmentInfo.GetVariable<string>("AGENT_WORKFOLDER");
@@ -49,11 +49,14 @@ namespace Nuke.Common.CI.AzureDevOps
         public long DefinitionVersion => EnvironmentInfo.GetVariable<long>("BUILD_DEFINITIONVERSION");
         public string QueuedBy => EnvironmentInfo.GetVariable<string>("BUILD_QUEUEDBY");
         public Guid QueuedById => EnvironmentInfo.GetVariable<Guid>("BUILD_QUEUEDBYID");
-        public AzureDevOpsBuildReason BuildReason => EnvironmentInfo.GetVariable<AzureDevOpsBuildReason>("BUILD_REASON");
+        public AzurePipelinesBuildReason BuildReason => EnvironmentInfo.GetVariable<AzurePipelinesBuildReason>("BUILD_REASON");
         public bool RepositoryClean => EnvironmentInfo.GetVariable<bool>("BUILD_REPOSITORY_CLEAN");
         public string RepositoryLocalPath => EnvironmentInfo.GetVariable<string>("BUILD_REPOSITORY_LOCALPATH");
         public string RepositoryName => EnvironmentInfo.GetVariable<string>("BUILD_REPOSITORY_NAME");
-        public AzureDevOpsRepositoryType RepositoryProvider => EnvironmentInfo.GetVariable<AzureDevOpsRepositoryType>("BUILD_REPOSITORY_PROVIDER");
+
+        public AzurePipelinesRepositoryType RepositoryProvider =>
+            EnvironmentInfo.GetVariable<AzurePipelinesRepositoryType>("BUILD_REPOSITORY_PROVIDER");
+
         [CanBeNull] public string RepositoryTfvcWorkspace => EnvironmentInfo.GetVariable<string>("BUILD_REPOSITORY_TFVC_WORKSPACE");
         public string RepositoryUri => EnvironmentInfo.GetVariable<string>("BUILD_REPOSITORY_URI");
         public string RequestedFor => EnvironmentInfo.GetVariable<string>("BUILD_REQUESTEDFOR");
@@ -74,9 +77,21 @@ namespace Nuke.Common.CI.AzureDevOps
         [CanBeNull] public long? PullRequestId => EnvironmentInfo.GetVariable<long?>("SYSTEM_PULLREQUEST_PULLREQUESTID");
         [CanBeNull] public string PullRequestSourceBranch => EnvironmentInfo.GetVariable<string>("SYSTEM_PULLREQUEST_SOURCEBRANCH");
         [CanBeNull] public string PullRequestTargetBranch => EnvironmentInfo.GetVariable<string>("SYSTEM_PULLREQUEST_TARGETBRANCH");
+        public string StageName => EnvironmentInfo.GetVariable<string>("SYSTEM_STAGENAME");
+        public string StageDisplayName => EnvironmentInfo.GetVariable<string>("SYSTEM_STAGEDISPLAYNAME");
         public string TeamFoundationCollectionUri => EnvironmentInfo.GetVariable<string>("SYSTEM_TEAMFOUNDATIONCOLLECTIONURI");
         public string TeamProject => EnvironmentInfo.GetVariable<string>("SYSTEM_TEAMPROJECT");
         public Guid TeamProjectId => EnvironmentInfo.GetVariable<Guid>("SYSTEM_TEAMPROJECTID");
+
+        public void Group(string group)
+        {
+            _messageSink($"##[group]{group}");
+        }
+
+        public void EndGroup(string group)
+        {
+            _messageSink($"##[endgroup]{group}");
+        }
 
         public void UploadLog(string localFilePath)
         {
@@ -118,7 +133,7 @@ namespace Nuke.Common.CI.AzureDevOps
             string columnNumber = null,
             string code = null)
         {
-            LogIssue(AzureDevOpsIssueType.Error, message, sourcePath, lineNumber, columnNumber, code);
+            LogIssue(AzurePipelinesIssueType.Error, message, sourcePath, lineNumber, columnNumber, code);
         }
 
         public void LogWarning(
@@ -128,11 +143,11 @@ namespace Nuke.Common.CI.AzureDevOps
             string columnNumber = null,
             string code = null)
         {
-            LogIssue(AzureDevOpsIssueType.Warning, message, sourcePath, lineNumber, columnNumber, code);
+            LogIssue(AzurePipelinesIssueType.Warning, message, sourcePath, lineNumber, columnNumber, code);
         }
 
         public void LogIssue(
-            AzureDevOpsIssueType type,
+            AzurePipelinesIssueType type,
             string message,
             string sourcePath = null,
             string lineNumber = null,
@@ -155,17 +170,14 @@ namespace Nuke.Common.CI.AzureDevOps
             _messageSink($"##vso[task.logissue {properties}]{message}");
         }
 
-        private string GetText(AzureDevOpsIssueType type)
+        private string GetText(AzurePipelinesIssueType type)
         {
-            switch (type)
+            return type switch
             {
-                case AzureDevOpsIssueType.Warning:
-                    return "warning";
-                case AzureDevOpsIssueType.Error:
-                    return "error";
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(type), type, message: null);
-            }
+                AzurePipelinesIssueType.Warning => "warning",
+                AzurePipelinesIssueType.Error => "error",
+                _ => throw new ArgumentOutOfRangeException(nameof(type), type, message: null)
+            };
         }
     }
 }
