@@ -15,7 +15,7 @@ using static Nuke.Common.Execution.ReflectionService;
 
 namespace Nuke.Common.Execution
 {
-    internal class ParameterService
+    public class ParameterService
     {
         private readonly Func<string[]> _commandLineArgumentsProvider;
         private readonly Func<IReadOnlyDictionary<string, string>> _environmentVariablesProvider;
@@ -315,7 +315,7 @@ namespace Nuke.Common.Execution
             name = name.ToLower();
             foreach (var candidate in candidates.Select(x => x.ToLower()))
             {
-                var levenshteinDistance = (float) GetLevenshteinDistance(name, candidate);
+                var levenshteinDistance = (float)GetLevenshteinDistance(name, candidate);
                 if (levenshteinDistance / name.Length < similarityThreshold)
                 {
                     Logger.Warn($"Requested parameter '{name}' was not found. Is there a typo with '{candidate}' which was passed?");
@@ -342,14 +342,14 @@ namespace Nuke.Common.Execution
             }
 
             for (var i = 1; i <= lengthA; i++)
-            for (var j = 1; j <= lengthB; j++)
-            {
-                var cost = b[j - 1] == a[i - 1] ? 0 : 1;
-                distances[i, j] = Math.Min(
-                    Math.Min(distances[i - 1, j] + 1, distances[i, j - 1] + 1),
-                    distances[i - 1, j - 1] + cost
-                );
-            }
+                for (var j = 1; j <= lengthB; j++)
+                {
+                    var cost = b[j - 1] == a[i - 1] ? 0 : 1;
+                    distances[i, j] = Math.Min(
+                        Math.Min(distances[i - 1, j] + 1, distances[i, j - 1] + 1),
+                        distances[i - 1, j - 1] + cost
+                    );
+                }
 
             return distances[lengthA, lengthB];
         }

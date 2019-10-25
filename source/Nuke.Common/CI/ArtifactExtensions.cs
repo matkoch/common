@@ -26,14 +26,23 @@ namespace Nuke.Common.CI
         // private static readonly TargetDefinitionMetadata<LookupTable<Target, string>> ArtifactDependenciesKey =
         //     new TargetDefinitionMetadata<LookupTable<Target, string>>(nameof(ArtifactDependenciesKey));
 
-        internal static readonly Dictionary<ITargetDefinition, (string, int)> Partitions =
-            new Dictionary<ITargetDefinition, (string, int)>();
+        internal static readonly Dictionary<ITargetDefinition, (string partitionName, int totalPartitions)> Partitions =
+            new Dictionary<ITargetDefinition, (string partitionName, int totalPartitions)>();
+
+        public static (string partitionName, int totalPartitions) GetPartition(ITargetDefinition definition) => Partitions.GetValueOrDefault(definition);
 
         internal static readonly LookupTable<ITargetDefinition, string> ArtifactProducts =
             new LookupTable<ITargetDefinition, string>();
 
-        internal static readonly LookupTable<ITargetDefinition, (Target, string[])> ArtifactDependencies =
-            new LookupTable<ITargetDefinition, (Target, string[])>();
+        public static IEnumerable<string> GetArtifactProducts(ITargetDefinition definition) => ArtifactProducts[definition];
+
+        internal static readonly LookupTable<ITargetDefinition, (Target target, string[] dependencies)> ArtifactDependencies =
+            new LookupTable<ITargetDefinition, (Target target, string[] dependencies)>();
+
+        public static IEnumerable<(Target target, IEnumerable<string> dependencies)> GetArtifactDependencies(ITargetDefinition definition)
+        {
+            return ArtifactDependencies[definition].Select(x => (x.target, x.dependencies.AsEnumerable()));
+        }
 
         public static ITargetDefinition Produces(this ITargetDefinition targetDefinition, params string[] artifacts)
         {

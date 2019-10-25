@@ -12,7 +12,7 @@ using System.Reflection;
 namespace Nuke.Common.Execution
 {
     [DebuggerDisplay("{" + nameof(Name) + "}")]
-    public class ExecutableTarget
+    public class ExecutableTarget : IExecutableTarget
     {
         internal ExecutableTarget()
         {
@@ -44,5 +44,37 @@ namespace Nuke.Common.Execution
         public TimeSpan Duration { get; internal set; }
         public bool Invoked { get; internal set; }
         public string SkipReason { get; internal set; }
+
+        ITargetDefinition IExecutableTarget.Definition => Definition;
+
+        string IExecutableTarget.Name => Name;
+
+        string IExecutableTarget.Description => Description;
+
+        bool IExecutableTarget.Listed => Listed;
+
+        IEnumerable<Expression<Func<bool>>> IExecutableTarget.DynamicConditions => DynamicConditions;
+
+        IEnumerable<Expression<Func<bool>>> IExecutableTarget.StaticConditions => StaticConditions;
+
+        DependencyBehavior IExecutableTarget.DependencyBehavior => DependencyBehavior;
+
+        bool IExecutableTarget.AssuredAfterFailure => AssuredAfterFailure;
+
+        bool IExecutableTarget.ProceedAfterFailure => ProceedAfterFailure;
+
+        IEnumerable<LambdaExpression> IExecutableTarget.Requirements => Requirements;
+
+        IEnumerable<Action> IExecutableTarget.Actions => Actions;
+
+        IEnumerable<IExecutableTarget> IExecutableTarget.ExecutionDependencies => ExecutionDependencies;
+
+        IEnumerable<IExecutableTarget> IExecutableTarget.OrderDependencies => OrderDependencies;
+
+        IEnumerable<IExecutableTarget> IExecutableTarget.TriggerDependencies => TriggerDependencies;
+
+        IEnumerable<IExecutableTarget> IExecutableTarget.Triggers => Triggers;
+
+        IEnumerable<IExecutableTarget> IExecutableTarget.AllDependencies => AllDependencies;
     }
 }

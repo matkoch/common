@@ -15,7 +15,7 @@ namespace Nuke.Common.Execution
     /// <summary>
     /// Given the invoked target names, creates an execution plan under consideration of execution, ordering and trigger dependencies.
     /// </summary>
-    internal static class ExecutionPlanner
+    public static class ExecutionPlanner
     {
         public static IReadOnlyCollection<ExecutableTarget> GetExecutionPlan(
             IReadOnlyCollection<ExecutableTarget> executableTargets,
