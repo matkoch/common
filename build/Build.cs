@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.AppVeyor;
@@ -111,6 +112,27 @@ partial class Build : NukeBuild
     Target Restore => _ => _
         .Executes(() =>
         {
+            var input = new[]
+                        {
+                            "https://raw.githubusercontent.com/nuke-build/common/develop/source/Nuke.GlobalTool/templates/_build.sdk.csproj",
+                            "https://github.com/nuke-build1/common/blob/develop/source/Nuke.GlobalTool/templates/_build.sdk.csproj",
+                            "https://github.com/nuke-build/common/tree/develop/source/Nuke.GlobalTool/templates"
+                        };
+            var regex = new Regex(
+                @"^https://github.com/(?'owner'[\w-]+)/(?'user'[\w-]+)/(?'method'(blob|tree)+)/(?'path'.+)$");
+            foreach (var s in input)
+            {
+                var match = regex.Match(s);
+                Console.WriteLine(match.Success);
+                if (!match.Success)
+                    continue;
+                Console.WriteLine(match.Groups["owner"].Value);
+                Console.WriteLine(match.Groups["user"].Value);
+                Console.WriteLine(match.Groups["method"].Value);
+                Console.WriteLine(match.Groups["path"].Value);
+            }
+
+            Environment.Exit(0);
             DotNetRestore(_ => _
                 .SetProjectFile(Solution)
                 .SetIgnoreFailedSources(IgnoreFailedSources));

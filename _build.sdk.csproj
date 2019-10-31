@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>_TARGET_FRAMEWORK_</TargetFramework>
+    <TargetFramework>Bla</TargetFramework>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <RootNamespace></RootNamespace>
     <IsPackable>False</IsPackable>
@@ -10,17 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Nuke.Common" Version="_NUKE_VERSION_" />
-    <PackageDownload Include="GitVersion.Tool" Version="[5.1.1]" />    // GITVERSION
+    <PackageReference Include="Nuke.Common" Version="6.6.6" />
+    <PackageDownload Include="GitVersion.Tool" Version="[5.1.1]" />
   </ItemGroup>
 
   <ItemGroup>
     <NukeSpecificationFiles Include="**\*.json" Exclude="bin\**;obj\**" />
+    <NukeExternalFiles Include="**\*.*.ext" Exclude="bin\**;obj\**" />
     <None Remove="*.csproj.DotSettings;*.ref.*.txt" />
-  </ItemGroup>
 
-  <!-- Common build related files -->
-  <ItemGroup>
+    <!-- Common build related files -->
     <None Include="_SCRIPT_DIRECTORY_\build.ps1" />
     <None Include="_SCRIPT_DIRECTORY_\build.sh" />
 
@@ -38,3 +37,4 @@
   </ItemGroup>
 
 </Project>
+

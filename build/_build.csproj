@@ -1,5 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <Import Project="..\source\Nuke.Common\Nuke.Common.targets" />
+  <Import Project="..\source\Nuke.MSBuildTasks\bin\Debug\netcoreapp3.0\publish\Nuke.MSBuildTasks.targets" />
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
@@ -15,9 +18,17 @@
     <DefineConstants Condition="'$(OS)' != 'Windows_NT'">$(DefineConstants);UNIX</DefineConstants>
   </PropertyGroup>
 
-  <ItemDefinitionGroup>
-    <PackageDownload Visible="false" />
-  </ItemDefinitionGroup>
+  <ItemGroup>
+    <!-- https://github.com/nuke-build/common/tree/develop/source/Nuke.GlobalTool/templates -->
+    <!-- https://github.com/nuke-build/common/blob/develop/source/Nuke.GlobalTool/templates/_build.sdk.csproj -->
+    <!-- https://raw.githubusercontent.com/nuke-build/common/develop/source/Nuke.GlobalTool/templates/_build.sdk.csproj -->
+    <NukeExternalFiles Include="https://raw.githubusercontent.com/nuke-build/common/develop/source/Nuke.GlobalTool/templates/_build.sdk.csproj" BasePath="..\">
+      <TargetFramework>Bla</TargetFramework>
+      <GitVersion />
+      <NuGetSource>https://www.myget.org/F/matkoch/api/v2/package</NuGetSource>
+      <NukeVersion>6.6.6</NukeVersion>
+    </NukeExternalFiles>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Octokit" Version="0.36.0" />
@@ -37,7 +48,9 @@
 
   <ItemGroup>
     <None Remove="*.csproj.DotSettings" />
+  </ItemGroup>
 
+  <ItemGroup>
     <None Include="..\build.ps1" />
     <None Include="..\build.sh" />
 
@@ -48,7 +61,6 @@
 
     <None Include="..\.github\workflows\*.yml" LinkBase="ci" />
     <None Include="..\.teamcity\settings.kts" LinkBase="ci" Condition="Exists('..\.teamcity\settings.kts')" />
-    <None Include="..\azure-pipelines.yml" LinkBase="ci" Condition="Exists('..\azure-pipelines.yml')" />
     <None Include="..\Jenkinsfile" LinkBase="ci" Condition="Exists('..\Jenkinsfile')" />
     <None Include="..\appveyor.yml" LinkBase="ci" Condition="Exists('..\appveyor.yml')" />
     <None Include="..\.travis.yml" LinkBase="ci" Condition="Exists('..\.travis.yml')" />

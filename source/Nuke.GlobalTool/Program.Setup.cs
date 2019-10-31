@@ -14,7 +14,9 @@ using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Utilities;
 using Nuke.Common.Utilities.Collections;
+using static Nuke.Common.EnvironmentInfo;
 using static Nuke.Common.IO.PathConstruction;
+using static Nuke.Common.Utilities.ConsoleUtility;
 using static Nuke.Common.Utilities.TemplateUtility;
 
 namespace Nuke.GlobalTool
@@ -23,12 +25,23 @@ namespace Nuke.GlobalTool
     {
         // ReSharper disable InconsistentNaming
 
-        public const string PLATFORM_NETCORE = "netcore";
-        public const string PLATFORM_NETFX = "netfx";
-        public const string FRAMEWORK_NET461 = "net472";
-        public const string FRAMEWORK_NETCOREAPP2 = "netcoreapp3.0";
-        public const string FORMAT_SDK = "sdk";
-        public const string FORMAT_LEGACY = "legacy";
+        private const string PLATFORM_NETCORE = "netcore";
+        private const string PLATFORM_NETFX = "netfx";
+        private const string FRAMEWORK_NETFX = "net472";
+        private const string FRAMEWORK_NETCORE = "netcoreapp3.0";
+        private const string FORMAT_SDK = "sdk";
+        private const string FORMAT_LEGACY = "legacy";
+
+        private const string DotNet = "DOTNET";
+        private const string MSBuild = "MSBUILD";
+        private const string SourceDir = "SOURCE_DIR";
+        private const string SrcDir = "SRC_DIR";
+        private const string OutputDir = "OUTPUT_DIR";
+        private const string ArtifactsDir = "ARTIFACTS_DIR";
+        private const string TestsDir = "TESTS_DIR";
+        private const string Git = "GIT";
+        private const string GitVersion = "GITVERSION";
+        private const string SolutionFile = "SOLUTION_FILE";
 
         // ReSharper restore InconsistentNaming
 
@@ -46,36 +59,36 @@ namespace Nuke.GlobalTool
             {
                 var rootDirectoryItems = new[] { ".git", ".svn" };
                 rootDirectory = FileSystemTasks.FindParentDirectory(
-                    EnvironmentInfo.WorkingDirectory,
+                    WorkingDirectory,
                     x => rootDirectoryItems.Any(y => x.GetFileSystemInfos(y, SearchOption.TopDirectoryOnly).Any()));
             }
 
             if (rootDirectory == null)
             {
                 Logger.Warn("Could not find root directory. Falling back to working directory.");
-                rootDirectory = EnvironmentInfo.WorkingDirectory;
+                rootDirectory = WorkingDirectory;
             }
 
-            var buildProjectName = ConsoleUtility.PromptForInput("How should the build project be named?", "_build");
-            var buildDirectoryName = ConsoleUtility.PromptForInput("Where should the build project be located?", "./build");
+            var buildProjectName = PromptForInput("How should the build project be named?", "_build");
+            var buildDirectoryName = PromptForInput("Where should the build project be located?", "./build");
 
-            var targetPlatform = !EnvironmentInfo.GetParameter<bool>("boot")
+            var targetPlatform = !GetParameter<bool>("boot")
                 ? PLATFORM_NETCORE
-                : ConsoleUtility.PromptForChoice("What bootstrapping method should be used?",
+                : PromptForChoice("What bootstrapping method should be used?",
                     (PLATFORM_NETCORE, ".NET Core SDK"),
                     (PLATFORM_NETFX, ".NET Framework/Mono"));
 
             var targetFramework = targetPlatform == PLATFORM_NETFX
-                ? FRAMEWORK_NET461
-                : FRAMEWORK_NETCOREAPP2;
+                ? FRAMEWORK_NETFX
+                : FRAMEWORK_NETCORE;
 
             var projectFormat = targetPlatform == PLATFORM_NETCORE
                 ? FORMAT_SDK
-                : ConsoleUtility.PromptForChoice("What project format should be used?",
+                : PromptForChoice("What project format should be used?",
                     (FORMAT_SDK, "SDK-based Format: requires .NET Core SDK"),
                     (FORMAT_LEGACY, "Legacy Format: supported by all MSBuild/Mono versions"));
 
-            var nukeVersion = ConsoleUtility.PromptForChoice("Which NUKE version should be used?",
+            var nukeVersion = PromptForChoice("Which NUKE version should be used?",
                 new[]
                     {
                         ("latest release", nukeLatestReleaseVersion.GetAwaiter().GetResult()),
@@ -87,7 +100,7 @@ namespace Nuke.GlobalTool
                     .Distinct(x => x.Item2)
                     .Select(x => (x.Item2, $"{x.Item2} ({x.Item1})")).ToArray());
 
-            var solutionFile = ConsoleUtility.PromptForChoice(
+            var solutionFile = PromptForChoice(
                 "Which solution should be the default?",
                 options: new DirectoryInfo(rootDirectory)
                     .EnumerateFiles("*", SearchOption.AllDirectories)
@@ -101,60 +114,58 @@ namespace Nuke.GlobalTool
 
             #region Additional
 
-            var definitions = new List<string>();
+            var tokens = new Dictionary<string, string>();
 
             if (solutionFile != null &&
                 projectFormat == FORMAT_SDK &&
-                ConsoleUtility.PromptForChoice(
+                PromptForChoice(
                     "Do you need help getting started with a basic build?",
                     (true, "Yes, get me started!"),
                     (false, "No, I can do this myself...")))
             {
-                definitions.Add(
-                    ConsoleUtility.PromptForChoice("Restore, compile, pack using ...",
-                        ("DOTNET", "dotnet CLI"),
-                        ("MSBUILD", "MSBuild/Mono"),
+                tokens.AddKeyValueWhenNotNull(
+                    PromptForChoice("Restore, compile, pack using ...",
+                        (DotNet, "dotnet CLI"),
+                        (MSBuild, "MSBuild/Mono"),
                         (null, "Neither")));
 
-                definitions.Add(
-                    ConsoleUtility.PromptForChoice("Source files are located in ...",
-                        ("SOURCE_DIR", "./source"),
-                        ("SRC_DIR", "./src"),
+                tokens.AddKeyValueWhenNotNull(
+                    PromptForChoice("Source files are located in ...",
+                        (SourceDir, "./source"),
+                        (SrcDir, "./src"),
                         (null, "Neither")));
 
-                definitions.Add(
-                    ConsoleUtility.PromptForChoice("Move packages to ...",
-                        ("OUTPUT_DIR", "./output"),
-                        ("ARTIFACTS_DIR", "./artifacts"),
+                tokens.AddKeyValueWhenNotNull(
+                    PromptForChoice("Move packages to ...",
+                        (OutputDir, "./output"),
+                        (ArtifactsDir, "./artifacts"),
                         (null, "Neither")));
 
-                definitions.Add(
-                    ConsoleUtility.PromptForChoice("Where do test projects go?",
-                        ("TESTS_DIR", "./tests"),
+                tokens.AddKeyValueWhenNotNull(
+                    PromptForChoice("Where do test projects go?",
+                        (TestsDir, "./tests"),
                         (null, "Same as source")));
 
                 if (Directory.Exists(Path.Combine(rootDirectory, ".git")))
-                    definitions.Add("GIT");
+                    tokens.AddKeyValueWhenNotNull(Git);
                 else
                 {
-                    definitions.Add(
-                        ConsoleUtility.PromptForChoice("Do you use git?",
-                            ("GIT", "Yes, just not setup yet"),
+                    tokens.AddKeyValueWhenNotNull(
+                        PromptForChoice("Do you use git?",
+                            (Git, "Yes, just not setup yet"),
                             (null, "No, something else")));
                 }
 
                 if (File.Exists(Path.Combine(rootDirectory, "GitVersion.yml")))
-                    definitions.Add("GITVERSION");
-                else if (definitions.Contains("GIT"))
+                    tokens.AddKeyValueWhenNotNull(GitVersion);
+                else if (tokens.ContainsKey(Git))
                 {
-                    definitions.Add(
-                        ConsoleUtility.PromptForChoice("Do you use GitVersion?",
-                            ("GITVERSION", "Yes, just not setup yet"),
+                    tokens.AddKeyValueWhenNotNull(
+                        PromptForChoice("Do you use GitVersion?",
+                            (GitVersion, "Yes, just not setup yet"),
                             (null, "No, custom versioning")));
                 }
             }
-
-            definitions.RemoveAll(x => x == null);
 
             #endregion
 
@@ -179,7 +190,7 @@ namespace Nuke.GlobalTool
                     Path.Combine(rootDirectory, Constants.ConfigurationFileName),
                     GetRelativePath(rootDirectory, solutionFile).Replace(oldChar: '\\', newChar: '/'));
 
-                definitions.Add("SOLUTION_FILE");
+                tokens.AddKeyValue(SolutionFile);
 
                 var solutionFileContent = TextTasks.ReadAllLines(solutionFile).ToList();
                 var buildProjectFileRelative = (WinRelativePath) GetRelativePath(solutionDirectory, buildProjectFile);
@@ -191,19 +202,20 @@ namespace Nuke.GlobalTool
                 buildProjectFile,
                 FillTemplate(
                     GetTemplate($"_build.{projectFormat}.csproj"),
-                    definitions,
-                    replacements: GetDictionary(
-                        new
-                        {
-                            solutionDirectory = (WinRelativePath) GetRelativePath(buildDirectory, solutionDirectory ?? rootDirectory),
-                            rootDirectory = (WinRelativePath) GetRelativePath(buildDirectory, rootDirectory),
-                            scriptDirectory = (WinRelativePath) GetRelativePath(buildDirectory, EnvironmentInfo.WorkingDirectory),
-                            buildProjectName,
-                            buildProjectGuid,
-                            targetFramework,
-                            nukeVersion,
-                            nukeVersionMajorMinor = nukeVersion.Split(".").Take(2).Join(".")
-                        })));
+                    tokens
+                        .ToDictionary(x => x.Key, x => x.Value)
+                        .AddDictionary(GetDictionary(
+                            new
+                            {
+                                SolutionDirectory = (WinRelativePath) GetRelativePath(buildDirectory, solutionDirectory ?? rootDirectory),
+                                RootDirectory = (WinRelativePath) GetRelativePath(buildDirectory, rootDirectory),
+                                ScriptDirectory = (WinRelativePath) GetRelativePath(buildDirectory, WorkingDirectory),
+                                BuildProjectName = buildProjectName,
+                                BuildProjectGuid = buildProjectGuid,
+                                TargetFramework = targetFramework,
+                                NukeVersion = nukeVersion,
+                                NukeVersionMajorMinor = nukeVersion.Split(".").Take(2).Join(".")
+                            }))));
 
             if (projectFormat == FORMAT_LEGACY)
             {
@@ -211,62 +223,63 @@ namespace Nuke.GlobalTool
                     Path.Combine(buildDirectory, "packages.config"),
                     FillTemplate(
                         GetTemplate("_build.legacy.packages.config"),
-                        replacements: GetDictionary(new { nukeVersion })));
+                        tokens: GetDictionary(new { NukeVersion = nukeVersion })));
             }
 
             TextTasks.WriteAllLines(
                 $"{buildProjectFile}.DotSettings",
-                FillTemplate(
-                    GetTemplate("_build.csproj.DotSettings")));
+                GetTemplate("_build.csproj.DotSettings"));
 
             TextTasks.WriteAllLines(
                 Path.Combine(buildDirectory, ".editorconfig"),
-                FillTemplate(
-                    GetTemplate(".editorconfig")));
+                GetTemplate(".editorconfig"));
 
             TextTasks.WriteAllLines(
                 Path.Combine(buildDirectory, "Build.cs"),
-                FillTemplate(
-                    GetTemplate("Build.cs"),
-                    definitions));
+                FillTemplate(GetTemplate("Build.cs"), tokens));
 
             TextTasks.WriteAllLines(
-                Path.Combine(EnvironmentInfo.WorkingDirectory, "build.ps1"),
+                Path.Combine(WorkingDirectory, "build.ps1"),
                 FillTemplate(
                     GetTemplate($"build.{targetPlatform}.ps1"),
-                    replacements: GetDictionary(
+                    tokens: GetDictionary(
                         new
                         {
-                            rootDirectory = (WinRelativePath) GetRelativePath(EnvironmentInfo.WorkingDirectory, rootDirectory),
-                            solutionDirectory =
-                                (WinRelativePath) GetRelativePath(EnvironmentInfo.WorkingDirectory, solutionDirectory ?? rootDirectory),
-                            scriptDirectory = (WinRelativePath) GetRelativePath(buildDirectory, EnvironmentInfo.WorkingDirectory),
-                            buildDirectory = (WinRelativePath) GetRelativePath(EnvironmentInfo.WorkingDirectory, buildDirectory),
-                            buildProjectName,
-                            nugetVersion = "latest"
+                            RootDirectory = (WinRelativePath) GetRelativePath(WorkingDirectory, rootDirectory),
+                            SolutionDirectory = (WinRelativePath) GetRelativePath(WorkingDirectory, solutionDirectory ?? rootDirectory),
+                            ScriptDirectory = (WinRelativePath) GetRelativePath(buildDirectory, WorkingDirectory),
+                            BuildDirectory = (WinRelativePath) GetRelativePath(WorkingDirectory, buildDirectory),
+                            BuildProjectName = buildProjectName,
+                            NuGetVersion = "latest"
                         })));
 
+            var bashScript = Path.Combine(WorkingDirectory, "build.sh");
             TextTasks.WriteAllLines(
-                Path.Combine(EnvironmentInfo.WorkingDirectory, "build.sh"),
+                bashScript,
                 FillTemplate(
                     GetTemplate($"build.{targetPlatform}.sh"),
-                    replacements: GetDictionary(
+                    tokens: GetDictionary(
                         new
                         {
-                            rootDirectory = (UnixRelativePath) GetRelativePath(EnvironmentInfo.WorkingDirectory, rootDirectory),
-                            solutionDirectory =
-                                (UnixRelativePath) GetRelativePath(EnvironmentInfo.WorkingDirectory, solutionDirectory ?? rootDirectory),
-                            scriptDirectory = (UnixRelativePath) GetRelativePath(buildDirectory, EnvironmentInfo.WorkingDirectory),
-                            buildDirectory = (UnixRelativePath) GetRelativePath(EnvironmentInfo.WorkingDirectory, buildDirectory),
-                            buildProjectName,
-                            nugetVersion = "latest"
+                            RootDirectory = (UnixRelativePath) GetRelativePath(WorkingDirectory, rootDirectory),
+                            SolutionDirectory =
+                                (UnixRelativePath) GetRelativePath(WorkingDirectory, solutionDirectory ?? rootDirectory),
+                            ScriptDirectory = (UnixRelativePath) GetRelativePath(buildDirectory, WorkingDirectory),
+                            BuildDirectory = (UnixRelativePath) GetRelativePath(WorkingDirectory, buildDirectory),
+                            BuildProjectName = buildProjectName,
+                            NuGetVersion = "latest"
                         })));
 
-            if (definitions.Contains("SRC_DIR"))
+            // if (Directory.Exists(Path.Combine(rootDirectory, ".git")))
+            //     ProcessTasks.StartProcess($"git update-index --chmod=+x {bashScript}", logOutput: false);
+            // if (Directory.Exists(Path.Combine(rootDirectory, ".svn")))
+            //     ProcessTasks.StartProcess($"svn propset svn:executable on {bashScript}", logOutput: false);
+
+            if (tokens.ContainsKey(SrcDir))
                 FileSystemTasks.EnsureExistingDirectory(Path.Combine(rootDirectory, "src"));
-            if (definitions.Contains("SOURCE_DIR"))
+            if (tokens.ContainsKey(SourceDir))
                 FileSystemTasks.EnsureExistingDirectory(Path.Combine(rootDirectory, "source"));
-            if (definitions.Contains("TESTS_DIR"))
+            if (tokens.ContainsKey(TestsDir))
                 FileSystemTasks.EnsureExistingDirectory(Path.Combine(rootDirectory, "tests"));
 
             #endregion
@@ -275,41 +288,40 @@ namespace Nuke.GlobalTool
 
             if (new[] { "addon", "addin", "plugin" }.Any(x => x.EqualsOrdinalIgnoreCase(args.FirstOrDefault())))
             {
-                ControlFlow.Assert(definitions.Contains("SOURCE_DIR"), "definitions.Contains('SOURCE_DIR')");
+                ControlFlow.Assert(tokens.ContainsKey(SourceDir), "tokens.ContainsKey('SOURCE_DIR')");
 
-                var organization = ConsoleUtility.PromptForInput("Organization name:", defaultValue: "nuke-build");
-                var addonName = ConsoleUtility.PromptForInput("Organization name:", defaultValue: null);
-                var authors = ConsoleUtility.PromptForInput("Author names separated by comma:", defaultValue: "Matthias Koch, Sebastian Karasek");
-                var packageName = ConsoleUtility.PromptForInput("Package name on nuget.org:", defaultValue: null);
+                var organization = PromptForInput("Organization name:", defaultValue: "nuke-build");
+                var addonName = PromptForInput("Organization name:", defaultValue: null);
+                var authors = PromptForInput("Author names separated by comma:", defaultValue: "Matthias Koch, Sebastian Karasek");
+                var packageName = PromptForInput("Package name on nuget.org:", defaultValue: null);
 
                 TextTasks.WriteAllLines(
                     Path.Combine(rootDirectory, "README.md"),
                     FillTemplate(
                         GetTemplate("README.md"),
-                        replacements: GetDictionary(
+                        tokens: GetDictionary(
                             new
                             {
-                                organization,
-                                addonName,
-                                authors,
-                                packageName
+                                Organization = organization,
+                                AddonName = addonName,
+                                Authors = authors,
+                                PackageName = packageName
                             })));
 
                 TextTasks.WriteAllLines(
                     Path.Combine(rootDirectory, "LICENSE"),
                     FillTemplate(
                         GetTemplate("LICENSE"),
-                        replacements: GetDictionary(
+                        tokens: GetDictionary(
                             new
                             {
-                                year = DateTime.Now.Year,
-                                authors
+                                DateTime.Now.Year,
+                                Authors = authors
                             })));
 
                 TextTasks.WriteAllLines(
                     Path.Combine(rootDirectory, "CHANGELOG.md"),
-                    FillTemplate(
-                        GetTemplate("CHANGELOG.md")));
+                    GetTemplate("CHANGELOG.md"));
 
                 TextTasks.WriteAllText(
                     $"{solutionFile}.DotSettings.ext",
