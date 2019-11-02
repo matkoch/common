@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -23,7 +24,9 @@ namespace Nuke.Common
         public static string WorkingDirectory
         {
 #if NETCORE
-            get => Directory.GetCurrentDirectory();
+            get => ValidDirectoryPath(Directory.GetCurrentDirectory())
+                ? Directory.GetCurrentDirectory()
+                : Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName);
             set => Directory.SetCurrentDirectory(value);
 #else
             get => Environment.CurrentDirectory;
@@ -83,7 +86,10 @@ namespace Nuke.Common
             if (entryAssemblyLocation == null)
                 return null;
 
-            var assemblyDirectory = Path.GetDirectoryName(entryAssemblyLocation).NotNull();
+            var assemblyDirectory = ValidDirectoryPath(entryAssemblyLocation)
+                ? Path.GetDirectoryName(entryAssemblyLocation).NotNull()
+                : Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName).NotNull();
+
             var argumentsFile = Path.Combine(assemblyDirectory, c_nukeTmpFileName);
             if (!File.Exists(argumentsFile))
                 return null;
@@ -124,6 +130,13 @@ namespace Nuke.Common
                 .Select(x => x.Trim().TrimMatchingDoubleQuotes().TrimMatchingQuotes().Replace("\\\"", "\"").Replace("\\\'", "'"))
                 .Where(x => !string.IsNullOrEmpty(x))
                 .ToArray();
+        }
+
+        internal static bool ValidDirectoryPath(string path)
+        {
+            //ref https://github.com/dotnet/core-setup/issues/7491
+            // workaround for self-contained apps where Directory.GetCurrentDirectory and assembly locations points to temp folder
+            return !path.ContainsOrdinalIgnoreCase(Path.GetTempPath());
         }
     }
 }

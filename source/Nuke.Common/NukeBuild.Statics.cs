@@ -3,6 +3,7 @@
 // https://github.com/nuke-build/nuke/blob/master/LICENSE
 
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -123,7 +124,10 @@ namespace Nuke.Common
         private static PathConstruction.AbsolutePath GetBuildAssemblyDirectory()
         {
             var entryAssembly = Assembly.GetEntryAssembly();
-            if (entryAssembly == null || entryAssembly.GetTypes().All(x => !x.IsSubclassOf(typeof(NukeBuild))))
+            if (entryAssembly == null || !EnvironmentInfo.ValidDirectoryPath(entryAssembly.Location)) 
+                return (PathConstruction.AbsolutePath) Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName).NotNull();
+
+            if (entryAssembly.GetTypes().All(x => !x.IsSubclassOf(typeof(NukeBuild))))
                 return null;
 
             return (PathConstruction.AbsolutePath) Path.GetDirectoryName(entryAssembly.Location).NotNull();

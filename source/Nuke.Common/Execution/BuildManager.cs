@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -51,9 +52,18 @@ namespace Nuke.Common.Execution
                 Logger.OutputSink = build.OutputSink;
                 Logger.LogLevel = NukeBuild.LogLevel;
 
-                ToolPathResolver.ExecutingAssemblyDirectory = NukeBuild.BuildProjectDirectory != null
-                    ? Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
-                    : null;
+                if(NukeBuild.BuildProjectDirectory != null)
+                {
+                    var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                    ToolPathResolver.ExecutingAssemblyDirectory = EnvironmentInfo.ValidDirectoryPath(assemblyLocation)
+                        ? assemblyLocation
+                        : Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName);
+                }
+                else
+                {
+                    ToolPathResolver.ExecutingAssemblyDirectory = null;
+                }
+                
                 ToolPathResolver.NuGetAssetsConfigFile = NukeBuild.BuildProjectDirectory / "obj" / "project.assets.json";
                 ToolPathResolver.NuGetPackagesConfigFile = build.NuGetPackagesConfigFile;
 
