@@ -124,12 +124,10 @@ namespace Nuke.Common
         private static PathConstruction.AbsolutePath GetBuildAssemblyDirectory()
         {
             var entryAssembly = Assembly.GetEntryAssembly();
-            if (entryAssembly == null) return null;
 
-            if (!EnvironmentInfo.ValidDirectoryPath(entryAssembly.Location)) 
-                return (PathConstruction.AbsolutePath) Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName).NotNull();
-
-            if (entryAssembly.GetTypes().All(x => !x.IsSubclassOf(typeof(NukeBuild)))) 
+            if (entryAssembly == null 
+                || entryAssembly.GetTypes().All(x => !x.IsSubclassOf(typeof(NukeBuild))) 
+                || !EnvironmentInfo.ValidDirectoryPath(entryAssembly.Location)) 
                 return null;
 
             return (PathConstruction.AbsolutePath) Path.GetDirectoryName(entryAssembly.Location).NotNull();
@@ -140,9 +138,6 @@ namespace Nuke.Common
         {
             if (buildAssemblyDirectory == null)
                 return null;
-
-            if(buildAssemblyDirectory == Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName))
-                buildAssemblyDirectory = RootDirectory / "build";
 
             return (PathConstruction.AbsolutePath) new DirectoryInfo(buildAssemblyDirectory)
                 .DescendantsAndSelf(x => x.Parent)
