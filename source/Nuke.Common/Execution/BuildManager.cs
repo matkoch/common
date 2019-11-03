@@ -58,14 +58,16 @@ namespace Nuke.Common.Execution
                     ToolPathResolver.ExecutingAssemblyDirectory = EnvironmentInfo.ValidDirectoryPath(assemblyLocation)
                         ? assemblyLocation
                         : Path.GetDirectoryName(Process.GetCurrentProcess().MainModule?.FileName);
+
+                    ToolPathResolver.NuGetAssetsConfigFile = NukeBuild.BuildProjectDirectory / "obj" / "project.assets.json";
+                    ToolPathResolver.NuGetPackagesConfigFile = build.NuGetPackagesConfigFile;
                 }
                 else
                 {
                     ToolPathResolver.ExecutingAssemblyDirectory = null;
+                    ToolPathResolver.NuGetAssetsConfigFile = null;
+                    ToolPathResolver.NuGetPackagesConfigFile = null;
                 }
-                
-                ToolPathResolver.NuGetAssetsConfigFile = NukeBuild.BuildProjectDirectory / "obj" / "project.assets.json";
-                ToolPathResolver.NuGetPackagesConfigFile = build.NuGetPackagesConfigFile;
 
                 if (!NukeBuild.NoLogo)
                 {
