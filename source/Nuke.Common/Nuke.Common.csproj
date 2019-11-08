@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;net472</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net472</TargetFrameworks>
   </PropertyGroup>
   
   <ItemGroup>
@@ -33,7 +33,7 @@
   <ItemGroup Condition="'$(TargetFramework)' == ''">
     <None Include="$(MSBuildProjectName).targets" PackagePath="build" Pack="true" />
     <None Include="..\Nuke.MSBuildTaskRunner\Nuke.MSBuildTaskRunner.targets" PackagePath="build" Pack="true" />
-    <None Include="..\Nuke.MSBuildTaskRunner\bin\$(Configuration)\netcoreapp3.0\publish\**\*.*" PackagePath="build" Pack="true" />
+    <None Include="..\Nuke.MSBuildTaskRunner\bin\$(Configuration)\netcoreapp2.1\publish\**\*.*" PackagePath="build" Pack="true" />
     <!--<None Include="..\Nuke.MSBuildTaskRunner\bin\$(Configuration)\net461\publish\**\*.*" PackagePath="build\netfx" Pack="true" />-->
   </ItemGroup>
   

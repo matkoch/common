@@ -31,7 +31,7 @@ namespace Nuke.Common.Tools.GitVersion
             }
 
             return GitVersionTasks.GitVersion(s => s
-                    .SetFramework("netcoreapp3.0")
+                    .SetFramework("netcoreapp2.1")
                     .DisableLogOutput()
                     .SetUpdateAssemblyInfo(UpdateAssemblyInfo))
                 .Result;
