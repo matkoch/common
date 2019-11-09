@@ -177,6 +177,7 @@ namespace Nuke.Common.CI.TeamCity
                                  };
                 }
 
+                artifactRules = new[] { "**/*" };
                 snapshotDependencies = buildTypes[executableTarget]
                     .Select(x => new TeamCitySnapshotDependency
                                  {
@@ -184,7 +185,12 @@ namespace Nuke.Common.CI.TeamCity
                                      FailureAction = TeamCityDependencyFailureAction.FailToStart,
                                      CancelAction = TeamCityDependencyFailureAction.Cancel
                                  }).ToArray<TeamCityDependency>();
-                artifactDependencies = new TeamCityDependency[0];
+                artifactDependencies = buildTypes[executableTarget]
+                    .Select(x => new TeamCityArtifactDependency
+                                 {
+                                     BuildType = x,
+                                     ArtifactRules = new[] { "**/*" }
+                                 }).ToArray<TeamCityDependency>();
             }
 
             var parameters = executableTarget.Requirements
