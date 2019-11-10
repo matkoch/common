@@ -59,5 +59,25 @@ namespace Nuke.Common.CI
             Partitions.Add(targetDefinition, (member.Name, member.GetCustomAttribute<PartitionAttribute>().Total));
             return targetDefinition;
         }
+
+        public static (string partitionName, int totalPartitions) GetPartition(ExecutableTarget target)
+        {
+            return Partitions.GetValueOrDefault(target.Definition);
+        }
+
+        public static IEnumerable<string> GetArtifactProducts(ExecutableTarget target)
+        {
+            return ArtifactProducts[target.Definition] ?? Array.Empty<string>();
+        }
+
+        public static IEnumerable<(Target target, string[] artifacts)> GetArtifactDependencies(ExecutableTarget target)
+        {
+            return ArtifactDependencies[target.Definition] ?? Array.Empty<(Target target, string[] artifacts)>();
+        }
+
+        public static string GetPartitionDashedName(string partitionName)
+        {
+            return ParameterService.GetParameterDashedName(partitionName);
+        }
     }
 }
